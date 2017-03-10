@@ -20,14 +20,16 @@ function ChiliFX:LoadEffectDefs()
         fade = {
             shader = {
                 fragment = VFS.LoadFile(CHILILFX_DIR .. "shaders/fade.frag"),
+                uniformInt = { tex0 = 0 }
             },
-            uniformNames = { "tex", "multi" },
+            uniformNames = { "tex0", "value" },
         },
         glow = {
             shader = {
                 fragment = VFS.LoadFile(CHILILFX_DIR .. "shaders/glow.frag"),
+                uniformInt = { tex0 = 0 }
             },
-            uniformNames = { "tex", "multi" },
+            uniformNames = { "tex0", "multi" },
         },
 --[[
         shine = {
@@ -166,6 +168,10 @@ local function Tex3Rect(x, y, w, h, t0, t1, t2)
     gl.Vertex(x+w, y)
 end
 
+local function DrawObjectWithEffect(obj, effect)
+
+end
+
 -- Sets a drawing effect on the Chili object
 function ChiliFX:SetEffect(opts)
     local obj        = opts.obj     -- chili object
@@ -179,35 +185,81 @@ function ChiliFX:SetEffect(opts)
     self.activeEffects[obj] = opts
     self.activeEffects[obj].DrawControl = obj.DrawControl
 
-    obj.DrawControl = function(...)
-        --Spring.Echo(" function(...) ",  ...)
-        gl.UseShader(effectObj.shader)
-        if effectObj.uniforms.time then
-            gl.Uniform(effectObj.uniforms.time, os.clock())
-        end
-        if not self.effectDefs[effectName].rawDraw then
-            self.activeEffects[obj].DrawControl(...)
-        else
---            gl.Color(obj.color)
-            local texs = {}
-            for texID, texName in pairs(effectObj.textures) do
-                --Spring.Echo("LoadTexture", texID, obj[texName], obj)
-                gl.Texture(texID, obj[texName])
-                --WG.Chili.TextureHandler.LoadTexture(texID, obj[texName], obj)
-                table.insert(texs, texID)
+    if not self.effectDefs[effectName].rawDraw then
+        obj.DrawControl = function(...)
+            local fboName1 = "_fbo_" .. "children"
+            local fboName2 = "_fbo_" .. "all"
+            if not obj._tex then
+                obj._tex = gl.CreateTexture(obj.width, obj.height, {
+                    border = false,
+                    min_filter = GL.LINEAR,
+                    mag_filter = GL.LINEAR,
+                    wrap_s = GL.CLAMP_TO_EDGE,
+                    wrap_t = GL.CLAMP_TO_EDGE,
+                    fbo = true,
+                })
+                --gl.Blending("disable")
+
             end
-            if #texs == 1 then
+            gl.RenderToTexture(obj._tex, function()
+                self.activeEffects[obj].DrawControl(obj)
+            end)
+            --gl.Blending("enable")
+            if true then
+                --Spring.Echo(0, 0, obj.width, obj.height)
+                gl.UseShader(effectObj.shader)
+                if effectObj.uniforms.value then
+                    gl.Uniform(effectObj.uniforms.value, (50 * os.clock()) % 1.0)
+                end
+                --gl.Texture(0, obj._tex)
+                --gl.Texture(0, "!" .. tostring(math.random(1, 30)))
+                --gl.Texture(0, "LuaMenu/images/dev_0008_Layer-5.png")
                 gl.TexRect(0, 0, obj.width, obj.height)
-            elseif #texs == 2 then
-                gl.BeginEnd(GL.QUADS, Tex2Rect, 0, 0, obj.width, obj.height, texs[1], texs[2])
-            elseif #texs == 3 then
-                gl.BeginEnd(GL.QUADS, Tex3Rect, 0, 0, obj.width, obj.height, texs[1], texs[2], texs[3])
+                gl.UseShader(0)
             end
+            if obj[fboName2] and false then
+                gl.UseShader(effectObj.shader)
+                gl.Texture(0, obj[fboName2].color0)
+                --gl.Texture(0, obj.file)
+                --gl.ActiveFBO(obj[fboName2], true)
+                Spring.Echo(obj[fboName2].color0)
+                gl.TexRect(0, 0, obj.width, obj.height)
+                gl.UseShader(0)
+            end
+
+            WG.Delay(function() obj:Invalidate() end, 0.001)
         end
-        gl.UseShader(0)
-        -- obj:Invalidate()
-        -- FIXME: the line above doesn't seem to always cause a Draw to be invoked so we're hacking it with a delayed call
-        WG.Delay(function() obj:Invalidate() end, 0.001)
+    else
+        obj.DrawControl = function(...)
+            --Spring.Echo(" function(...) ",  ...)
+            gl.UseShader(effectObj.shader)
+            if effectObj.uniforms.time then
+                gl.Uniform(effectObj.uniforms.time, os.clock())
+            end
+            if not self.effectDefs[effectName].rawDraw then
+                self.activeEffects[obj].DrawControl(...)
+            else
+    --            gl.Color(obj.color)
+                local texs = {}
+                for texID, texName in pairs(effectObj.textures) do
+                    --Spring.Echo("LoadTexture", texID, obj[texName], obj)
+                    gl.Texture(texID, obj[texName])
+                    --WG.Chili.TextureHandler.LoadTexture(texID, obj[texName], obj)
+                    table.insert(texs, texID)
+                end
+                if #texs == 1 then
+                    gl.TexRect(0, 0, obj.width, obj.height)
+                elseif #texs == 2 then
+                    gl.BeginEnd(GL.QUADS, Tex2Rect, 0, 0, obj.width, obj.height, texs[1], texs[2])
+                elseif #texs == 3 then
+                    gl.BeginEnd(GL.QUADS, Tex3Rect, 0, 0, obj.width, obj.height, texs[1], texs[2], texs[3])
+                end
+            end
+            gl.UseShader(0)
+            -- obj:Invalidate()
+            -- FIXME: the line above doesn't seem to always cause a Draw to be invoked so we're hacking it with a delayed call
+            WG.Delay(function() obj:Invalidate() end, 0.001)
+        end
     end
 end
 
@@ -240,6 +292,7 @@ function ChiliFX:SetTimedEffect(opts)
 
 end
 
+--[[
 function ChiliFX:AddFadeEffect(effect)
     local obj = effect.obj
     local time = effect.time
@@ -343,6 +396,7 @@ function ChiliFX:AddGlowEffect(effect)
     end
     obj:Invalidate()
 end
+--]]
 
 function ChiliFX:IsEnabled()
     return self.enabled
