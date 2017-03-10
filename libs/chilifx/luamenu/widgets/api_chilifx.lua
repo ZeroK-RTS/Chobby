@@ -27,7 +27,7 @@ function widget:Initialize()
 
     ChiliFX = VFS.Include(CHILILFX_DIR .. "core.lua", nil)
 
-    local startDisabled = true
+    local startDisabled = false
     WG.ChiliFX = ChiliFX(startDisabled)
 end
 
