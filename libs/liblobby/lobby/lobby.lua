@@ -859,7 +859,7 @@ function Lobby:_OnVoteResponse(isYesVote)
 end
 
 function Lobby:_OnSetModOptions(data)
-	self.modoptions = data
+	self.modoptions = data or {}
 	self:_CallListeners("OnSetModOptions", data)
 end
 
