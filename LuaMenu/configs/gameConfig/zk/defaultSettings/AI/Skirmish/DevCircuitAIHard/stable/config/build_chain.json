@@ -24,11 +24,13 @@
 	// Base defence and time to build it, in seconds
 	"base": [[0, 20], [0, 120], [9, 300], [0, 360], [1, 400], [0, 500], [9, 530], [16, 600], [5, 660], [5, 860], [15, 900], [9, 930], [1, 980], [5, 1160], [1, 1380], [2, 1680], [13, 1800], [17, 1830]],
 
+// FIXME last 1 isn't superweapon
 	"superweapon": {
-		"unit":   ["raveparty", "staticnuke", "staticheavyarty", "zenith", "staticantinuke"],  // FIXME: last 1 isn't superweapon
+		"unit":   ["raveparty", "staticnuke", "staticheavyarty", "zenith", "staticantinuke"],
 		"weight": [ 0.1,         0.2,          0.3,               0.1       0.3],
 
-		"condition": [35, 600]  // [<Minimum income>, <maximum seconds to build>]
+// [<Minimum income>, <maximum seconds to build>]
+		"condition": [35, 600]
 	},
 
 	// Fallback defence
