@@ -79,6 +79,9 @@ local function CompareUsers(userName, otherName)
 		return otherData.isIgnored
 	end
 
+	if (not otherData.isOffline) ~= (not userData.isOffline) then
+		return otherData.isOffline
+	end
 	return string.lower(userName) < string.lower(otherName)
 end
 
