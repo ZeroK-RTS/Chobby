@@ -71,15 +71,15 @@ local function CompareUsers(userName, otherName)
 		return true
 	end
 
-	if (not otherData.isAdmin) ~= (not userData.isAdmin) then
+	if (not not otherData.isAdmin) ~= (not not userData.isAdmin) then
 		return userData.isAdmin
 	end
 
-	if (not otherData.isIgnored) ~= (not userData.isIgnored) then
+	if (not not otherData.isIgnored) ~= (not not userData.isIgnored) then
 		return otherData.isIgnored
 	end
 
-	if (not otherData.isOffline) ~= (not userData.isOffline) then
+	if (not not otherData.isOffline) ~= (not not userData.isOffline) then
 		return otherData.isOffline
 	end
 	return string.lower(userName) < string.lower(otherName)
