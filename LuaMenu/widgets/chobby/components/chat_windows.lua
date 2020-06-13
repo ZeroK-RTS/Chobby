@@ -1,5 +1,20 @@
 ChatWindows = LCS.class{}
 
+local ignoredDiscordUsers = {
+	Xtrasauce = true,
+} -- eventually becomes discord ignore feature.
+
+function AddDiscordIgnoredUser(name) -- Adds the user to the ignore list
+	ignoredDiscordUsers[name] = true
+end
+
+function RemoveDiscordIgnoredUser(name) -- Removes the user from the ignorelist.
+	ignoredDiscordUsers[name] = nil
+end
+
+WG.DiscordIgnoreUser = AddDiscordIgnoredUser
+WG.DiscordUnignoreUser = RemoveDiscordIgnoredUser
+
 function ChatWindows:init()
 	self.channelConsoles = {}
 	self.userListPanels = {}
@@ -426,9 +441,9 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 		self.activeUnreadMessages = self.activeUnreadMessages + 1
 	end
 	local nameColor
-	if source == lobby.SOURCE_DISCORD then
-	channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\40\210\220", "Discord user.", true)
-	else
+	if source == lobby.SOURCE_DISCORD and not ignoredDiscordUsers[userName] then
+		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\40\210\220", "Discord user.", true)
+	elseif source ~= lobby.SOURCE_DISCORD then
 		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, nameColor)
 	end
 	if iAmMentioned then
