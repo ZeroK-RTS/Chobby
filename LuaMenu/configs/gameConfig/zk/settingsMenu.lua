@@ -313,9 +313,18 @@ local settingsConfig = {
 				humanName = "Anti Aliasing",
 				options = {
 					{
+						name = "Compatibility",
+						apply = {
+							MSAALevel = 1, -- Set to 1 (2xMSAA) for flicker fix, see https://springrts.com/mantis/view.php?id=5625
+							FSAA = 0,
+							SmoothLines = 0,
+							SmoothPoints = 0,
+						}
+					},
+					{
 						name = "Off",
 						apply = {
-							MSAALevel = 1, -- Required, see https://springrts.com/mantis/view.php?id=5625
+							MSAALevel = 0,
 							FSAA = 0,
 							SmoothLines = 0,
 							SmoothPoints = 0,
