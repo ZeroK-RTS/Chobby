@@ -14,7 +14,6 @@ function widget:GetInfo()
 	}
 end
 
-local MAX_FPS = 5
 local FAST_FPS = 40
 local oldX, oldY
 
@@ -60,6 +59,7 @@ end
 
 local function IsMousePressed()
 	local x,y, lmb, mmb, rmb = Spring.GetMouseState()
+	LimitFPS.ForceRedraw()
 	return lmb or mmb or rmb
 end
 
@@ -77,28 +77,28 @@ function widget:AllowDraw()
 	end
 	local timer = Spring.GetTimer()
 	local diff = Spring.DiffTimers(timer, lastTimer)
-	if constantRedrawSeconds and not IsMousePressed() then
+	if constantRedrawSeconds then
 		constantRedrawSeconds = constantRedrawSeconds - diff
 		if constantRedrawSeconds <= 0 then
 			constantRedrawSeconds = false
 		end
 	end
-	if (fastRedraw or constantRedrawSeconds) and (diff >= 1/FAST_FPS) then
+	if (fastRedraw or constantRedrawSeconds) then
 		fastRedraw = false
 		lastTimer = timer
-		return true
-	elseif (diff >= 1/MAX_FPS) then
-		lastTimer = timer
+		oldFramesInBuffer = 0
 		return true
 	end
-
 	if (config.lobbyIdleSleep) then
-		if (fastRedraw or constantRedrawSeconds) and oldFramesInBuffer < 3 then
-			framesInBuffer = oldFramesInBuffer + 1
+		framesInBuffer = oldFramesInBuffer + 1
+		if (diff >= 1/FAST_FPS) then
+			lastTimer = timer
+			oldFramesInBuffer = 0
 			return true
 		end
 	elseif oldFramesInBuffer < 3 then
 		framesInBuffer = oldFramesInBuffer + 1
+		lastTimer = timer
 		return true
 	end
 	
