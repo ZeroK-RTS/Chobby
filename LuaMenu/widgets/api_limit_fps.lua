@@ -132,11 +132,13 @@ end
 
 function widget:MouseWheel()
 	forceRedraw = true
+	LimitFps.ForceRedrawPeriod(2)
 	return false
 end
 
 function widget:KeyPress()
 	forceRedraw = true
+	LimitFps.ForceRedrawPeriod(2)
 	return false
 end
 
