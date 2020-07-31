@@ -542,20 +542,20 @@ So they turned themselves into the most formidable stronghold in the galaxy, in 
 		name = "New Falsell Anomaly",
 		image = "campaign/sample/graphics/unitpics/fakeunit.png",
 		category = "5. Anomalies",
-		text = [[What was going on here? Why leave such formidable defenses with no mobile forces to support it?
-Did they really think that this would be enough? Defenses alone can only slow an enemy down to buy time, not stop it.
-You would think that those in charge of such clearly sensitive defense would apply such basic principle.
+		text = [[What was going on there? Why leave such formidable defenses with no mobile forces to support it?
+Did they really think that this would be enough? Defenses alone can only slow an enemy down to buy time, not stop them.
+You would think that those in charge of such sensitive defense would apply some basic warfare principles.
 Expect they clearly didn't. What good reason could they possibly have?
 Uh, my
 Commander seems to have some weird software glitch going on.
 I should try and fix that.
-Didn't think that was possible, actually. For the state it was in, it has been remarkably stable so far. More than I'd
+Didn't think this would happen, actually. For the state it was in, it has been remarkably stable so far. More than I'd
 Expect, honestly.
 So.
-Thanks to those lone static defenses, I could breach the perimeter.
-For something so well-guarded, though, I can't find what they were actually guarding. There is nothing there!
+Thanks to those static defenses being so desolate, I had breached the perimeter.
+For something so well-guarded, though, I couldn't find what they were actually protecting. There was nothing there!
 Getting in was the easiest part, it would seem.
-Those weren't the only thing down thee though. The
+Those weren't the only forces down there. The
 Interlopers weren't part of the defense.
 By
 The time I took care of them, it was pretty clear they were actually hostile to the defenses. In a
@@ -586,7 +586,7 @@ If
 I
 Really
 Wanted
-To.
+To. [End of log]
 Now,
 You
 Are
