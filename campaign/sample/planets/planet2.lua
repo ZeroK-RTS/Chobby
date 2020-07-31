@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = "Where is everyone? Automated systems and non-sapient life are still there, but no trace of intelligent beings. No humans, no cyborgs, no free machines, nothing..."
+			text = "Where is everyone? Automated systems and non-sapient life are still there, but no trace of intelligent beings. No humans, no cyborgs, no free machines, noone..."
 			.. "\n "
 			.. "\nMost of the unit blueprints are gone. I will need to find new copies on my way out of here."
 			,
