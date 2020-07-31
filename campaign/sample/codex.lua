@@ -586,7 +586,7 @@ If
 I
 Really
 Wanted
-To. [End of log]
+To.
 Now,
 You
 Are
