@@ -102,6 +102,9 @@ local function DownloadQueueUpdate()
 	local front = downloadQueue[1]
 	if not front.active then
 		if USE_WRAPPER_DOWNLOAD and WG.WrapperLoopback and WG.WrapperLoopback.DownloadFile then
+			if front.fileType == "game" then
+				WG.WrapperLoopback.DownloadFile(front.name, typeMap["map"])
+			end
 			WG.WrapperLoopback.DownloadFile(front.name, typeMap[front.fileType])
 			CallListeners("DownloadStarted", front.id, front.name, front.fileType)
 		else
