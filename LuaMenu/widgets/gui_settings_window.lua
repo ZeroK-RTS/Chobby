@@ -18,6 +18,7 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 local spSetConfigInt = Spring.SetConfigInt
+local spGetConfigInt = Spring.GetConfigInt
 
 local battleStartDisplay = 1
 local lobbyFullscreen = 1
@@ -39,6 +40,9 @@ local CHECK_WIDTH = 280
 local TEXT_OFFSET = 6
 
 local settingsWindowHandler
+
+local trackbarLobbyMusicVolume
+local trackbarMasterVolume
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -799,8 +803,26 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = AddLabel(offset, "Menu Music Volume")
-	children[#children + 1] = Trackbar:New {
+	trackbarMasterVolume = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = spGetConfigInt("snd_volmaster", 50),
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				spSetConfigInt("snd_volmaster", value)
+			end
+		}
+	}
+	children[#children + 1] = AddLabel(offset, "Master Volume")
+	children[#children + 1] = trackbarMasterVolume
+	offset = offset + ITEM_OFFSET
+
+	trackbarLobbyMusicVolume = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
 		width  = COMBO_WIDTH,
@@ -818,6 +840,8 @@ local function GetLobbyTabControls()
 			end
 		}
 	}
+	children[#children + 1] = AddLabel(offset, "Menu Music Volume")
+	children[#children + 1] = trackbarLobbyMusicVolume
 	offset = offset + ITEM_OFFSET
 
 	children[#children + 1] = AddLabel(offset, "Notification Volume")
@@ -1619,6 +1643,7 @@ local function MakeTab(name, children)
 	}
 end
 
+local initialized = false
 local function InitializeControls(window)
 	window.OnParent = nil
 
@@ -1672,6 +1697,7 @@ local function InitializeControls(window)
 		tabPanel.tabBar:Select(tabName)
 	end
 
+	initialized = true
 	return externalFunctions
 end
 
@@ -1844,6 +1870,22 @@ function widget:ActivateMenu()
 	end
 	inLobby = true
 	SetLobbyFullscreenMode(WG.Chobby.Configuration.lobby_fullscreen)
+end
+
+local dLastSync = 0
+function widget:Update()
+	dLastSync = dLastSync + 1
+	if dLastSync < 10 then -- Only run this stuff every 10 updates
+		return
+	end
+	dLastSync = 0
+
+	if not (initialized and WG.Chobby and WG.Chobby.Configuration) then
+		return
+	end
+
+	trackbarMasterVolume.value = spGetConfigInt("snd_volmaster", trackbarMasterVolume.value)
+	trackbarLobbyMusicVolume.value = WG.Chobby.Configuration.menuMusicVolume
 end
 
 --local oldWidth, oldHeight, oldX, oldY
