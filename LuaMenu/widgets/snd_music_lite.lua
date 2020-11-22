@@ -73,7 +73,7 @@ end
 --------------------------------------------------------------------------------
 
 local function SetTrackVolume(volume)
-	if volume == 0 then
+	if not volume or volume == 0 then
 		StopTrack()
 		return
 	end
@@ -182,7 +182,7 @@ function widget:Initialize()
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 
 	WG.MusicHandler = MusicHandler
-	
+
 	WG.Delay(DelayedInitialize, 0.1)
 	WG.Delay(DelayedInitialize, 1)
 end

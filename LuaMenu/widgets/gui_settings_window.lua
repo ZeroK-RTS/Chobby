@@ -17,6 +17,8 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Local Variables
+local spSetConfigInt = Spring.SetConfigInt
+local spGetConfigInt = Spring.GetConfigInt
 
 local battleStartDisplay = 1
 local lobbyFullscreen = 1
@@ -36,6 +38,9 @@ local CHECK_WIDTH = 280
 local TEXT_OFFSET = 6
 
 local settingsWindowHandler
+
+local trackbarLobbyMusicVolume
+local trackbarMasterVolume
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -63,28 +68,28 @@ local function ToPercent(value)
 end
 
 local function ToggleFullscreenOff()
-	Spring.SetConfigInt("Fullscreen", 1, false)
-	Spring.SetConfigInt("Fullscreen", 0, false)
+	spSetConfigInt("Fullscreen", 1, false)
+	spSetConfigInt("Fullscreen", 0, false)
 
 	if WG.Chobby.Configuration.agressivelySetBorderlessWindowed and not currentManualBorderless then
 		local screenX, screenY = Spring.GetScreenGeometry()
 		if currentManualBorderless then
-			Spring.SetConfigInt("XResolutionWindowed", currentManualBorderless.width or (screenX - FUDGE*2), false)
-			Spring.SetConfigInt("YResolutionWindowed", currentManualBorderless.height or (screenY - FUDGE*2), false)
-			Spring.SetConfigInt("WindowPosX", currentManualBorderless.x or FUDGE, false)
-			Spring.SetConfigInt("WindowPosY", currentManualBorderless.y or FUDGE, false)
+			spSetConfigInt("XResolutionWindowed", currentManualBorderless.width or (screenX - FUDGE*2), false)
+			spSetConfigInt("YResolutionWindowed", currentManualBorderless.height or (screenY - FUDGE*2), false)
+			spSetConfigInt("WindowPosX", currentManualBorderless.x or FUDGE, false)
+			spSetConfigInt("WindowPosY", currentManualBorderless.y or FUDGE, false)
 		else
-			Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
-			Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
-			Spring.SetConfigInt("WindowPosX", FUDGE, false)
-			Spring.SetConfigInt("WindowPosY", FUDGE, false)
+			spSetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
+			spSetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
+			spSetConfigInt("WindowPosX", FUDGE, false)
+			spSetConfigInt("WindowPosY", FUDGE, false)
 		end
 	end
 end
 
 local function ToggleFullscreenOn()
-	Spring.SetConfigInt("Fullscreen", 0, false)
-	Spring.SetConfigInt("Fullscreen", 1, false)
+	spSetConfigInt("Fullscreen", 0, false)
+	spSetConfigInt("Fullscreen", 1, false)
 end
 
 local function SaveWindowPos(width, height, x, y)
@@ -110,7 +115,7 @@ local function SaveWindowPos(width, height, x, y)
 	end
 
 	-- WindowState is not saved by Spring. See https://springrts.com/mantis/view.php?id=5624
-	Spring.SetConfigInt("WindowState", (x == 0 and 1) or 0, false)
+	spSetConfigInt("WindowState", (x == 0 and 1) or 0, false)
 end
 
 local function ManualBorderlessChange(modeName)
@@ -158,22 +163,22 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		-- Required to remove FUDGE
 		currentManualBorderless = false
 
-		Spring.SetConfigInt("Fullscreen", 1)
+		spSetConfigInt("Fullscreen", 1)
 
-		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
-		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
-		Spring.SetConfigInt("WindowPosX", FUDGE, false)
-		Spring.SetConfigInt("WindowPosY", FUDGE, false)
+		spSetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
+		spSetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
+		spSetConfigInt("WindowPosX", FUDGE, false)
+		spSetConfigInt("WindowPosY", FUDGE, false)
 
-		Spring.SetConfigInt("WindowBorderless", 1, false)
-		Spring.SetConfigInt("Fullscreen", 0, false)
+		spSetConfigInt("WindowBorderless", 1, false)
+		spSetConfigInt("Fullscreen", 0, false)
 	elseif mode == 2 then -- Windowed
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetViewGeometry()
 		winPosX = Configuration.window_WindowPosX or winPosX
 		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
 		winSizeY = Configuration.window_YResolutionWindowed or winSizeY
-		Spring.SetConfigInt("WindowBorderless", 0, false)
-		Spring.SetConfigInt("Fullscreen", 0)
+		spSetConfigInt("WindowBorderless", 0, false)
+		spSetConfigInt("Fullscreen", 0)
 
 		if Configuration.window_WindowPosY then
 			winPosY = Configuration.window_WindowPosY
@@ -183,23 +188,23 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 
 		if winPosY > 10 then
 			-- Window is not stuck at the top of the screen
-			Spring.SetConfigInt("WindowPosX", math.min(winPosX, screenX - 50), false)
-			Spring.SetConfigInt("WindowPosY", math.min(winPosY, screenY - 50), false)
-			Spring.SetConfigInt("XResolutionWindowed",  math.min(winSizeX, screenX), false)
-			Spring.SetConfigInt("YResolutionWindowed",  math.min(winSizeY, screenY - 50), false)
+			spSetConfigInt("WindowPosX", math.min(winPosX, screenX - 50), false)
+			spSetConfigInt("WindowPosY", math.min(winPosY, screenY - 50), false)
+			spSetConfigInt("XResolutionWindowed",  math.min(winSizeX, screenX), false)
+			spSetConfigInt("YResolutionWindowed",  math.min(winSizeY, screenY - 50), false)
 		else
 			-- Reset window to screen centre
-			Spring.SetConfigInt("WindowPosX", screenX/4, false)
-			Spring.SetConfigInt("WindowPosY", screenY/8, false)
-			Spring.SetConfigInt("XResolutionWindowed", screenX/2, false)
-			Spring.SetConfigInt("YResolutionWindowed", screenY*3/4, false)
+			spSetConfigInt("WindowPosX", screenX/4, false)
+			spSetConfigInt("WindowPosY", screenY/8, false)
+			spSetConfigInt("XResolutionWindowed", screenX/2, false)
+			spSetConfigInt("YResolutionWindowed", screenY*3/4, false)
 		end
-		Spring.SetConfigInt("WindowBorderless", 0, false)
-		Spring.SetConfigInt("Fullscreen", 0)
+		spSetConfigInt("WindowBorderless", 0, false)
+		spSetConfigInt("Fullscreen", 0)
 	elseif mode == 3 then -- Fullscreen
-		Spring.SetConfigInt("XResolution", screenX, false)
-		Spring.SetConfigInt("YResolution", screenY, false)
-		Spring.SetConfigInt("Fullscreen", 1, false)
+		spSetConfigInt("XResolution", screenX, false)
+		spSetConfigInt("YResolution", screenY, false)
+		spSetConfigInt("Fullscreen", 1, false)
 		--WG.Delay(ToggleFullscreenOn, 0.1)
 	elseif mode == 4 or mode == 6 then -- Manual Borderless and windowed
 		local borders = borderOverride
@@ -213,16 +218,16 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		end
 		currentManualBorderless = Spring.Utilities.CopyTable(borders)
 
-		Spring.SetConfigInt("Fullscreen", (mode == 4 and 1) or 0)
+		spSetConfigInt("Fullscreen", (mode == 4 and 1) or 0)
 
-		Spring.SetConfigInt("XResolutionWindowed", borders.width or (screenX - FUDGE*2), false)
-		Spring.SetConfigInt("YResolutionWindowed", borders.height or (screenY - FUDGE*2), false)
-		Spring.SetConfigInt("WindowPosX", borders.x or FUDGE, false)
-		Spring.SetConfigInt("WindowPosY", borders.y or FUDGE, false)
+		spSetConfigInt("XResolutionWindowed", borders.width or (screenX - FUDGE*2), false)
+		spSetConfigInt("YResolutionWindowed", borders.height or (screenY - FUDGE*2), false)
+		spSetConfigInt("WindowPosX", borders.x or FUDGE, false)
+		spSetConfigInt("WindowPosY", borders.y or FUDGE, false)
 
-		Spring.SetConfigInt("WindowBorderless", (mode == 4 and 1) or 0, false)
+		spSetConfigInt("WindowBorderless", (mode == 4 and 1) or 0, false)
 
-		Spring.SetConfigInt("Fullscreen", 0, false)
+		spSetConfigInt("Fullscreen", 0, false)
 	elseif mode == 5 then -- Manual Fullscreen
 		local resolution
 		if inLobby then
@@ -230,9 +235,9 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		else
 			resolution = WG.Chobby.Configuration.manualFullscreen.game or {}
 		end
-		Spring.SetConfigInt("XResolution", resolution.width or screenX, false)
-		Spring.SetConfigInt("YResolution", resolution.height or screenY, false)
-		Spring.SetConfigInt("Fullscreen", 1, false)
+		spSetConfigInt("XResolution", resolution.width or screenX, false)
+		spSetConfigInt("YResolution", resolution.height or screenY, false)
+		spSetConfigInt("Fullscreen", 1, false)
 	end
 
 	if delayedModeSet == mode and delayedBorderOverride then
@@ -242,8 +247,8 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		delayedModeSet = mode
 		delayedBorderOverride = borderOverride
 		currentMode = 2
-		Spring.SetConfigInt("WindowBorderless", 0, false)
-		Spring.SetConfigInt("Fullscreen", 0)
+		spSetConfigInt("WindowBorderless", 0, false)
+		spSetConfigInt("Fullscreen", 0)
 		WG.Delay(SetLobbyFullscreenMode, 0.8)
 	end
 end
@@ -619,6 +624,21 @@ local function AddNumberSetting(offset, caption, desc, key, default, minVal, max
 	return label, numberInput, offset + ITEM_OFFSET
 end
 
+local function AddLabel(offset, caption, tooltip)
+	local Configuration = WG.Chobby.Configuration
+	return Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = caption,
+		tooltip = tooltip,
+	}
+end
+
 local function GetLobbyTabControls()
 	local freezeSettings = true
 
@@ -645,16 +665,7 @@ local function GetLobbyTabControls()
 		langNum = langNum + 1
 	end
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Language",
-	}
+	children[#children + 1] = AddLabel(offset, "Language")
 	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
 		y = offset,
@@ -676,16 +687,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Split Panel Mode",
-	}
+	children[#children + 1] = AddLabel(offset, "Split Panel Mode")
 	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
 		y = offset,
@@ -709,16 +711,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], children[#children + 2], offset = AddNumberSetting(offset, "Lobby Interface Scale", "Increase or decrease interface size, for accessibility and 4k screens.",
 		"uiScale", Configuration.uiScale, Configuration.minUiScale*100, Configuration.maxUiScale*100, true)
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Chat Font Size",
-	}
+	children[#children + 1] = AddLabel(offset, "Chat Font Size")
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -739,17 +732,26 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Menu Music Volume",
+	trackbarMasterVolume = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = spGetConfigInt("snd_volmaster", 50),
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				spSetConfigInt("snd_volmaster", value)
+			end
+		}
 	}
-	children[#children + 1] = Trackbar:New {
+	children[#children + 1] = AddLabel(offset, "Master Volume")
+	children[#children + 1] = trackbarMasterVolume
+	offset = offset + ITEM_OFFSET
+
+	trackbarLobbyMusicVolume = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
 		width  = COMBO_WIDTH,
@@ -767,18 +769,11 @@ local function GetLobbyTabControls()
 			end
 		}
 	}
+	children[#children + 1] = AddLabel(offset, "Menu Music Volume")
+	children[#children + 1] = trackbarLobbyMusicVolume
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Notification Volume",
-	}
+	children[#children + 1] = AddLabel(offset, "Notification Volume")
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -799,16 +794,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Background Brightness",
-	}
+	children[#children + 1] = AddLabel(offset, "Background Brightness")
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -829,16 +815,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Game Overlay Opacity",
-	}
+	children[#children + 1] = AddLabel(offset, "Game Overlay Opacity")
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -859,17 +836,10 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Coop Connection Delay",
-		tooltip = "Hosts with poor internet may require their clients to add a delay in order to connect.",
-	}
+	children[#children + 1] = AddLabel(offset,
+		"Coop Connection Delay",
+		"Hosts with poor internet may require their clients to add a delay in order to connect."
+	)
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -927,20 +897,11 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Minimize lobby updates", "lobbyIdleSleep", true)
-	
+
 	-- Not needed as it happens automatically for spectating and singleplayer.
 	--children[#children + 1], offset = AddCheckboxSetting(offset, i18n("keep_queues"), "rememberQueuesOnStart2", false, nil, "Stay in the matchmaker when you launch a singleplayer game or replay, as well as when watching a multiplayer game.")
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Clear Channel History",
-	}
+	children[#children + 1] = AddLabel(offset, "Clear Channel History")
 	children[#children + 1] = Button:New {
 		x = COMBO_X,
 		y = offset,
@@ -958,16 +919,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Delete Path Cache",
-	}
+	children[#children + 1] = AddLabel(offset, "Delete Path Cache")
 	children[#children + 1] = Button:New {
 		x = COMBO_X,
 		y = offset,
@@ -1050,16 +1002,7 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Use wrong engine", "useWrongEngine", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show old AI versions", "showOldAiVersions", false)
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Disable Lobby",
-	}
+	children[#children + 1] = AddLabel(offset, "Disable Lobby")
 	children[#children + 1] = Button:New {
 		x = COMBO_X,
 		y = offset,
@@ -1076,16 +1019,7 @@ local function GetVoidTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Server Address                                                                           (zero-k.info or test.zero-k.info for testing)",
-	}
+	children[#children + 1] = AddLabel(offset, "Server Address                                                                           (zero-k.info or test.zero-k.info for testing)")
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,
 		y = offset,
@@ -1107,16 +1041,7 @@ local function GetVoidTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Server Port                                                                                  (8200 or 8202 for testing)",
-	}
+	children[#children + 1] = AddLabel(offset, "Server Port                                                                                  (8200 or 8202 for testing)")
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,
 		y = offset,
@@ -1258,7 +1183,7 @@ local function MakeRestartWarning(offset)
 		font = Configuration:GetFont(2),
 		caption = "Warning: Most changes do not affect battles in progress.",
 	}
-	
+
 	return warningLabel, offset + ITEM_OFFSET
 end
 
@@ -1579,7 +1504,7 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 		label, list, customSettingsSwitch, offset = MakePresetsControl(settingPresets, offset)
 		children[#children + 1] = label
 		children[#children + 1] = list
-		
+
 		label, offset = MakeRestartWarning(offset)
 		children[#children + 1] = label
 	end
@@ -1623,6 +1548,7 @@ local function MakeTab(name, children)
 	}
 end
 
+local initialized = false
 local function InitializeControls(window)
 	window.OnParent = nil
 
@@ -1676,6 +1602,7 @@ local function InitializeControls(window)
 		tabPanel.tabBar:Select(tabName)
 	end
 
+	initialized = true
 	return externalFunctions
 end
 
@@ -1823,6 +1750,9 @@ end
 
 local firstCall = true
 function widget:ActivateMenu()
+	if not (WG.Chobby and WG.Chobby.Configuration) then
+		return
+	end
 	if firstCall then
 		local gameSettings = WG.Chobby.Configuration.game_settings
 		for key, value in pairs(gameSettings) do
@@ -1832,11 +1762,24 @@ function widget:ActivateMenu()
 		firstCall = false
 		return
 	end
-	if not (WG.Chobby and WG.Chobby.Configuration) then
-		return
-	end
 	inLobby = true
 	SetLobbyFullscreenMode(WG.Chobby.Configuration.lobby_fullscreen)
+end
+
+local dLastSync = 0
+function widget:Update()
+	dLastSync = dLastSync + 1
+	if dLastSync < 10 then -- Only run this stuff every 10 updates
+		return
+	end
+	dLastSync = 0
+
+	if not (initialized and WG.Chobby and WG.Chobby.Configuration) then
+		return
+	end
+
+	trackbarMasterVolume.value = spGetConfigInt("snd_volmaster", trackbarMasterVolume.value)
+	trackbarLobbyMusicVolume.value = WG.Chobby.Configuration.menuMusicVolume
 end
 
 --local oldWidth, oldHeight, oldX, oldY

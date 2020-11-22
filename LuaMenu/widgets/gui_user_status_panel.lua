@@ -90,32 +90,19 @@ local function InitializeControls(window)
 	btnLogout = Button:New {
 		y = 2,
 		right = 3,
-		width = 108,
-		height = 38,
+		width = 70, --108,
+		height = 20, --38,
 		caption = i18n("login"),
 		parent = window,
-		font = WG.Chobby.Configuration:GetFont(3),
+		font = WG.Chobby.Configuration:GetFont(2), --(3)
 		OnClick = {Logout}
 	}
-
-	if WG.Chobby.Configuration.gameConfig.link_homePage ~= nil then
-		btnProfile = Button:New {
-			y = 2,
-			right = 114,
-			width = 108,
-			height = 38,
-			caption = i18n("home"),
-			parent = window,
-			font = WG.Chobby.Configuration:GetFont(3),
-			OnClick = {GoToProfilePage}
-		}
-	end
 
 	connectivityText = TextBox:New {
 		name = "connectivityText",
 		x = 40,
 		width = 150,
-		y = 53,
+		y = 3, --53,
 		height = 20,
 		valign = "center",
 		text = "\255\180\180\180" .. i18n("offline") .. "\b",
@@ -126,7 +113,7 @@ local function InitializeControls(window)
 	connectivityImage = Image:New {
 		name = "connectivityImage",
 		x = 15,
-		y = 52,
+		y = 2, --52,
 		width = 18,
 		height = 18,
 		keepAspect = false,
@@ -137,7 +124,7 @@ local function InitializeControls(window)
 	local userControl
 	onAccepted = function(listener)
 		userControl = WG.UserHandler.GetStatusUser(lobby:GetMyUserName())
-		userControl:SetPos(40, 51, 190)
+		userControl:SetPos(40, 1, 190) --(40, 51, 190)
 		window:AddChild(userControl)
 		window:RemoveChild(connectivityText)
 		lobby:Ping()
