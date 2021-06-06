@@ -33,6 +33,7 @@ local includes = {
 	"components/submenu_handler.lua",
 	"components/priority_popup.lua",
 	"components/ai_list_window.lua",
+	"components/aioptions_window.lua",
 	"components/game_list_window.lua",
 	"components/mode_list_window.lua",
 	"components/confirmation_popup.lua",

@@ -512,7 +512,7 @@ local function MakeRewardsPanel(parent, bottom, planetData, cullUnlocked, showCo
 	if showCodex then
 		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, false, CodexClick, extraCodexUnlocks}}, cullUnlocked, 3.96, 2) then
 			bottom = bottom + 98
-			
+
 			local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
 			if singleplayerMenu then
 				local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
@@ -680,7 +680,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty, extra
 			openCommanderWindowOnContinue = true
 		end
 	end
-	
+
 	function externalFunctions.CloseWinPopup(cancelCommPopup)
 		if cancelCommPopup and openCommanderWindowOnContinue then
 			openCommanderWindowOnContinue = false
@@ -805,7 +805,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		padding = {0, 0, 10, 0},
 		text = ((startable or Configuration.debugMode) and planetData.infoDisplay.text) or "This planet will need to be approached for further study.",
 		font = Configuration:GetFont(3),
-	}	
+	}
 
 
 	local subPanel = Panel:New{
@@ -837,10 +837,10 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		if planetData.infoDisplay.feedbackLink then
 			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 0, 85, nil)
 		end
-		
+
 		difficultyWindow = difficultyWindow or InitializeDifficultySetting()
 		buttonHolder:AddChild(difficultyWindow)
-		
+
 		local startButton = Button:New{
 			right = 0,
 			bottom = 0,
@@ -1016,7 +1016,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 
 	local function SizeUpdate()
 		local fluffFont = Configuration:GetFont(((planetHandler.height < 720) and 2) or 3)
-		local descFont = Configuration:GetFont(((planetHandler.height < 720) and 1) or 2) 
+		local descFont = Configuration:GetFont(((planetHandler.height < 720) and 1) or 2)
 
 		planetDesc.font.size = descFont.size
 		planetDesc:Invalidate()
@@ -1315,7 +1315,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 
 	local externalFunctions = {}
 	externalFunctions.OpenPlanetScreen = OpenPlanetScreen
-	
+
 	function externalFunctions.StartPlanetMission()
 		if not startable then
 			return

@@ -2245,8 +2245,7 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	local config = WG.Chobby.Configuration
 	local skirmishGame = config:GetDefaultGameName()
 	if skirmishGame then
-		singleplayerGame = skirmishGame
-		ToggleShowFunc(battleroomObj, tabData)
+		SetGameSucess(skirmishGame)
 	else
 		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess)
 	end

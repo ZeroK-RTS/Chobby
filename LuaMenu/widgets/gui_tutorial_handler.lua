@@ -101,7 +101,7 @@ local function CheckTutorialPopup()
 		draggable = false,
 		classname = "main_window",
 	}
-	
+
 	TextBox:New {
 		x = 95,
 		right = 15,
@@ -174,9 +174,9 @@ local function CheckTutorialPopup()
 		},
 		parent = tutorialWindow,
 	}
-	
+
 	local popupHolder = WG.Chobby.PriorityPopup(tutorialWindow, CancelFunc, CancelFunc)
-	
+
 	return true
 end
 
@@ -196,7 +196,7 @@ function DelayedInitialize()
 		return
 	end
 	CheckTutorialPopup()
-	
+
 	local function onConfigurationChange(listener, key, value)
 		if key ~= "firstBattleStarted" then
 			return
@@ -205,7 +205,6 @@ function DelayedInitialize()
 			tutorialPrompt.Remove()
 		end
 	end
-	
 	WG.Chobby.Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 

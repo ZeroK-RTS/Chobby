@@ -240,7 +240,7 @@ function Lobby:SetBattleStatus(status)
 	return self
 end
 
-function Lobby:AddAi(aiName, aiLib, allyNumber, version)
+function Lobby:AddAi(aiName, aiLib, allyNumber, version, options)
 	return self
 end
 
@@ -608,7 +608,24 @@ function Lobby:_OnUnfriend(userName)
 	self:_CallListeners("OnUnfriend", userName)
 end
 
-function Lobby:_OnFriendList()
+function Lobby:_OnFriendList(friends)
+	local newFriendMap = {}
+	for i = 1, #friends do
+		local userName = friends[i]
+		if not self.isFriend[userName] then
+			self:_OnFriend(userName)
+			self:_OnRemoveIgnoreUser(userName)
+		end
+		newFriendMap[userName] = true
+	end
+
+	for _, userName in pairs(self.friends) do
+		if not newFriendMap[userName] then
+			self:_OnUnfriend(userName)
+			self:_OnRemoveIgnoreUser(userName)
+		end
+	end
+
 	self:_CallListeners("OnFriendList", self:GetFriends())
 end
 
@@ -880,8 +897,10 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 		userData.isSpectator = status.isSpectator
 	end
 	userData.sync       = status.sync  or userData.sync
+	userData.side       = status.side  or userData.side
 	userData.aiLib      = status.aiLib or userData.aiLib
 	userData.aiVersion  = status.aiVersion or userData.aiVersion
+	userData.aiOptions  = status.aiOptions or userData.aiOptions
 	userData.owner      = status.owner or userData.owner
 	userData.teamColor  = status.teamColor or userData.teamColor
 	userData.joinTime   = status.joinTime or userData.JoinTime
@@ -891,12 +910,15 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.teamNumber   = userData.teamNumber
 	status.isSpectator  = userData.isSpectator
 	status.sync         = userData.sync
+	status.side         = userData.side
 	status.aiLib        = userData.aiLib
 	status.aiVersion    = userData.aiVersion
+	status.aiOptions    = userData.aiOptions
 	status.owner        = userData.owner
 	status.teamColor    = userData.teamColor
 	status.joinTime     = userData.joinTime
 	status.queueOrder   = userData.queueOrder
+
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
 
 	if changedSpectator or changedAllyTeam then
@@ -1382,8 +1404,8 @@ function Lobby:GetUnusedTeamID()
 	local unusedTeamID = 0
 	local takenTeamID = {}
 	for name, data in pairs(self.userBattleStatus) do
-		if data.TeamNumber and not data.isSpectator then
-			local teamID = data.teamNumber
+		local teamID = data.teamNumber
+		if teamID and not data.isSpectator then
 			takenTeamID[teamID] = true
 			while takenTeamID[unusedTeamID] do
 				unusedTeamID = unusedTeamID + 1
