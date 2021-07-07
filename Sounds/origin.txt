@@ -1,3 +1,6 @@
 matchFound.wav - Public domain sound from Golgotha
 alarm.wav - SoundBible (http://soundbible.com/2056-Missile-Alert.html)
 marker_place.wav - BZFlag
+
+click-full.wav      (https://www.zapsplat.com/music/button-click-solid-and-hard-2/)
+click-empty.wav     (https://www.zapsplat.com/music/button-click-solid-and-hard-1/)
