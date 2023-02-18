@@ -42,6 +42,10 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The Iris area cloaker grants cloaking to all friendly units in the surrounding area, including itself. It is fragile and has a large decloak radius so keep it away from enemy spotters. Combine with high damage short range units like riots, raiders or bombs for best effect.]]
 			},
 			{
+				image = "LuaUI/Images/commands/Bold/move.png",
+				text = [[Select a group of units, then press Ctrl-Rightclick to move all units at the same speed. This is useful for keeping other units (like Snitches) within the cloaking radius of an Iris.]]
+			},
+			{
 				image = "unitpics/staticjammer.png",
 				text = [[The Iris mobile cloaker can morph to and from a static version - the Cornea. The Cornea cloaks units in a larger radius and is much harder to spot due it's reduced decloak radius. Cornea can be built by all standard constructors, so area cloakers are avalible even without a Cloakbot Factory.]]
 			},
