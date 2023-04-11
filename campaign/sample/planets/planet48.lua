@@ -39,15 +39,19 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/empmissile.png",
-				text = [[Shockley missiles deliver a massive amount of EMP damage in a small radius, and are not affected by shields. Use this to disable the most important part of your opponent's defenses just before you attack.]]
+				text = [[The Shockley delivers a massive amount of EMP damage in a small radius, and is not affected by shields. Use this to disable the most important part of your opponent's defenses just before you attack.]]
 			},
 			{
 				image = "unitpics/napalmmissile.png",
-				text = [[Inferno missiles create fire in a large radius, which inflicts damage over time. This is very useful for destroying low-HP economic buildings like Wind Generators and Caretakers, or preventing production from a Factory.]]
+				text = [[The Inferno fire in a large radius, which inflicts damage over time. This is very useful for destroying low-HP economic buildings like Wind Generators and Caretakers, or preventing production from a Factory.]]
+			},
+			{
+				image = "unitpics/missileslow.png",
+				text = [[The Zeno deals high slow damage to a single target. It is effective against mobile targets, such as striders, due to its ability to home. After impact, it leaves lingering slow damage in a large area, which dissuades armies of smaller units.]]
 			},
 			{
 				image = "unitpics/seismic.png",
-				text = [[The Quake seismic missile's main purpose is reducing terraformed walls so that other missiles can strike their targets. It can also be used to smooth other difficult terrain.]]
+				text = [[The Quake's main purpose is reducing terraformed walls so that other missiles can strike their targets. It can also be used to smooth other difficult terrain.]]
 			},
 		},
 		gameConfig = {
@@ -65,6 +69,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"staticmissilesilo",
 					"tacnuke",
 					"napalmmissile",
+					"missileslow",
 					"empmissile",
 					"seismic",
 				},
@@ -3127,6 +3132,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"staticmissilesilo",
 				"tacnuke",
 				"napalmmissile",
+				"missileslow",
 				"empmissile",
 				"seismic",
 			},

@@ -105,6 +105,32 @@ function widget:AllowDraw()
 	return false
 end
 
+
+local basememlimit = 200000
+local garbagelimit = basememlimit -- in kilobytes, will adjust upwards as needed
+local lastGCchecktime = Spring.GetTimer()
+
+local function StrictGarbageCleanup()
+	if Spring.DiffTimers(Spring.GetTimer(), lastGCchecktime) > 1 then
+		lastGCchecktime = Spring.GetTimer()
+		local ramuse = gcinfo()
+		--Spring.Echo("RAMUSE",ramuse)
+		if ramuse > garbagelimit then 
+			collectgarbage("collect")
+			collectgarbage("collect")
+			local notgarbagemem = gcinfo()
+			local newgarbagelimit = math.min(1000000, notgarbagemem + basememlimit) -- peak 1 GB
+			Spring.Echo(string.format("Chobby Using %d MB RAM > %d MB limit, performing garbage collection to %d MB and adjusting limit to %d MB",
+				math.floor(ramuse/1000), 
+				math.floor(garbagelimit/1000), 
+				math.floor(notgarbagemem/1000),
+				math.floor(newgarbagelimit/1000) ) 
+			)
+			garbagelimit = newgarbagelimit
+		end
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Force redraw on input or screen resize
@@ -116,6 +142,7 @@ function widget:Update()
 		fastRedraw = true
 	end
 	oldX, oldY = x, y
+	StrictGarbageCleanup()
 end
 
 function widget:MousePress()

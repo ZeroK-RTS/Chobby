@@ -57,11 +57,11 @@ local function ResetHostData()
 	DownloadUpdateFunction = nil
 end
 
-local function MakeExclusivePopup(text, buttonText, ClickFunc, buttonClass, height)
+local function MakeExclusivePopup(text, buttonText, ClickFunc, buttonClass, width, height)
 	if replacablePopup then
 		replacablePopup:Close()
 	end
-	replacablePopup = WG.Chobby.InformationPopup(text, {caption = buttonText, closeFunc = ClickFunc, buttonClass = buttonClass, height = height})
+	replacablePopup = WG.Chobby.InformationPopup(text, {caption = buttonText, closeFunc = ClickFunc, buttonClass = buttonClass, width = width, height = height})
 end
 
 local function CloseExclusivePopup()
@@ -70,6 +70,14 @@ local function CloseExclusivePopup()
 		replacablePopup = nil
 		downloadPopup = false
 	end
+end
+
+local function CornerEcho(title, stuff)
+	Spring.Echo(stuff)
+	Chotify:Post({
+		title = title,
+		body = stuff,
+	})
 end
 
 --------------------------------------------------------------------------------
@@ -158,7 +166,7 @@ end
 --------------------------------------------------------------------------------
 -- Downloading
 
-local function CheckDownloads(gameName, mapName, DoneFunc, gameList)
+local function CheckDownloads(gameName, mapName, DoneFunc, gameList, replayName)
 	local haveGame = (not gameName) or WG.Package.ArchiveExists(gameName)
 	if not haveGame then
 		WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
@@ -178,12 +186,17 @@ local function CheckDownloads(gameName, mapName, DoneFunc, gameList)
 		end
 	end
 
-	if haveGame and haveMap then
+	local haveReplay = (not replayName) or WG.DownloadHandler.HasReplay(replayName)
+	if not haveReplay then
+		WG.DownloadHandler.MaybeDownloadArchive(replayName, "demo", -1)
+	end
+
+	if haveGame and haveMap and haveReplay then
 		return true
 	end
 
 	local function Update()
-		if ((not gameName) or WG.Package.ArchiveExists(gameName)) and ((not mapName) or VFS.HasArchive(mapName)) then
+		if ((not gameName) or WG.Package.ArchiveExists(gameName)) and ((not mapName) or VFS.HasArchive(mapName)) and ((not replayName) or WG.DownloadHandler.HasReplay(replayName)) then
 			if gameList then
 				for i = 1, #gameList do
 					if not WG.Package.ArchiveExists(gameList[i]) then
@@ -201,7 +214,7 @@ local function CheckDownloads(gameName, mapName, DoneFunc, gameList)
 	end
 	DownloadUpdateFunction = Update
 
-	local dlString = "Waiting on content: "
+	local dlString = "Downloading files: "
 	downloading = {
 		downloads = {
 		},
@@ -229,8 +242,14 @@ local function CheckDownloads(gameName, mapName, DoneFunc, gameList)
 		downloading.downloads[mapName] = #downloading.progress
 	end
 
+	if not haveReplay then
+		dlString = dlString .. ("\n - " .. replayName .. ": %d%%")
+		downloading.progress[#downloading.progress + 1] = 0
+		downloading.downloads[replayName] = #downloading.progress
+	end
+
 	downloading.dlString = dlString
-	MakeExclusivePopup(string.format(dlString, unpack(downloading.progress)), "Cancel", CancelFunc, "negative_button", (gameList and (180 + (#gameList)*40)))
+	MakeExclusivePopup(string.format(dlString, unpack(downloading.progress)), "Cancel", CancelFunc, "negative_button", 500, 350)
 end
 
 
@@ -343,7 +362,7 @@ end
 --------------------------------------------------------------------------------
 -- External functions: Widget <-> Widget
 
-function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTable, newFriendsReplaceAI, newReplayFile, newEngineVersion)
+function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTable, newFriendsReplaceAI, newReplayFile, newEngineVersion, checkReplayDownload)
 	if coopClient then
 		local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 		if statusAndInvitesPanel and statusAndInvitesPanel.GetChildByName("coopPanel") then
@@ -394,8 +413,9 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 					return
 				end
 				local engine = string.gsub(string.gsub(string.gsub(startEngineVersion, " BAR105", ""), " maintenance", ""), " develop", "")
+				local StartDemoName = startReplayFile:gsub("demos/", ""):gsub("demos\\", "")
 				local params = {
-					StartDemoName = string.sub(startReplayFile, 7),
+					StartDemoName = StartDemoName,
 					Engine = engine,
 					SpringSettings = WG.SettingsWindow.GetSettingsString(),
 				}
@@ -452,7 +472,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 		WG.WrapperLoopback.SteamHostGameRequest(args)
 	end
 
-	if CheckDownloads(gameName, mapName, DownloadsComplete) then
+	if CheckDownloads(gameName, mapName, DownloadsComplete, false, checkReplayDownload and newReplayFile) then
 		DownloadsComplete()
 	end
 end

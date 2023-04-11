@@ -19,6 +19,7 @@ local mapListWindow
 local lobby
 local wgChobbyConfig
 local listFont
+local oldOnlyFeaturedMaps = nil
 local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 
@@ -385,7 +386,9 @@ local MapListPanel = {}
 function MapListPanel.Show(newLobby, zoomToMap)
 	lobby = newLobby
 	loadRate = 40
-	if not mapListWindow then
+	local Configuration = WG.Chobby.Configuration
+	if (oldOnlyFeaturedMaps ~= Configuration.onlyShowFeaturedMaps) or not mapListWindow then
+		oldOnlyFeaturedMaps = Configuration.onlyShowFeaturedMaps
 		mapListWindow = InitializeControls()
 	end
 	mapListWindow.Show(zoomToMap)

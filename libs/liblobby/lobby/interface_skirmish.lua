@@ -294,7 +294,11 @@ function InterfaceSkirmish:StartReplay(replayFilename, myName, hostPort)
 	IsHost=1;
 }
 ]]
-
+	
+	if not (string.find(replayFilename, "demos/") or string.find(replayFilename, "demos\\")) then
+		replayFilename = "demos/" .. replayFilename
+	end
+	
 	scriptTxt = scriptTxt:gsub("__FILE__", replayFilename)
                          :gsub("__IP__", "127.0.0.1")
                          :gsub("__MY_PLAYER_NAME__", myName or "(spec)")

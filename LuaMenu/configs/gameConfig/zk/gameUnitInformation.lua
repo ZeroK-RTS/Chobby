@@ -173,7 +173,8 @@ local nameList = {
 	[172] = "shieldaa",
 	[173] = "shieldbomb",
 	[174] = "amphlaunch",
-    [175] = "hoverheavyraid",
+	[175] = "hoverheavyraid",
+	[176] = "missileslow",
 }
 
 local categories = {
@@ -1321,6 +1322,12 @@ local humanNames = {
 		order = 4,
 		description = "Napalm Missile",
 		humanName = "Inferno",
+	},
+	missileslow = {
+		category = "missilesilo",
+		order = 5,
+		description = "Slow Homing Missile",
+		humanName = "Zeno",
 	},
 
 	-- Drone

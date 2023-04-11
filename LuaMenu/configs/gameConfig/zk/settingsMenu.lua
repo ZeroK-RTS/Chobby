@@ -1261,31 +1261,31 @@ local settingsConfig = {
 					{
 						name = "Higher performance",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 1.8,
+							LuaGarbageCollectionMemLoadMult = 1.7,
 						}
 					},
 					{
 						name = "More performance",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 2.2,
+							LuaGarbageCollectionMemLoadMult = 2.4,
 						}
 					},
 					{
 						name = "Recommended",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 2.65,
+							LuaGarbageCollectionMemLoadMult = 3.2,
 						}
 					},
 					{
 						name = "More Stability",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 3.8,
+							LuaGarbageCollectionMemLoadMult = 4,
 						}
 					},
 					{
 						name = "Higher Stability",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 5,
+							LuaGarbageCollectionMemLoadMult = 6,
 						}
 					},
 					{
@@ -1309,31 +1309,31 @@ local settingsConfig = {
 					{
 						name = "Higher Performance",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 1.3,
+							LuaGarbageCollectionRunTimeMult = 1.4,
 						}
 					},
 					{
 						name = "More Performance",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 1.5,
+							LuaGarbageCollectionRunTimeMult = 1.7,
 						}
 					},
 					{
 						name = "Recommended",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 1.65,
+							LuaGarbageCollectionRunTimeMult = 2,
 						}
 					},
 					{
 						name = "More Stability",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 2.1,
+							LuaGarbageCollectionRunTimeMult = 3,
 						}
 					},
 					{
 						name = "Higher Stability",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 3.5,
+							LuaGarbageCollectionRunTimeMult = 4,
 						}
 					},
 					{
