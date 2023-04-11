@@ -17,9 +17,12 @@ end
 local loadRate = 1
 local mapListWindow
 local lobby
+<<<<<<< HEAD
 local wgChobbyConfig
 local listFont
 local oldOnlyFeaturedMaps = nil
+=======
+>>>>>>> d47f25bd... Don't make globals that are only used in init.
 local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 
@@ -27,7 +30,7 @@ local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function CreateMapEntry(mapName, mapData, CloseFunc)--{"ResourceID":7098,"Name":"2_Mountains_Battlefield","SupportLevel":2,"Width":16,"Height":16,"IsAssymetrical":false,"Hills":2,"WaterLevel":1,"Is1v1":false,"IsTeams":true,"IsFFA":false,"IsChickens":false,"FFAMaxTeams":null,"RatingCount":3,"RatingSum":10,"IsSpecial":false},
+local function CreateMapEntry(mapName, mapData, CloseFunc, Configuration, listFont)--{"ResourceID":7098,"Name":"2_Mountains_Battlefield","SupportLevel":2,"Width":16,"Height":16,"IsAssymetrical":false,"Hills":2,"WaterLevel":1,"Is1v1":false,"IsTeams":true,"IsFFA":false,"IsChickens":false,"FFAMaxTeams":null,"RatingCount":3,"RatingSum":10,"IsSpecial":false},
 	local mapButton = Button:New {
 		classname = "button_rounded",
 		x = 0,
@@ -47,7 +50,7 @@ local function CreateMapEntry(mapName, mapData, CloseFunc)--{"ResourceID":7098,"
 		},
 	}
 
-	local mapImageFile, needDownload = wgChobbyConfig:GetMinimapSmallImage(mapName)
+	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(mapName)
 	Image:New {
 		name = "minimapImage",
 		x = 3,
@@ -57,7 +60,7 @@ local function CreateMapEntry(mapName, mapData, CloseFunc)--{"ResourceID":7098,"
 		padding = {1,1,1,1},
 		keepAspect = true,
 		file = mapImageFile,
-		fallbackFile = (needDownload and wgChobbyConfig:GetLoadingImage(2)) or nil,
+		fallbackFile = (needDownload and Configuration:GetLoadingImage(2)) or nil,
 		checkFileExists = needDownload,
 		parent = mapButton,
 	}
@@ -148,9 +151,8 @@ local function InitializeControls()
 	--local lmkb, lmalloc, lgkb, lgalloc = Spring.GetLuaMemUsage()
 	--Spring.Echo("LuaMenu KB", lmkb, "allocs", lmalloc, "Lua global KB", lgkb, "allocs", lgalloc)
 
-	wgChobbyConfig = WG.Chobby.Configuration
-
-	listFont = wgChobbyConfig:GetFont(2)
+	local Configuration = WG.Chobby.Configuration
+	local listFont = Configuration:GetFont(2)
 
 	local mapListWindow = Window:New {
 		classname = "main_window",
@@ -169,7 +171,7 @@ local function InitializeControls()
 		y = WG.TOP_LABEL_Y,
 		height = 20,
 		parent = mapListWindow,
-		objectOverrideFont = wgChobbyConfig:GetFont(3),
+		objectOverrideFont = Configuration:GetFont(3),
 		caption = "Select a Map",
 	}
 
@@ -246,7 +248,7 @@ local function InitializeControls()
 		for i = 1, loadRate do
 			if featuredMapList[featuredMapIndex] then
 				local mapName = featuredMapList[featuredMapIndex].Name
-				control, sortData, mapFuncs[mapName] = CreateMapEntry(mapName, featuredMapList[featuredMapIndex], CloseFunc)
+				control, sortData, mapFuncs[mapName] = CreateMapEntry(mapName, featuredMapList[featuredMapIndex], CloseFunc, Configuration, listFont)
 				mapItems[#mapItems + 1] = {mapName, control, sortData}
 				featuredMapIndex = featuredMapIndex + 1
 			end
@@ -255,11 +257,11 @@ local function InitializeControls()
 
 		if featuredMapList[featuredMapIndex] then
 			WG.Delay(AddTheNextBatchOfMaps, 0.1)
-		elseif not wgChobbyConfig.onlyShowFeaturedMaps then
+		elseif not Configuration.onlyShowFeaturedMaps then
 			for i, archive in pairs(VFS.GetAllArchives()) do
 				local info = VFS.GetArchiveInfo(archive)
 				if info and info.modtype == 3 and not mapFuncs[info.name] then
-					control, sortData, mapFuncs[info.name] = CreateMapEntry(info.name, nil, CloseFunc)
+					control, sortData, mapFuncs[info.name] = CreateMapEntry(info.name, nil, CloseFunc, Configuration, listFont)
 					mapItems[#mapItems + 1] = {info.name, control, sortData}
 				end
 			end
@@ -279,7 +281,7 @@ local function InitializeControls()
 		width = 80,
 		height = WG.BUTTON_HEIGHT,
 		caption = i18n("close"),
-		objectOverrideFont = wgChobbyConfig:GetFont(3),
+		objectOverrideFont = Configuration:GetFont(3),
 		classname = "negative_button",
 		parent = mapListWindow,
 		OnClick = {
@@ -289,19 +291,19 @@ local function InitializeControls()
 		},
 	}
 
-	if wgChobbyConfig.gameConfig.link_maps ~= nil then
+	if Configuration.gameConfig.link_maps ~= nil then
 		Button:New {
 			right = 98,
 			y = WG.TOP_BUTTON_Y,
 			width = 180,
 			height = WG.BUTTON_HEIGHT,
 			caption = i18n("download_maps"),
-			objectOverrideFont = wgChobbyConfig:GetFont(3),
+			objectOverrideFont = Configuration:GetFont(3),
 			classname = "option_button",
 			parent = mapListWindow,
 			OnClick = {
 				function ()
-					WG.BrowserHandler.OpenUrl(wgChobbyConfig.gameConfig.link_maps())
+					WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_maps())
 				end
 			},
 		}
@@ -318,8 +320,8 @@ local function InitializeControls()
 		height = 33,
 		text = '',
 		hint = i18n("type_to_filter"),
-		objectOverrideFont = wgChobbyConfig:GetFont(2),
-		objectOverrideHintFont = wgChobbyConfig:GetHintFont(2),
+		objectOverrideFont = Configuration:GetFont(2),
+		objectOverrideHintFont = Configuration:GetHintFont(2),
 		parent = mapListWindow,
 		OnKeyPress = {
 			function(obj, key, ...)
@@ -364,11 +366,11 @@ local function InitializeControls()
 	function externalFunctions.UpdateHaveMap(thingName)
 		if mapFuncs[thingName] then
 			mapFuncs[thingName].UpdateHaveMap()
-		elseif not wgChobbyConfig.onlyShowFeaturedMaps and VFS.HasArchive(thingName) then
+		elseif not Configuration.onlyShowFeaturedMaps and VFS.HasArchive(thingName) then
 			local info = VFS.GetArchiveInfo(thingName)
 			if info and info.modtype == 3 and not mapFuncs[info.name] then
 				local control, sortData
-				control, sortData, mapFuncs[info.name] = CreateMapEntry(info.name, nil, CloseFunc)
+				control, sortData, mapFuncs[info.name] = CreateMapEntry(info.name, nil, CloseFunc, Configuration, listFont)
 				mapList:AddItem(info.name, control, sortData)
 			end
 		end
