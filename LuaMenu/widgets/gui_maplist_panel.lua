@@ -17,12 +17,7 @@ end
 local loadRate = 1
 local mapListWindow
 local lobby
-<<<<<<< HEAD
-local wgChobbyConfig
-local listFont
 local oldOnlyFeaturedMaps = nil
-=======
->>>>>>> d47f25bd... Don't make globals that are only used in init.
 local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 
