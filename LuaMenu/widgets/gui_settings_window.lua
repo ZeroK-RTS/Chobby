@@ -1829,6 +1829,9 @@ end
 
 local firstCall = true
 function widget:ActivateMenu()
+	if not (WG.Chobby and WG.Chobby.Configuration) then
+		return
+	end
 	if firstCall then
 		local gameSettings = WG.Chobby.Configuration.game_settings
 		for key, value in pairs(gameSettings) do
@@ -1836,9 +1839,6 @@ function widget:ActivateMenu()
 		end
 
 		firstCall = false
-		return
-	end
-	if not (WG.Chobby and WG.Chobby.Configuration) then
 		return
 	end
 	inLobby = true
