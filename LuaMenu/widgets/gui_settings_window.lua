@@ -692,6 +692,21 @@ local function AddNumberSetting(offset, caption, desc, key, default, minVal, max
 	return label, numberInput, offset + ITEM_OFFSET
 end
 
+local function AddLabel(offset, caption, tooltip)
+	local Configuration = WG.Chobby.Configuration
+	return Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = caption,
+		tooltip = tooltip,
+	}
+end
+
 local function GetLobbyTabControls()
 	local freezeSettings = true
 
@@ -718,16 +733,7 @@ local function GetLobbyTabControls()
 		langNum = langNum + 1
 	end
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Language",
-	}
+	children[#children + 1] = AddLabel(offset, "Language")
 	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
 		y = offset,
@@ -748,16 +754,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Split Panel Mode",
-	}
+	children[#children + 1] = AddLabel(offset, "Split Panel Mode")
 	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
 		y = offset,
@@ -780,16 +777,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], children[#children + 2], offset = AddNumberSetting(offset, "Lobby Interface Scale", "Increase or decrease interface size, for accessibility and 4k screens.",
 		"uiScale", Configuration.uiScale, Configuration.minUiScale*100, Configuration.maxUiScale*100, true)
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Chat Font Size",
-	}
+	children[#children + 1] = AddLabel(offset, "Chat Font Size")
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -810,16 +798,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Menu Music Volume",
-	}
+	children[#children + 1] = AddLabel(offset, "Menu Music Volume")
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -840,16 +819,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Notification Volume",
-	}
+	children[#children + 1] = AddLabel(offset, "Notification Volume")
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -870,16 +840,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Background Brightness",
-	}
+	children[#children + 1] = AddLabel(offset, "Background Brightness")
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -900,16 +861,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Game Overlay Opacity",
-	}
+	children[#children + 1] = AddLabel(offset, "Game Overlay Opacity")
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -930,17 +882,10 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Coop Connection Delay",
-		tooltip = "Hosts with poor internet may require their clients to add a delay in order to connect.",
-	}
+	children[#children + 1] = AddLabel(offset,
+		"Coop Connection Delay",
+		"Hosts with poor internet may require their clients to add a delay in order to connect."
+	)
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
 		y = offset,
@@ -988,7 +933,7 @@ local function GetLobbyTabControls()
 	if not Configuration.gameConfig.disablePlanetwars then
 		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)
 	end
-	
+
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Autosave SP on matchmaker", "autosaveOnMatchmaker", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("ingame_notifcations"), "ingameNotifcations", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("non_friend_notifications"), "nonFriendNotifications", true)
@@ -1000,20 +945,11 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Minimize lobby updates", "lobbyIdleSleep", true)
-	
+
 	-- Not needed as it happens automatically for spectating and singleplayer.
 	--children[#children + 1], offset = AddCheckboxSetting(offset, i18n("keep_queues"), "rememberQueuesOnStart2", false, nil, "Stay in the matchmaker when you launch a singleplayer game or replay, as well as when watching a multiplayer game.")
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Clear Channel History",
-	}
+	children[#children + 1] = AddLabel(offset, "Clear Channel History")
 	children[#children + 1] = Button:New {
 		x = COMBO_X,
 		y = offset,
@@ -1031,16 +967,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Delete Path Cache",
-	}
+	children[#children + 1] = AddLabel(offset, "Delete Path Cache")
 	children[#children + 1] = Button:New {
 		x = COMBO_X,
 		y = offset,
@@ -1116,16 +1043,7 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Use wrong engine", "useWrongEngine", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show old AI versions", "showOldAiVersions", false)
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Disable Lobby",
-	}
+	children[#children + 1] = AddLabel(offset, "Disable Lobby")
 	children[#children + 1] = Button:New {
 		x = COMBO_X,
 		y = offset,
@@ -1142,16 +1060,7 @@ local function GetVoidTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Server Address                                                                           (zero-k.info or test.zero-k.info for testing)",
-	}
+	children[#children + 1] = AddLabel(offset, "Server Address                                                                           (zero-k.info or test.zero-k.info for testing)")
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,
 		y = offset,
@@ -1174,16 +1083,7 @@ local function GetVoidTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Server Port                                                                                  (8200 or 8202 for testing)",
-	}
+	children[#children + 1] = AddLabel(offset, "Server Port                                                                                  (8200 or 8202 for testing)")
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,
 		y = offset,
@@ -1324,7 +1224,7 @@ local function MakeRestartWarning(offset)
 		objectOverrideFont = Configuration:GetFont(2),
 		caption = "Warning: Most changes do not affect battles in progress.",
 	}
-	
+
 	return warningLabel, offset + ITEM_OFFSET
 end
 
@@ -1671,7 +1571,7 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 		label, list, customSettingsSwitch, offset = MakePresetsControl(settingPresets, offset)
 		children[#children + 1] = label
 		children[#children + 1] = list
-		
+
 		label, offset = MakeRestartWarning(offset)
 		children[#children + 1] = label
 	end
@@ -1856,7 +1756,7 @@ function SettingsWindow.WriteGameSpringsettings(fileName)
 		WriteToFile("WindowBorderless", 0)
 		WriteToFile("Fullscreen", 1)
 	end
-	
+
 	settingsFile:close()
 end
 
@@ -1981,7 +1881,7 @@ function widget:Initialize()
 
 		-- Settings which rely on io
 		local gameSettings = Configuration.game_settings
-	
+
 		if lobbyFullscreen ~= battleStartDisplay or battleStartDisplay >= 4 then
 			SetLobbyFullscreenMode(battleStartDisplay)
 
