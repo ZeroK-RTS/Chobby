@@ -17,6 +17,7 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Local Variables
+local spSetConfigInt = Spring.SetConfigInt
 
 local battleStartDisplay = 1
 local lobbyFullscreen = 1
@@ -87,7 +88,7 @@ local function SaveWindowPos(width, height, x, y)
 	end
 
 	-- WindowState is not saved by Spring. See https://springrts.com/mantis/view.php?id=5624
-	Spring.SetConfigInt("WindowState", (x == 0 and 1) or 0, false)
+	spSetConfigInt("WindowState", (x == 0 and 1) or 0, false)
 end
 
 local function EnableProfilerFunc(newState)
@@ -230,22 +231,22 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		-- Required to remove FUDGE
 		currentManualBorderless = false
 
-		Spring.SetConfigInt("Fullscreen", 1)
+		spSetConfigInt("Fullscreen", 1)
 
-		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
-		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
-		Spring.SetConfigInt("WindowPosX", FUDGE, false)
-		Spring.SetConfigInt("WindowPosY", FUDGE, false)
+		spSetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
+		spSetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
+		spSetConfigInt("WindowPosX", FUDGE, false)
+		spSetConfigInt("WindowPosY", FUDGE, false)
 
-		Spring.SetConfigInt("WindowBorderless", 1, false)
-		Spring.SetConfigInt("Fullscreen", 0, false)
+		spSetConfigInt("WindowBorderless", 1, false)
+		spSetConfigInt("Fullscreen", 0, false)
 	elseif mode == 2 then -- Windowed
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetViewGeometry()
 		winPosX = Configuration.window_WindowPosX or winPosX
 		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
 		winSizeY = Configuration.window_YResolutionWindowed or winSizeY
-		Spring.SetConfigInt("WindowBorderless", 0, false)
-		Spring.SetConfigInt("Fullscreen", 0)
+		spSetConfigInt("WindowBorderless", 0, false)
+		spSetConfigInt("Fullscreen", 0)
 
 		if Configuration.window_WindowPosY then
 			winPosY = Configuration.window_WindowPosY
@@ -255,23 +256,23 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 
 		if winPosY > 10 then
 			-- Window is not stuck at the top of the screen
-			Spring.SetConfigInt("WindowPosX", math.min(winPosX, screenX - 50), false)
-			Spring.SetConfigInt("WindowPosY", math.min(winPosY, screenY - 50), false)
-			Spring.SetConfigInt("XResolutionWindowed",  math.min(winSizeX, screenX), false)
-			Spring.SetConfigInt("YResolutionWindowed",  math.min(winSizeY, screenY - 50), false)
+			spSetConfigInt("WindowPosX", math.min(winPosX, screenX - 50), false)
+			spSetConfigInt("WindowPosY", math.min(winPosY, screenY - 50), false)
+			spSetConfigInt("XResolutionWindowed",  math.min(winSizeX, screenX), false)
+			spSetConfigInt("YResolutionWindowed",  math.min(winSizeY, screenY - 50), false)
 		else
 			-- Reset window to screen centre
-			Spring.SetConfigInt("WindowPosX", screenX/4, false)
-			Spring.SetConfigInt("WindowPosY", screenY/8, false)
-			Spring.SetConfigInt("XResolutionWindowed", screenX/2, false)
-			Spring.SetConfigInt("YResolutionWindowed", screenY*3/4, false)
+			spSetConfigInt("WindowPosX", screenX/4, false)
+			spSetConfigInt("WindowPosY", screenY/8, false)
+			spSetConfigInt("XResolutionWindowed", screenX/2, false)
+			spSetConfigInt("YResolutionWindowed", screenY*3/4, false)
 		end
-		Spring.SetConfigInt("WindowBorderless", 0, false)
-		Spring.SetConfigInt("Fullscreen", 0)
+		spSetConfigInt("WindowBorderless", 0, false)
+		spSetConfigInt("Fullscreen", 0)
 	elseif mode == 3 then -- Fullscreen
-		Spring.SetConfigInt("XResolution", screenX, false)
-		Spring.SetConfigInt("YResolution", screenY, false)
-		Spring.SetConfigInt("Fullscreen", 1, false)
+		spSetConfigInt("XResolution", screenX, false)
+		spSetConfigInt("YResolution", screenY, false)
+		spSetConfigInt("Fullscreen", 1, false)
 	elseif mode == 4 or mode == 6 then -- Manual Borderless and windowed
 		local borders = borderOverride
 		if not borders then
@@ -284,16 +285,16 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		end
 		currentManualBorderless = Spring.Utilities.CopyTable(borders)
 
-		Spring.SetConfigInt("Fullscreen", (mode == 4 and 1) or 0)
+		spSetConfigInt("Fullscreen", (mode == 4 and 1) or 0)
 
-		Spring.SetConfigInt("XResolutionWindowed", borders.width or (screenX - FUDGE*2), false)
-		Spring.SetConfigInt("YResolutionWindowed", borders.height or (screenY - FUDGE*2), false)
-		Spring.SetConfigInt("WindowPosX", borders.x or FUDGE, false)
-		Spring.SetConfigInt("WindowPosY", borders.y or FUDGE, false)
+		spSetConfigInt("XResolutionWindowed", borders.width or (screenX - FUDGE*2), false)
+		spSetConfigInt("YResolutionWindowed", borders.height or (screenY - FUDGE*2), false)
+		spSetConfigInt("WindowPosX", borders.x or FUDGE, false)
+		spSetConfigInt("WindowPosY", borders.y or FUDGE, false)
 
-		Spring.SetConfigInt("WindowBorderless", (mode == 4 and 1) or 0, false)
+		spSetConfigInt("WindowBorderless", (mode == 4 and 1) or 0, false)
 
-		Spring.SetConfigInt("Fullscreen", 0, false)
+		spSetConfigInt("Fullscreen", 0, false)
 	elseif mode == 5 then -- Manual Fullscreen
 		local resolution
 		if inLobby then
@@ -301,9 +302,9 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		else
 			resolution = WG.Chobby.Configuration.manualFullscreen.game or {}
 		end
-		Spring.SetConfigInt("XResolution", resolution.width or screenX, false)
-		Spring.SetConfigInt("YResolution", resolution.height or screenY, false)
-		Spring.SetConfigInt("Fullscreen", 1, false)
+		spSetConfigInt("XResolution", resolution.width or screenX, false)
+		spSetConfigInt("YResolution", resolution.height or screenY, false)
+		spSetConfigInt("Fullscreen", 1, false)
 	end
 
 	if delayedModeSet == mode and delayedBorderOverride then
@@ -313,8 +314,8 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		delayedModeSet = mode
 		delayedBorderOverride = borderOverride
 		currentMode = 2
-		Spring.SetConfigInt("WindowBorderless", 0, false)
-		Spring.SetConfigInt("Fullscreen", 0)
+		spSetConfigInt("WindowBorderless", 0, false)
+		spSetConfigInt("Fullscreen", 0)
 		WG.Delay(SetLobbyFullscreenMode, 0.8)
 	end
 end
