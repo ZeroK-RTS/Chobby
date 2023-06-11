@@ -104,12 +104,13 @@ local externalFuncAndData = {
 	link_matchmakerMapBans  = link_matchmakerMapBans,
 	ignoreServerVersion     = false,
 	runTutorial             = true,
-	openTrack               = 'sounds/lobbyMusic/The Secret of Ayers Rock.ogg',
+	openTrack               = 'sounds/lobbyMusic/dreamsofcipher_wip.ogg',
 	randomTrackList         = {
 		"sounds/lobbyMusic/A Magnificent Journey (Alternative Version).ogg",
 		"sounds/lobbyMusic/Dream Infinity.ogg",
 		"sounds/lobbyMusic/Interstellar.ogg",
 		"sounds/lobbyMusic/Tomorrow Landscape.ogg",
+		"sounds/lobbyMusic/The Secret of Ayers Rock.ogg",
 	},
 	-- I assume ZK doesn't want to show this as it was removed
 	hideGameExistanceDisplay = true,
