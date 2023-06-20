@@ -181,6 +181,18 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 
+	local status_volumePanel = Panel:New {
+		y = 5,
+		height = 36,
+		width = 205,
+		right = userStatusWidth + 10,
+		padding = {0, 0, 0, 0},
+		parent = holder_status,
+		children = {
+			WG.VolumePanel.GetControl(),
+		}
+	}
+
 	local status_userWindow = Control:New {
 		y = 0,
 		right = 0,
@@ -619,6 +631,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_status._relativeBounds.right = 0
 			holder_status:UpdateClientArea()
 
+			status_volumePanel._relativeBounds.bottom = panelButtonsHeight
+			status_volumePanel:UpdateClientArea()
 			status_userWindow._relativeBounds.bottom = panelButtonsHeight
 			status_userWindow:UpdateClientArea()
 
@@ -676,6 +690,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_status._relativeBounds.right = 0
 			holder_status:UpdateClientArea()
 
+			status_volumePanel._relativeBounds.bottom = 0
+			status_volumePanel:UpdateClientArea()
 			status_userWindow._relativeBounds.bottom = 0
 			status_userWindow:UpdateClientArea()
 
