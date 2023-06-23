@@ -139,7 +139,7 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset, imageWidth)
 		textDisplay:SetPos(nil, newPosition)
 
 		if newColor then
-			textDisplay.font = WG.Chobby.Configuration:GetFont(fontSize, colorName, newColor)
+			textDisplay.font = WG.Chobby.Configuration:GetFont(fontSize, colorName, {color = newColor})
 			textDisplay:Invalidate()
 		else
 			textDisplay.font = WG.Chobby.Configuration:GetFont(fontSize)
