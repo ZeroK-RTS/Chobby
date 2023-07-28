@@ -1,11 +1,14 @@
 
 ButtonUtilities = ButtonUtilities or {}
 
-local COLOR_CLASS = {
-	positive_button = true,
-	negative_button = true,
+local VOTE_CLASS = {
 	option_button = true,
-	action_button = true,
+	yes_button = true,
+	no_button = true,
+}
+
+local STATE_CLASS = {
+	button_highlight = true,
 }
 
 function ButtonUtilities.SetButtonSelected(button)
@@ -17,6 +20,7 @@ function ButtonUtilities.SetButtonSelected(button)
 	if not button.highlighted then
 		button.oldCaption = button.oldCaption or button.caption
 		button.oldBackgroundColor = button.oldBackgroundColor or button.backgroundColor
+		button.oldBorderColor = button.oldBorderColor or button.borderColor
 		button.oldFont = button.oldFont or button.font
 	end
 
@@ -25,18 +29,21 @@ function ButtonUtilities.SetButtonSelected(button)
 
 	button:SetCaption(Configuration:GetSelectedColor() .. button.oldCaption .. "\b")
 	button.font = Configuration:GetFont(button.oldFont.size, "button_highlight", {
-		outlineWidth = 6,
-		outlineHeight = 6,
-		outline = true,
-		outlineColor = {0,0,0,0.8},
+		--outlineWidth = 10,
+		--outlineHeight = 10,
+		--outline = true,
+		--outlineColor = {0,0,0,0.8},
+		--outlineColor = {1,1,1,.03},
 		autoOutlineColor = false,
 	}, true)
 
-	if COLOR_CLASS[button.classname] then
-		local col = button.backgroundColor
-		button.backgroundColor = {(1 + col[1])*0.5, (1 + col[2])*0.5, (1 + col[3])*0.5, (1 + col[4])*0.5}
+	local selected_color = Configuration:GetButtonSelectedColor()
+	if VOTE_CLASS[button.classname] then
+		button.borderColor = button.focusColor
+	elseif STATE_CLASS[button.classname] then
+		button.borderColor = {selected_color[1] * (4/3), selected_color[2] * (4/3), selected_color[3] * (4/3), selected_color[4]}
 	else
-		button.backgroundColor = Configuration:GetButtonSelectedColor()
+		button.borderColor = selected_color
 	end
 	button:Invalidate()
 end
@@ -49,7 +56,7 @@ function ButtonUtilities.SetButtonHighlighted(button)
 	local Configuration = WG.Chobby.Configuration
 	if not button.selected then
 		button.oldCaption = button.oldCaption or button.caption
-		button.oldBackgroundColor = button.oldBackgroundColor or button.backgroundColor
+		button.oldBorderColor = button.oldBorderColor or button.borderColor
 		button.oldFont = button.oldFont or button.font
 	end
 
@@ -75,7 +82,7 @@ function ButtonUtilities.SetButtonDeselected(button)
 	end
 
 	button.oldCaption = button.oldCaption or button.caption
-	button.oldBackgroundColor = button.oldBackgroundColor or button.backgroundColor
+	button.oldBorderColor = button.oldBorderColor or button.borderColor
 	button.oldFont = button.oldFont or button.font
 
 	button.selected = false
@@ -83,7 +90,7 @@ function ButtonUtilities.SetButtonDeselected(button)
 
 	button:SetCaption(button.oldCaption)
 	button.font = button.oldFont
-	button.backgroundColor = button.oldBackgroundColor
+	button.borderColor = button.oldBorderColor
 	button:Invalidate()
 end
 

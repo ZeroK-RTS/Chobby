@@ -18,10 +18,10 @@ local DEBUG_SHOW_INGAME_BRIEF = false
 
 local GALAXY_IMAGE = LUA_DIRNAME .. "images/heic1403aDowngrade.jpg"
 local IMAGE_BOUNDS = {
-	x = 810/4000,
-	y = 710/2602,
-	width = 2400/4000,
-	height = 1500/2602,
+	x = 0.2025,
+	y = 0.2725,
+	width = 0.6,
+	height = 0.56,
 }
 
 local TRANSFORM_BOUNDS = {
@@ -42,12 +42,14 @@ local difficultyNameMap = {
 local edgeDrawList = 0
 local planetConfig, planetAdjacency, planetEdgeList
 
-local ACTIVE_COLOR = {0,1,0,0.75}
-local INACTIVE_COLOR = {0.2, 0.2, 0.2, 0.75}
+local ACTIVE_COLOR = {104/255, 107/255, 190/255, 1}
+local BORDER_COLOR = {1, 0.2, 0.2, 1}
+local INACTIVE_COLOR = {47/255, 39/255, 48/255, 0.6}
 local HIDDEN_COLOR = {0.2, 0.2, 0.2, 0}
+local OUTLINE_COLOR = {0, 0, 0, 0.90}
 
 local PLANET_START_COLOR = {1, 1, 1, 1}
-local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
+local PLANET_NO_START_COLOR = {0.40, 0.40, 0.55, 1}
 
 local TARGET_IMAGE = LUA_DIRNAME .. "images/nicecircle.png"
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
@@ -89,7 +91,22 @@ local function DrawEdgeLines()
 				local planetData = planetList[pid]
 				local hidden = not (planetData and planetData.GetVisible()) -- Note that planets not in the whitelist have planetData = nil
 				local x, y = planetHandler.GetZoomTransform(planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y)
-				gl.Color((hidden and HIDDEN_COLOR) or (planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
+				gl.Color((hidden and HIDDEN_COLOR) or (planetData.GetCaptured() and ACTIVE_COLOR) or (planetData.GetCapturedOrStarable_Unsafe() and BORDER_COLOR) or INACTIVE_COLOR)
+				gl.Vertex(x, y)
+			end
+		end
+	end
+end
+
+local function DrawEdgeLineOutline()
+	for i = 1, #planetEdgeList do
+		if IsEdgeVisible(planetEdgeList[i][1], planetEdgeList[i][2]) then
+			for p = 1, 2 do
+				local pid = planetEdgeList[i][p]
+				local planetData = planetList[pid]
+				local hidden = not (planetData and planetData.GetVisible()) -- Note that planets not in the whitelist have planetData = nil
+				local x, y = planetHandler.GetZoomTransform(planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y)
+				gl.Color((hidden and HIDDEN_COLOR) or OUTLINE_COLOR)
 				gl.Vertex(x, y)
 			end
 		end
@@ -100,9 +117,15 @@ local function CreateEdgeList()
 	gl.BeginEnd(GL.LINES, DrawEdgeLines)
 end
 
+local function CreateEdgeListOutline()
+	gl.BeginEnd(GL.LINES, DrawEdgeLineOutline)
+end
+
 local function UpdateEdgeList()
 	gl.DeleteList(edgeDrawList)
+	gl.DeleteList(edgeDrawListOutline)
 	edgeDrawList = gl.CreateList(CreateEdgeList)
+	edgeDrawListOutline = gl.CreateList(CreateEdgeListOutline)
 	planetHandler.SendEdgesToBack()
 end
 
@@ -1877,8 +1900,33 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			gl.PushMatrix()
 			gl.Translate(x, y, 0)
 			gl.Scale(w, h, 1)
-			gl.LineWidth(3 * scale)
+			gl.LineWidth(4 * scale)
 			gl.CallList(edgeDrawList)
+			gl.PopMatrix()
+		end,
+		parent = window,
+	}
+	
+		local graphOutline = Chili.Control:New{
+		x       = 0,
+		y       = 0,
+		height  = "100%",
+		width   = "100%",
+		padding = {0,0,0,0},
+		drawcontrolv2 = true,
+		DrawControl = function (obj)
+			local x = obj.x
+			local y = obj.y
+			local w = obj.width
+			local h = obj.height
+
+			local _,_,scale = planetHandler.GetZoomTransformValues()
+
+			gl.PushMatrix()
+			gl.Translate(x, y, 0)
+			gl.Scale(w, h, 1)
+			gl.LineWidth(6 * scale)
+			gl.CallList(edgeDrawListOutline)
 			gl.PopMatrix()
 		end,
 		parent = window,
@@ -1987,6 +2035,9 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	function externalFunctions.SendEdgesToBack()
 		if graph then
 			graph:SendToBack()
+		end
+		if graphOutline then
+			graphOutline:SendToBack()
 		end
 	end
 

@@ -17,7 +17,7 @@ end
 --------------------------------------------------------------------------------
 -- Vars
 
-local IMG_LINK = LUA_DIRNAME .. "images/link.png"
+-- local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 local IMG_MISSING = LUA_DIRNAME .. "images/minimapNotFound1.png"
 local IMG_BULLET = LUA_DIRNAME .. "images/bullet.png"
 
@@ -98,7 +98,7 @@ local function AddLinkButton(scroll, name, tooltip, link, x, right, y, bottom)
 		bottom = bottom,
 		caption = name,
 		tooltip = tooltip,
-		classname = "option_button",
+		classname = "link_button",
 		align = "left",
 		alignPadding = 0.12,
 		objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(3),
@@ -385,25 +385,25 @@ local headingFormats = {
 		buttonSize = 28,
 		height = 24,
 		linkSize = 16,
-		spacing = 2,
+		spacing = 4,
 		buttonPos = 2,
-		inButton = 4,
+		inButton = 8,
 		paragraphSpacing = 0,
 		topHeadingOffset = 30,
 		imageSize = 120,
-		buttonBot = 6,
+		buttonBot = 12, -- clickable area size
 	},
 	[4] = {
 		buttonSize = 40,
 		height = 34,
 		linkSize = 28,
-		spacing = 16,
+		spacing = 24,
 		buttonPos = 5,
-		inButton = 7,
+		inButton = 14,
 		paragraphSpacing = 30,
 		topHeadingOffset = 50,
 		imageSize = 120,
-		buttonBot = 10,
+		buttonBot = 20,
 	},
 }
 
@@ -432,8 +432,8 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 		if showBulletHeading then
 			if not controls.bullet then
 				controls.bullet = Image:New{
-					x = 2,
-					y = offset + 5,
+					x = 5,
+					y = offset + 2 + headFormat.inButton,
 					width = 16,
 					height = 16,
 					file = IMG_BULLET,
@@ -451,9 +451,9 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 					y = offset + 5,
 					right = 2,
 					height = headFormat.buttonSize,
-					classname = "button_square",
 					caption = "",
 					padding = {0, 0, 0, 0},
+					backgroundColor = {0, 0, 0, 0.45},
 					parent = holder,
 					OnClick = {
 						function ()
@@ -467,7 +467,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 
 			if not controls.heading then
 				controls.heading = TextBox:New{
-					x = 4,
+					x = 8,
 					y = headFormat.inButton,
 					right = 4,
 					height = headFormat.height,
@@ -481,23 +481,23 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 				controls.heading:SetText(entryData.heading)
 			end
 
-			-- Possibly looks nicer without link image.
-			if not showBulletHeading then
-				if not controls.linkImage then
-					controls.linkImage = Image:New {
-						x = 0,
-						y = 5,
-						width = headFormat.linkSize,
-						height = headFormat.linkSize,
-						keepAspect = true,
-						file = IMG_LINK,
-						parent = controls.linkButton,
-					}
-				end
-
-				local length = controls.heading.font:GetTextWidth(entryData.heading)
-				controls.linkImage:SetPos(length + 8)
-			end
+-- 			-- Possibly looks nicer without link image.
+-- 			if not showBulletHeading then
+-- 				if not controls.linkImage then
+-- 					controls.linkImage = Image:New {
+-- 						x = 0,
+-- 						y = 5,
+-- 						width = headFormat.linkSize,
+-- 						height = headFormat.linkSize,
+-- 						keepAspect = true,
+-- 						file = IMG_LINK,
+-- 						parent = controls.linkButton,
+-- 					}
+-- 				end
+-- 
+-- 				local length = controls.heading.font:GetTextWidth(entryData.heading)
+-- 				controls.linkImage:SetPos(length + 8)
+-- 			end
 
 			if controls.freeHeading then
 				controls.freeHeading:SetVisibility(false)
@@ -604,7 +604,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 		local offset = 0
 
 		if controls.bullet then
-			controls.bullet:SetPos(nil, offset + 5)
+			controls.bullet:SetPos(nil, offset + 2 + headFormat.inButton)
 		end
 
 		local headingSize

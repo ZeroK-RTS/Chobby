@@ -60,7 +60,7 @@ local function AddLinkButton(scroll, name, tooltip, link, requireLogin, x, right
 		bottom = bottom,
 		caption = name,
 		tooltip = tooltip,
-		classname = "option_button",
+		classname = "link_button",
 		objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(3),
 		align = "left",
 		alignPadding = 0.085,
@@ -178,7 +178,7 @@ local function GetProfileHandler()
 		parent = holder,
 	}
 	local nameHolder = Control:New{
-		x = "36%",
+		x = "38%",
 		y = 0,
 		right = 0,
 		height = 28,

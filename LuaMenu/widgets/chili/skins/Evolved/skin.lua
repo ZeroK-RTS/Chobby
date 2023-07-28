@@ -36,12 +36,12 @@ skin.icons = {
 skin.button = {
   TileImageBK = ":cl:tech_button_small_square_bk.png",
   TileImageFG = ":cl:tech_button_small_square_fg.png",
-  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
+  tiles = {4, 4, 4, 4}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
-
-  backgroundColor = {0.04, 0.3, 0.55, 0.84},
-  focusColor  = {0.94, 0.50, 0.23, 0.72},
-  borderColor = {1,1,1,0},
+  
+  backgroundColor = {0.17, 0.16, 0.20, 1},
+  focusColor  = {0.20, 0.45, 0.80, 1},
+  borderColor = {0.17, 0.16, 0.20, 0.0},
 
   DrawControl = DrawButton,
 }
@@ -78,8 +78,8 @@ skin.button_highlight = {
   tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
-  backgroundColor = {0.2, 0.25, 0.35, 0.7},
-  focusColor  = {0.3, 0.375, 0.525, 0.5},
+  backgroundColor = {0.2, 0.25, 0.35, 1},
+  focusColor  = {0.3, 0.375, 0.525, 0.85},
   borderColor = {1,1,1,0},
 
   DrawControl = DrawButton,
@@ -113,60 +113,89 @@ skin.button_planet = {
 }
 
 skin.action_button = {
-  TileImageBK = ":cl:tech_button_bright_small_bk.png",
-  TileImageFG = ":cl:tech_button_bright_small_fg.png",
-  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
+  TileImageBK = ":cl:tech_button_bright_small_v2_bk.png",
+  TileImageFG = ":cl:tech_button_bright_small_v2_fg.png",
+  tiles = {4, 4, 4, 4}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
-
-  backgroundColor = {0.98, 0.48, 0.26, 0.65},
-  focusColor  = {0.98, 0.48, 0.26, 0.9},
-  borderColor = {0.98, 0.48, 0.26, 0.15},
+  
+  backgroundColor = {213/255, 108/255, 53/255, 0.90},
+  focusColor  = {232/255, 123/255, 66/255, 1.0},
+  borderColor = {247/255, 114/255, 42/255, 0.0},
+  
 
   DrawControl = DrawButton,
 }
 
 skin.option_button = {
-  TileImageBK = ":cl:tech_button_bright_small_bk.png",
-  TileImageFG = ":cl:tech_button_bright_small_fg.png",
-  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
+  TileImageBK = ":cl:tech_button_bright_small_v2_bk.png",
+  TileImageFG = ":cl:tech_button_bright_small_v2_fg.png",
+  tiles = {4, 4, 4, 4}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
-  backgroundColor = {0.21, 0.53, 0.60, 0.65},
-  focusColor  = {0.21, 0.53, 0.60, 0.9},
-  borderColor = {0.21, 0.53, 0.60, 0.15},
+  backgroundColor = {38/255, 117/255, 184/255, 0.80},
+  focusColor  = {54/255, 138/255, 209/255, 1.0},
+  borderColor = {0.15, 0.46, 0.72, 0.0},
+
+  DrawControl = DrawButton,
+}
+
+skin.link_button = {
+  TileImageBK = ":cl:tech_button_flair_bk.png",
+  TileImageFG = ":cl:tech_button_flair_fg.png",
+  tiles = {4, 4, 4, 12}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 18},
+
+  backgroundColor = {1, 1, 1, 1},
+  --focusColor  = {38/255, 117/255, 184/255, 1.0},
+  focusColor  = {1, 1, 1, 1.0},
+  borderColor = {0.15, 0.46, 0.72, 0.0},
 
   DrawControl = DrawButton,
 }
 
 skin.negative_button = {
-  TileImageBK = ":cl:tech_button_bright_small_bk.png",
-  TileImageFG = ":cl:tech_button_bright_small_fg.png",
-  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
+  TileImageBK = ":cl:tech_button_bright_small_v2_bk.png",
+  TileImageFG = ":cl:tech_button_bright_small_v2_fg.png",
+  tiles = {4, 4, 4, 4}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
-  backgroundColor = {0.85, 0.05, 0.25, 0.65},
-  focusColor  = {0.85, 0.05, 0.25, 0.9},
-  borderColor = {0.85, 0.05, 0.25, 0.15},
+  -- avoid negative red buttons being too eye-catching
+  backgroundColor = {211/255, 41/255, 52/255, 0.80},
+  focusColor  = {232/255, 60/255, 71/255, 1.0},
+  borderColor = {0.85, 0.05, 0.20, 0.0},
 
   DrawControl = DrawButton,
 }
 
-skin.positive_button = {
-  TileImageBK = ":cl:tech_button_bright_small_bk.png",
-  TileImageFG = ":cl:tech_button_bright_small_fg.png",
-  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
+skin.yes_button = {
+  TileImageBK = ":cl:tech_button_yes_bk.png",
+  TileImageFG = ":cl:tech_button_yes_fg.png",
+  tiles = {3, 3, 3, 3}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
-  backgroundColor = {0.05, 0.85, 0.25, 0.65},
-  focusColor  = {0.05, 0.85, 0.25, 0.9},
-  borderColor = {0.05, 0.85, 0.25, 0.15},
+  backgroundColor = {1,1,1,1},
+  focusColor  = {1,1,1,1},
+  borderColor = {1, 1, 1, 0.0},
+
+  DrawControl = DrawButton,
+}
+
+skin.no_button = {
+  TileImageBK = ":cl:tech_button_no_bk.png",
+  TileImageFG = ":cl:tech_button_no_fg.png",
+  tiles = {3, 3, 3, 3}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  backgroundColor = {1,1,1,1},
+  focusColor  = {1,1,1,1},
+  borderColor = {1, 1, 1, 0.0},
 
   DrawControl = DrawButton,
 }
 
 skin.battle_default_button = { --Blue
   TileImageBK = ":cl:tech_button_bk.png",
-  TileImageFG = ":cl:tech_button_bright_small_fg.png",
+  TileImageFG = ":cl:tech_button_bright_small_fg2.png",
   tiles = {20, 20, 20, 20}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
@@ -233,7 +262,7 @@ skin.editbox = {
   hintFont = table.merge({color = {1,1,1,0.7}}, skin.general.font),
 
   backgroundColor = {0.1, 0.1, 0.1, 0},
-  cursorColor     = {1.0, 0.7, 0.1, 0.8},
+  cursorColor     = {0.94, 0.50, 0.23, 1},
 
   focusColor  = {1, 1, 1, 1},
   borderColor = {1, 1, 1, 0.6},
@@ -319,17 +348,27 @@ skin.overlay_panel = {
   DrawControl = DrawPanel,
 }
 
+skin.queue_popup = { -- similar to skin.button, but as a panel
+  TileImageBK = ":cl:tech_button_small_square_bk.png",
+  TileImageFG = ":cl:empty.png",
+  tiles = {4, 4, 4, 4},
+
+  backgroundColor = {0.17, 0.16, 0.20, 1},
+
+  DrawControl = DrawPanel,
+}
 
 skin.progressbar = {
   TileImageFG = ":cl:tech_progressbar_full.png",
   TileImageBK = ":cl:tech_progressbar_empty.png",
-  tiles       = {10, 10, 10, 10},
+  tiles       = {3, 1, 1, 3}, --// tile widths: left,top,right,bottom
 
   font = {
     shadow = true,
   },
 
   backgroundColor = {0,0,0,0.5},
+  color = {38/255, 117/255, 184/255},
 
   DrawControl = DrawProgressbar,
 }
@@ -351,7 +390,7 @@ skin.scrollpanel = {
   HKnobTileImage = ":cl:tech_scrollbar_knob.png",
   HKnobTiles     = {6,8,6,8},
 
-  KnobColorSelected = {1,0.7,0.1,0.8},
+  KnobColorSelected = {0.94, 0.50, 0.23, 1}, -- match general focus color
 
   padding = {5, 5, 5, 0},
 
@@ -438,8 +477,8 @@ skin.window = {
 }
 
 skin.main_window = {
-  TileImage = ":c:tech_mainwindow_darker.png",
-  tiles = {176, 64, 176, 64}, --// tile widths: left,top,right,bottom
+  TileImage = ":c:tech_mainwindow_darker2.png",
+  tiles = {8, 8, 8, 8}, --// tile widths: left,top,right,bottom
   padding = {13, 13, 13, 13},
   hitpadding = {4, 4, 4, 4},
 
@@ -462,9 +501,9 @@ skin.main_window = {
 }
 
 skin.main_window_large = {
-  TileImage = ":c:tech_mainwindow_darker.png",
-  tiles = {176, 64, 176, 64}, --// tile widths: left,top,right,bottom
-  padding = {5, 4, 5, 2},
+  TileImage = ":c:tech_mainwindow_darker2.png",
+  tiles = {8, 8, 8, 8}, --// tile widths: left,top,right,bottom
+  padding = {4, 4, 4, 4},
   hitpadding = {4, 4, 4, 4},
 
   captionColor = {1, 1, 1, 0.45},
@@ -487,8 +526,8 @@ skin.main_window_large = {
 
 
 skin.main_window_small = {
-  TileImage = ":c:tech_mainwindow_small_darker.png",
-  tiles = {76, 40, 76, 40}, --// tile widths: left,top,right,bottom
+  TileImage = ":c:tech_mainwindow_small_darker2.png",
+  tiles = {8, 8, 8, 8}, --// tile widths: left,top,right,bottom
   padding = {13, 13, 13, 13},
   hitpadding = {4, 4, 4, 4},
 
@@ -511,9 +550,9 @@ skin.main_window_small = {
 }
 
 skin.tech_mainwindow_very_small = {
-  TileImage = ":c:tech_mainwindow_very_small.png",
-  tiles = {40, 30, 38, 38}, --// tile widths: left,top,right,bottom
-  padding = {10, 6, 10, 6},
+  TileImage = ":c:tech_mainwindow_very_small2.png",
+  tiles = {4, 4, 4, 4}, --// tile widths: left,top,right,bottom
+  padding = {6, 6, 6, 6},
   hitpadding = {4, 4, 4, 4},
 
   captionColor = {1, 1, 1, 0.45},
@@ -563,7 +602,7 @@ skin.line = {
   tiles = {0, 0, 0, 0},
   TileImageV = ":cl:tech_line_vert.png",
   tilesV = {0, 0, 0, 0},
-  borderColor = {50/255, 125/255, 141/255, 1},
+  borderColor = {162/255, 162/255, 162/255, 1},
   DrawControl = DrawLine,
 }
 
@@ -581,20 +620,43 @@ skin.tabbar = {
 }
 
 skin.tabbaritem = {
-  -- yes these are reverted, but also a lie (see images), only one is used
-  TileImageFG = ":cl:tech_tabbaritem_bk.png",
+  TileImageFG = ":cl:tech_tabbaritem_fg.png",
   TileImageBK = ":cl:tech_tabbaritem_bk.png",
-  tiles = {12, 12, 12, 12}, --// tile widths: left,top,right,bottom
-  padding = {1, 1, 1, 2},
+  tiles = {4, 4, 4, 4}, --// tile widths: left,top,right,bottom
+  padding = {1, 1, 1, -2},
   -- since it's color multiplication, it's easier to control white color (1, 1, 1) than black color (0, 0, 0) to get desired results
-  backgroundColor = {0.3, 0.3, 0.3, 0.5},
+  backgroundColor = {0.46, 0.45, 0.53, 0.9},
   -- actually kill this anyway
   borderColor     = {0, 0, 0, 0},
-  focusColor      = {0.46, 0.54, 0.68, 1.0},
+  focusColor      = {0.55, 0.54, 0.64, 1},
 
   DrawControl = DrawTabBarItem,
 }
 
+skin.tabbar_square_button_positive = {
+  TileImageFG = ":cl:tech_tabbaritem_square_fg.png",
+  TileImageBK = ":cl:tech_tabbaritem_square_bk.png",
+  tiles = {3, 3, 3, 3}, --// tile widths: left,top,right,bottom
+  padding = {0, 0, 0, 0},
+  backgroundColor = {0.46, 0.45, 0.53, 1},
+  borderColor     = {0, 0, 0, 0},
+  focusColor      = {0.85, 0.84, 0.95, 1},
+
+  DrawControl = DrawButton,
+}
+
+skin.tabbar_square_button_negative = {
+  TileImageFG = ":cl:tech_tabbaritem_square_negative_fg.png",
+  TileImageBK = ":cl:tech_tabbaritem_square_negative_bk.png",
+  tiles = {3, 3, 3, 3}, --// tile widths: left,top,right,bottom
+  padding = {0, 0, 0, 0},
+
+  backgroundColor = {0.46, 0.45, 0.53, 0.90},
+  borderColor     = {0, 0, 0, 0},
+  focusColor      = {0.85, 0.84, 0.95, 1},
+
+  DrawControl = DrawButton,
+}
 
 skin.control = skin.general
 

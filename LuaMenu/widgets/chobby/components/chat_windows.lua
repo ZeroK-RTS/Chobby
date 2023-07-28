@@ -59,8 +59,8 @@ function ChatWindows:init()
 	end
 	lobby:AddListener("OnUserCount", self.onUserCount)
 
-	local CHAT_EX_MENTION = "\255\255\0\0"
-	local CHAT_MENTION ="\255\255\0\0"
+	local CHAT_EX_MENTION = "\255\255\40\40"
+	local CHAT_MENTION ="\255\255\40\40"
 
 	-- channel chat
 	lobby:AddListener("OnSaid",
@@ -247,10 +247,11 @@ function ChatWindows:init()
 	self.joinButton = Button:New {
 		x = 2000,
 		y = 5,
-		width = 30,
-		height = 30,
+		width = 32,
+		height = 32,
 		parent = self.tabScrollPanel,
-		caption = "+",
+		caption = "",
+		classname = "tabbar_square_button_positive",
 		OnClick = {
 			function()
 				if self.joinWindow == nil then
@@ -512,9 +513,7 @@ function ChatWindows:SetTabActivation(tabName, activationLevel, outlineColor)
 		end
 	else
 		ctrl.font = Configuration:GetFont(1, "chat_badge_white", {
-			outline = false,
-			outlineColor = {0,0,0,1},
-			color = {1,1,1,1},
+			shadow = true,
 		})
 	end
 	ctrl.activationLevel = activationLevel
@@ -774,8 +773,9 @@ function ChatWindows:GetChannelConsole(chanName)
 		end
 
 		local closeChannelButton = Button:New {
-			width = 24, height = 24, y = 5, right = Configuration.userListWidth + 18,
-			caption = "x",
+			width = 32, height = 32, y = 5, right = Configuration.userListWidth + 20,
+			classname = "tabbar_square_button_negative",
+			caption = "",
 			OnClick = {
 				function()
 					self.channelConsoles[chanName] = nil

@@ -61,7 +61,7 @@ function BattleListWindow:init(parent)
 		right = 5,
 		bottom = 11,
 		height = 20,
-		objectOverrideFont = Configuration:GetFont(2),
+		objectOverrideFont = Configuration:GetFont(6), -- same as 2, but without font shadow
 		caption = "Filter out:",
 		parent = self.window
 	}
@@ -75,7 +75,7 @@ function BattleListWindow:init(parent)
 		boxsize = 20,
 		caption = " Passworded",
 		checked = Configuration.battleFilterPassworded3 or false,
-		objectOverrideFont = Configuration:GetFont(2),
+		objectOverrideFont = Configuration:GetFont(6),
 		OnChange = {
 			function (obj, newState)
 				Configuration:SetConfigValue("battleFilterPassworded3", newState)
@@ -93,7 +93,7 @@ function BattleListWindow:init(parent)
 		boxsize = 20,
 		caption = " Non-friend",
 		checked = Configuration.battleFilterNonFriend or false,
-		objectOverrideFont = Configuration:GetFont(2),
+		objectOverrideFont = Configuration:GetFont(6),
 		OnChange = {
 			function (obj, newState)
 				Configuration:SetConfigValue("battleFilterNonFriend", newState)
@@ -111,7 +111,7 @@ function BattleListWindow:init(parent)
 		boxsize = 20,
 		caption = " Running",
 		checked = Configuration.battleFilterRunning or false,
-		objectOverrideFont = Configuration:GetFont(2),
+		objectOverrideFont = Configuration:GetFont(6),
 		OnChange = {
 			function (obj, newState)
 				Configuration:SetConfigValue("battleFilterRunning", newState)
@@ -706,17 +706,17 @@ function BattleListWindow:UpdateButtonColor(battleID)
 	if battle == nil then return end
 
 	local oldbuttonstyle = items.battleButton.backgroundColor
-	local battlebuttonstyle = {0.10, 0.10, 0.95, 0.65} --blue
+	local battlebuttonstyle = {0.10, 0.30, 0.65, 0.60} --blue
 	if battle.passworded then
-		battlebuttonstyle =  {0.60, 0.10, 0.85, 0.65} --violet
+		battlebuttonstyle =  {0.65, 0.10, 0.20, 0.35} --red
 	elseif battle.isMatchMaker then
-		battlebuttonstyle =  {0.90, 0.10, 0.10, 0.65} --red
+		battlebuttonstyle =  {0.40, 0.10, 0.60, 0.60} --violet
 	elseif lobby:GetBattlePlayerCount(battleID) < 1 then
-		battlebuttonstyle = {0.10, 0.10, 0.95, 0.65} --blue
+		battlebuttonstyle = {0.10, 0.30, 0.65, 0.60} --blue
 	elseif battle.isRunning then
-		battlebuttonstyle =  {0.70, 0.60, 0.1, 0.65} --yellow
+		battlebuttonstyle =  {0.60, 0.45, 0.2, 0.65} --yellow
 	else
-		battlebuttonstyle =  {0.10, 0.50, 0.10, 0.65} --green
+		battlebuttonstyle =  {0.15, 0.50, 0.25, 0.65} --green
 	end
 	local colorChanged = false
 	for i, c in ipairs(oldbuttonstyle) do

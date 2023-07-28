@@ -21,7 +21,7 @@ local planetwarsSoon = false
 local planetwarsEnabled = false
 local planetwarsLevelRequired = false
 
-local IMG_LINK = LUA_DIRNAME .. "images/link.png"
+--local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
 local PLANET_NAME_LENGTH = 210
@@ -222,15 +222,15 @@ local function GetLinkButton(holder, x, y, width, text, link)
 		objectOverrideFont = config:GetFont(3),
 		parent = btnLink,
 	}
-	local imgLink = Image:New {
-		x = 0,
-		y = 4,
-		width = 18,
-		height = 18,
-		keepAspect = true,
-		file = IMG_LINK,
-		parent = btnLink,
-	}
+-- 	local imgLink = Image:New {
+-- 		x = 0,
+-- 		y = 4,
+-- 		width = 18,
+-- 		height = 18,
+-- 		keepAspect = true,
+-- 		file = IMG_LINK,
+-- 		parent = btnLink,
+-- 	}
 
 	local externalFunctions = {}
 
