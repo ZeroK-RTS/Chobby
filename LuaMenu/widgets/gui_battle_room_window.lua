@@ -1572,9 +1572,9 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 	local tipTextBox
 	if pageConfig.tipText then
 		tipTextBox = TextBox:New {
-			x = "26%",
-			y = 3*buttonScale + 20 + (#pageConfig.options)*buttonScale,
-			right = "26%",
+			x = "25%",
+			y = 2*buttonScale + 20 + (#pageConfig.options)*buttonScale,
+			right = "25%",
 			height = 200,
 			align = "left",
 			objectOverrideFont = Configuration:GetFont(2),
@@ -1678,7 +1678,17 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 				fallbackFile = Configuration:GetLoadingImage(2),
 				checkFileExists = needDownload,
 				parent = buttons[i],
+				OnClick = {
+					function (obj)
+						WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:advanced")
+						subPanel:SetVisibility(false)
+						ApplyFunction(false)
+					end
+				},
 			}
+			if tipTextBox then
+				tipTextBox:SetVisibility(true)
+			end
 		end
 		ButtonUtilities.SetButtonSelected(buttons[i])
 	end

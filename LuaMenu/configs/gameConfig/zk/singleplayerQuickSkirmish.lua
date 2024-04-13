@@ -36,7 +36,7 @@ local skirmishSetupData = {
 		{
 			humanName = "Select Map",
 			name = "map",
-			tipText = "Click 'Advanced' for more maps and game modes.",
+			tipText = "You can customize game mode and modifiers on the next screen (under Options) before the match begins.",
 			minimap = true,
 			options = {
 				"TitanDuel 2.2",
