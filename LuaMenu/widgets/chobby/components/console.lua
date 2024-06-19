@@ -244,8 +244,9 @@ function Console:SendMessage()
 
 		local cursor = self.sentMsgHistoryCursor
 		local count = self.sentMsgHistoryCount
-		if cursor < count + 1 and self.sentMsgHistory[cursor] == self.ebInputText.text then
-			-- skip, don't add to history message coming from history / keep cursor at current
+		if cursor == count  and self.sentMsgHistory[cursor] == self.ebInputText.text then
+			-- skip, don't add to history the last message coming from history 
+			self.sentMsgHistoryCursor = count + 1
 		else
 			if count == self.sentMsgHistoryMax then
 				table.remove(self.sentMsgHistory, 1)
