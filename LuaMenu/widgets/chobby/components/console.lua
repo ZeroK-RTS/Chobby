@@ -242,15 +242,20 @@ function Console:SendMessage()
 	if self.ebInputText.text ~= "" then
 		message = self.ebInputText.text
 
+		local cursor = self.sentMsgHistoryCursor
 		local count = self.sentMsgHistoryCount
-		if count == self.sentMsgHistoryMax then
-			table.remove(self.sentMsgHistory, 1)
+		if cursor < count + 1 and self.sentMsgHistory[cursor] == self.ebInputText.text then
+			-- skip, don't add to history message coming from history / keep cursor at current
 		else
-			count = count + 1
-			self.sentMsgHistoryCount = count
+			if count == self.sentMsgHistoryMax then
+				table.remove(self.sentMsgHistory, 1)
+			else
+				count = count + 1
+				self.sentMsgHistoryCount = count
+			end
+			self.sentMsgHistory[count] = message
+			self.sentMsgHistoryCursor = count + 1
 		end
-		self.sentMsgHistory[count] = message
-		self.sentMsgHistoryCursor = count + 1
 
 		if self.listener then
 			self.listener(message)
