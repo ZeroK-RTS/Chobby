@@ -335,7 +335,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					{
 						name = "energysolar",
-						x = 8200,
+						x = 820,
 						z = 4811,
 						facing = 3,
 					},

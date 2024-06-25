@@ -1791,7 +1791,7 @@ local function GetPlanet(planetUtilities, planetID)
 					difficultyDependantUnlocks = {
 						[2] = {"spidercrabe"},
 						[3] = {"spidercrabe","spiderantiheavy"},
-						[3] = {"striderhub","striderfunnelweb","spidercrabe","spiderantiheavy","staticantinuke",},
+						[4] = {"striderhub","striderfunnelweb","spidercrabe","spiderantiheavy","staticantinuke",},
 					},
 					commanderLevel = 5,
 					commander = {
