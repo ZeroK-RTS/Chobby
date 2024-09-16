@@ -267,7 +267,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		height = 20,
 		valign = 'center',
 		objectOverrideFont = Configuration:GetFont(3),
-		text = saveFile.commanderName .. (current and " \255\0\255\255(current)\008" or ""),
+		text = saveFile.commanderName .. (current and " \255\60\190\240(current)\008" or ""),
 		parent = container,
 	}
 

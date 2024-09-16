@@ -528,7 +528,7 @@ function DrawButton(obj)
 	local bgcolor = obj.backgroundColor
 	if not obj.supressButtonReaction then
 		if (obj.state.pressed) then
-			bgcolor = obj.pressBackgroundColor or mulColor(bgcolor, 0.4)
+			bgcolor = obj.pressBackgroundColor or mulColor(bgcolor, 0.7)
 		elseif (obj.state.hovered) --[[ or (obj.state.focused)]] then
 			bgcolor = obj.focusColor
 			--bgcolor = mixColors(bgcolor, obj.focusColor, 0.5)
@@ -549,7 +549,7 @@ function DrawButton(obj)
 		fgcolor = mixColors(fgcolor, obj.disabledColor, 0.8)
 	elseif not obj.supressButtonReaction then
 		if (obj.state.pressed) then
-			fgcolor = obj.pressForegroundColor or mulColor(fgcolor, 0.4)
+			fgcolor = obj.pressForegroundColor or mulColor(fgcolor, 0.7)
 		elseif (obj.state.hovered) --[[ or (obj.state.focused)]] then
 			fgcolor = obj.focusColor
 		end
@@ -1328,7 +1328,7 @@ function DrawTabBarItem(obj)
 	--gl.Texture(0, false)
 
 	if (obj.state.pressed) then
-		gl.Color(0.6, 0.6, 0.6, 1) --FIXME
+		gl.Color(0.61, 0.6, 0.7, 1) --FIXME
 	elseif (obj.state.selected) then
 		gl.Color(obj.focusColor)
 	else
