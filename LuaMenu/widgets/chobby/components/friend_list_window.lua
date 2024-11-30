@@ -56,7 +56,7 @@ function FriendListWindow:OnAddUser(userName)
 end
 
 function FriendListWindow:OnRemoveUser(userName)
-	if (not lobby.status == "connected") then
+	if lobby.status ~= "connected" then
 		return
 	end
 	local userInfo = lobby:TryGetUser(userName)
