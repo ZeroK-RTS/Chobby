@@ -139,9 +139,9 @@ local function GetBattleInfoHolder(parent, battleID)
 			lblTitle:SetPos(36, 1, 150)
 
 			lblPlayerStatus.font = Configuration:GetFont(1)
-			lblPlayerStatus:SetPos(58, 18)
+			lblPlayerStatus:SetPos(58, 19)
 
-			imPlayerStatus:SetPos(43, 18, 12, 12)
+			imPlayerStatus:SetPos(43, 17, 12, 12)
 
 			lblPlayers.font = Configuration:GetFont(1)
 			lblPlayers:SetPos(165, 18)
@@ -154,9 +154,9 @@ local function GetBattleInfoHolder(parent, battleID)
 			lblTitle:SetPos(76, 2, 225)
 
 			lblPlayerStatus.font = Configuration:GetFont(2)
-			lblPlayerStatus:SetPos(103, 26)
+			lblPlayerStatus:SetPos(103, 27)
 
-			imPlayerStatus:SetPos(82, 26, 18, 18)
+			imPlayerStatus:SetPos(82, 25, 18, 18)
 
 			lblPlayers.font = Configuration:GetFont(2)
 			lblPlayers:SetPos(80, 48)
