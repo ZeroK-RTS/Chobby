@@ -61,6 +61,7 @@ function Interface:Disconnect()
 	self.finishedConnecting = false
 	if self.client then
 		self.client:close()
+		self.client = nil
 	end
 	self:_OnDisconnected(nil, true)
 end
