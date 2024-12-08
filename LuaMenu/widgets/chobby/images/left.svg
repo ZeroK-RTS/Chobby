@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="50mm"
+   height="50mm"
+   viewBox="0 0 50.000001 50"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="left.svg"
+   inkscape:export-filename="left.png"
+   inkscape:export-xdpi="239.776"
+   inkscape:export-ydpi="239.776"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="2.9967892"
+     inkscape:cx="63.73488"
+     inkscape:cy="69.908154"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1700">
+      <stop
+         style="stop-color:#f9f9f9;stop-opacity:1;"
+         offset="0"
+         id="stop1696" />
+      <stop
+         style="stop-color:#c1bfd4;stop-opacity:1;"
+         offset="1"
+         id="stop1698" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1700"
+       id="linearGradient1702"
+       x1="28.403591"
+       y1="46.979565"
+       x2="13.809306"
+       y2="121.86484"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.46764455,-0.29227671,0.46764455,0.29227671,45.432406,17.976267)" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-69.782303,-11.481986)">
+    <path
+       id="rect1113"
+       style="fill:url(#linearGradient1702);fill-opacity:1;stroke:#202124;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stop-color:#000000"
+       d="M 104.7823,23.981986 84.782303,36.481851 104.7823,48.981985 Z" />
+  </g>
+</svg>

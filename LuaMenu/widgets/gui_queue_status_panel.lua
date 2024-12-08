@@ -285,7 +285,7 @@ local function InitializeInstantQueueHandler()
 		y = 0,
 		right = 0,
 		bottom = 0,
-		classname = "overlay_panel",
+		classname = "queue_popup",
 		padding = {0,0,0,0},
 		caption = "",
 		resizable = false,
