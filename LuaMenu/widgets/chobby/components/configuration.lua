@@ -887,6 +887,9 @@ function Configuration:GetModoptions(gameName)
 	end
 
 	local function ReadModoptions()
+		if not VFS.FileExists("modoptions.lua", VFS.ZIP) then
+			return false
+		end
 		return VFS.Include("modoptions.lua", nil, VFS.ZIP)
 	end
 
