@@ -598,6 +598,7 @@ planetData = {
 			--  * countRemovedUnits - true/false
 			--  * onlyCountRemovedUnits - true/false
 			--  * capturedUnitsSatisfy - true/false
+			--  * alliedUnitsSatisfy - true/false
 			--
 			-- Bonus objectives work on the same system. They compare a number of units to their targetNumber and are satisfied based on their
 			-- satisfaction type. Ingame, an objective is either satisfied or not satisfied from second to second. It succeeds or failed based on
@@ -641,8 +642,9 @@ planetData = {
 			--      objective "Make 20 Glaives" which doesn't care what happens to each Glaive after it is built.
 			--  * If 'onlyCountRemovedUnits = true' then the objective only counts those units that were relevant units before they died. Set
 			--      this to create an objective "Kill 5 Glaive" by making the objective only count removed enemy glaives.
-			--  * If 'capturedUnitsSatisfy = true' then captured units can count towards objection completion. Usually only built units count, and
+			--  * If 'capturedUnitsSatisfy = true' then captured units can count towards objective completion. Usually only built units count, and
 			--      only when on their origional ally team.
+			--  * If 'alliedUnitsSatisfy = true' then units allied to the player count for the objective. Usually only player built units count.
 			
 			[1] = {
 				satisfyForever = true,

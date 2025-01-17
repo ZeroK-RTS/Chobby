@@ -983,6 +983,7 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 24,
+					alliedUnitsSatisfy = true,
 					unitTypes = {
 						"staticmex",
 					},
