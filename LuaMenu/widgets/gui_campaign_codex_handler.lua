@@ -67,7 +67,7 @@ local function UpdateCodexEntry(entry, codexText, codexImage, entryButton)
 	--	entryButton:Invalidate()
 	--end
 	--WG.CampaignAPI.MarkCodexEntryRead(entry.id)
-	codexText:SetText(entry.text)
+	codexText:SetText((entry.text or "") .. "\n ")
 	codexImage.file = entry.image
 	codexImage:Invalidate()
 end
