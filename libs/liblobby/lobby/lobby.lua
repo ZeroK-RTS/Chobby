@@ -689,6 +689,9 @@ end
 function Lobby:_OnBattleIngameUpdate(battleID, isRunning)
 	if self.battles[battleID] and self.battles[battleID].isRunning ~= isRunning then
 		self.battles[battleID].isRunning = isRunning
+		if not isRunning then
+			self.battles[battleID].lastRunningTime = os.clock()
+		end
 		self:_CallListeners("OnBattleIngameUpdate", battleID, isRunning)
 	end
 end
@@ -800,6 +803,10 @@ function Lobby:_OnLeaveBattle(battleID)
 	self.modoptions = {}
 	self.battleAis = {}
 	self.userBattleStatus = {}
+	self.voteMessage    = nil
+	self.voteCandidates = nil
+	self.votesNeeded    = nil
+	self.voteType       = nil
 
 	self:_CallListeners("OnLeaveBattle", battleID)
 end
@@ -974,6 +981,8 @@ function Lobby:_OnVoteUpdate(voteMessage, pollType, notify, mapPoll, candidates,
 	self.voteMessage    = voteMessage
 	self.voteCandidates = candidates
 	self.votesNeeded    = votesNeeded
+	self.voteType       = pollType
+	self.voteMap        = mapPoll
 	self:_CallListeners("OnVoteUpdate", voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl, mapName)
 end
 
@@ -989,6 +998,7 @@ function Lobby:_OnVoteEnd(message, success)
 	self.voteMessage    = nil
 	self.voteCandidates = nil
 	self.votesNeeded    = nil
+	self.voteType       = nil
 	self:_CallListeners("OnVoteEnd", message, success)
 end
 

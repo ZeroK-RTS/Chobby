@@ -244,6 +244,7 @@ function Configuration:init()
 	self.drawAtFullSpeed = false
 	self.lobbyIdleSleep = false
 	self.rememberQueuesOnStart2 = true
+	self.blockedJoinBattles = false
 	self.channels = {}
 	if self.gameConfig.defaultChatChannels ~= nil then
 		for _, channelName in ipairs(self.gameConfig.defaultChatChannels) do
@@ -599,6 +600,7 @@ function Configuration:GetConfigData()
 		drawAtFullSpeed = self.drawAtFullSpeed,
 		lobbyIdleSleep = self.lobbyIdleSleep,
 		rememberQueuesOnStart2 = self.rememberQueuesOnStart2,
+		blockedJoinBattles = self.blockedJoinBattles,
 		queue_handicap = self.queue_handicap,
 		queue_wide = self.queue_wide,
 		loadLocalWidgets = self.loadLocalWidgets,
