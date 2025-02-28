@@ -202,9 +202,9 @@ end
 -- Split handling
 ------------------------
 
-local SPLIT_MULTIPLIER = 1.3
+local SPLIT_MULTIPLIER = 1.45
 local SPLIT_TO_PLAYER_MULT = 0.25
-local LOWER_RATING_PROP = 0.55
+local LOWER_RATING_PROP = 0.5
 local SPLIT_LEEWAY_TIME = 40
 local EVEN_TEAMS_THREHSOLD = 30
 local CONF_EXPIRE_TIME = 240
