@@ -18,7 +18,7 @@ Font = Object:Inherit{
 
 	font          = "FreeSansBold.otf",
 	size          = 12,
-	outlineWidth  = 3,
+	outlineWidth  = 2,
 	outlineWeight = 3,
 
 	shadow        = false,

@@ -798,7 +798,7 @@ function Configuration:GetButtonFont(sizeScale, specialName, specialData, rawSiz
 	specialName = (specialName or "") .. "_button_" .. sizeScale
 	specialData = specialData or {}
 	specialData.outline = true
-	specialData.outlineWidth = 3
+	specialData.outlineWidth = 2
 	specialData.outlineHeight = 3
 	return self:GetFont(sizeScale, specialName, specialData, rawSize)
 end

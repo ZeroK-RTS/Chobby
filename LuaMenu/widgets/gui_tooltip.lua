@@ -499,7 +499,7 @@ local function GetBattleTooltip(battleID, battle)
 				font = {
 					outline          = true,
 					autoOutlineColor = true,
-					outlineWidth     = 3,
+					outlineWidth     = 2,
 					outlineWeight    = 4,
 				},
 				parent = battleTooltip.mainControl,
