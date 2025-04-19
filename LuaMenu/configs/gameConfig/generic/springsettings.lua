@@ -25,6 +25,7 @@ local settings = {
 	MSAALevel = 4,
 	FeatureDrawDistance = 600000,
 	FeatureFadeDistance = 600000,
+	FontOutlineWidth = 2,
 	FontSize = 18,
 	GrassDetail = 4,
 	GroundScarAlphaFade = 1,

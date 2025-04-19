@@ -37,6 +37,7 @@ GroundScarAlphaFade = 1
 Version = 2
 OverheadScrollSpeed = 50
 EdgeMoveWidth = 0
+FontOutlineWidth = 2
 FontSize = 18
 snd_general = 100
 BumpWaterBlurReflection = 1
