@@ -66,6 +66,7 @@ local settings = {
 	Shadows = 1,
 	ShadowMapSize = 2048,
 	ShowClock = 0,
+	SmallFontSize = 14,
 	SmoothLines = 1,
 	SmoothPoints = 1,
 	SoftParticles = 2,

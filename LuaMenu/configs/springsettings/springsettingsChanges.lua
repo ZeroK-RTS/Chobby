@@ -1,6 +1,7 @@
 local settings = {
 	FontOutlineWidth = 2,
 	FontSize = 18,
+	SmallFontSize = 14,
 	OverheadMaxHeightFactor = 1.4,
 	HangTimeout = 30,
 	ROAM = 1,
