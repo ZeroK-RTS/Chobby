@@ -101,9 +101,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		y = 0,
 		right = 0,
 		height = 46,
+		classname = "glow",
 		caption = "",
 		padding = {5, 5, 5, 5},
 		parent = rightInfo,
+		tooltip = "View additional map details on the website.",
 		OnClick = {
 			function ()
 				if currentMapName and config.gameConfig.link_particularMapPage ~= nil then
@@ -181,8 +183,10 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		bottom = 0,
 		caption = "",
+		classname = "glow",
 		parent = minimapPanel,
-		padding = {2,2,2,2},
+		padding = {4,4,4,4},
+		tooltip = "Select a new map.",
 		OnClick = {
 			function()
 				WG.MapListPanel.Show(battleLobby, battle.mapName)
@@ -1810,7 +1814,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		right = "33%",
 		bottom = 0,
 		height = BOTTOM_SPACING,
-		padding = {EXTERNAL_PAD_HOR, INTERNAL_PAD, 1, INTERNAL_PAD},
+		padding = {EXTERNAL_PAD_HOR - 1, INTERNAL_PAD, 2, INTERNAL_PAD},
 		parent = topPanel,
 	}
 
@@ -1830,7 +1834,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		y = 0,
 		right = 0,
 		bottom = 0,
-		padding = {1, EXTERNAL_PAD_VERT, EXTERNAL_PAD_HOR, INTERNAL_PAD},
+		padding = {1, EXTERNAL_PAD_VERT, EXTERNAL_PAD_HOR - 1, INTERNAL_PAD},
 		parent = topPanel,
 	}
 
@@ -1839,11 +1843,11 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	local btnQuitBattle = Button:New {
 		right = 11,
 		y = WG.TOP_BUTTON_Y,
-		width = 80,
+		width = (isSingleplayer and WG.BUTTON_HEIGHT) or 80,
 		height = WG.BUTTON_HEIGHT,
 		objectOverrideFont = Configuration:GetButtonFont(3),
-		caption = (isSingleplayer and i18n("close")) or i18n("leave"),
-		classname = "negative_button",
+		caption = (isSingleplayer and "") or i18n("leave"),
+		classname = (isSingleplayer and "close_button") or "action_button",
 		OnClick = {
 			function()
 				battleLobby:LeaveBattle()
@@ -1853,7 +1857,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	}
 
 	local btnInviteFriends = Button:New {
-		right = 98,
+		right = (isSingleplayer and 59) or 98,
 		y = WG.TOP_BUTTON_Y,
 		width = 180,
 		height = WG.BUTTON_HEIGHT,
@@ -1978,7 +1982,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		parent = bottomPanel,
 	}
 
-	local CHAT_MENTION = "\255\255\80\80"
+	local CHAT_MENTION = "\255\120\250\110"
 	local CHAT_ME = Configuration.meColor
 
 	-- External Functions

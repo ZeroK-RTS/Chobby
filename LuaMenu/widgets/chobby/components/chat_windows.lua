@@ -59,8 +59,8 @@ function ChatWindows:init()
 	end
 	lobby:AddListener("OnUserCount", self.onUserCount)
 
-	local CHAT_EX_MENTION = "\255\255\40\40"
-	local CHAT_MENTION ="\255\255\40\40"
+	local CHAT_EX_MENTION = "\255\120\250\110"
+	local CHAT_MENTION ="\255\120\250\110"
 
 	-- channel chat
 	lobby:AddListener("OnSaid",
@@ -168,6 +168,7 @@ function ChatWindows:init()
 		right = 7,
 		y = 0,
 		bottom = 9,
+		minTabWidth = 120,
 		padding = {0, 0, 0, 0},
 		tabs = {
 			[1] = (Configuration.debugMode and { name = "debug", caption = i18n("debug"), children = {
@@ -429,7 +430,8 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 	end
 	local nameColor
 	if source == lobby.SOURCE_DISCORD then
-		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\40\210\220", "Discord user.", true)
+		-- channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\96\125\248", "Discord user.", true)
+		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\110\137\251", "Discord user.", true)
 	else
 		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, nameColor)
 	end
@@ -673,7 +675,7 @@ function ChatWindows:UpdateChannels(channelsArray)
 			width = 100,
 			y = 0,
 			height = 20,
-			caption = "#",
+			caption = "# ",
 		}
 	)
 	self.serverPanel:AddChild(
@@ -733,8 +735,8 @@ function ChatWindows:UpdateChannels(channelsArray)
 end
 
 function ChatWindows:UpdateJoinPosition()
-	self.joinButton:SetPos(#self.tabPanel.tabBar.children * 70 + 10)
-	self.tabBarFudgeHolder:SetPos(nil, nil, #self.tabPanel.tabBar.children * 70 + 5)
+	self.joinButton:SetPos(#self.tabPanel.tabBar.children * 120 + 10)
+	self.tabBarFudgeHolder:SetPos(nil, nil, #self.tabPanel.tabBar.children * 120 + 5)
 end
 
 function ChatWindows:GetChannelConsole(chanName)
@@ -763,7 +765,7 @@ function ChatWindows:GetChannelConsole(chanName)
 		local userListPanel = UserListPanel(function() return lobby:GetChannel(chanName) end, 22, true, false, chanName or "_missing")
 		self.userListPanels[chanName] = userListPanel
 
-		local caption = "#" .. chanName
+		local caption = "# " .. chanName
 		local tooltip = nil
 		local origCaption = caption
 		local fontSize = 1

@@ -7,11 +7,11 @@ local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 
 function BattleListWindow:init(parent)
-	self:super("init", parent, "Play or watch a game", true, nil, nil, nil, 34)
+	self:super("init", parent, "Play or Watch Games", true, nil, nil, nil, 34)
 
 	if not Configuration.gameConfig.disableBattleListHostButton then
 		self.btnNewBattle = Button:New {
-			x = 260,
+			right = 59,
 			y = WG.TOP_BUTTON_Y,
 			width = 150,
 			height = WG.BUTTON_HEIGHT,
@@ -706,17 +706,17 @@ function BattleListWindow:UpdateButtonColor(battleID)
 	if battle == nil then return end
 
 	local oldbuttonstyle = items.battleButton.backgroundColor
-	local battlebuttonstyle = {0.10, 0.30, 0.65, 0.60} --blue
+	local battlebuttonstyle = {0.10, 0.30, 0.60, 0.60} --blue
 	if battle.passworded then
 		battlebuttonstyle =  {0.65, 0.10, 0.20, 0.35} --red
 	elseif battle.isMatchMaker then
-		battlebuttonstyle =  {0.40, 0.10, 0.60, 0.60} --violet
+		battlebuttonstyle =  {0.40, 0.35, 0.55, 0.60} --violet
 	elseif lobby:GetBattlePlayerCount(battleID) < 1 then
-		battlebuttonstyle = {0.10, 0.30, 0.65, 0.60} --blue
+		battlebuttonstyle = {0.10, 0.30, 0.60, 0.60} --blue
 	elseif battle.isRunning then
 		battlebuttonstyle =  {0.60, 0.45, 0.2, 0.65} --yellow
 	else
-		battlebuttonstyle =  {0.15, 0.50, 0.25, 0.65} --green
+		battlebuttonstyle =  {0.30, 0.60, 0.40, 0.65} --green
 	end
 	local colorChanged = false
 	for i, c in ipairs(oldbuttonstyle) do

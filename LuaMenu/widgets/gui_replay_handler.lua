@@ -54,7 +54,7 @@ local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 		bottom = 3,
 		width = 65,
 		caption = i18n("start"),
-		classname = "action_button",
+		classname = "small_action_button",
 		objectOverrideFont = Configuration:GetButtonFont(2),
 		OnClick = {
 			function()
@@ -235,7 +235,7 @@ local function InitializeControls(parentControl)
 	-------------------------
 
 	Button:New {
-		x = 100,
+		right = 126,
 		y = WG.TOP_BUTTON_Y,
 		width = 110,
 		height = WG.BUTTON_HEIGHT,
@@ -251,7 +251,7 @@ local function InitializeControls(parentControl)
 	}
 
 	moreButton = Button:New {
-		x = 340,
+		right = 8,
 		y = WG.TOP_BUTTON_Y,
 		width = 110,
 		height = WG.BUTTON_HEIGHT,
@@ -285,9 +285,9 @@ local function InitializeControls(parentControl)
 
 	if WG.BrowserHandler and Configuration.gameConfig.link_replays ~= nil then
 		Button:New {
-			x = 220,
+			right = 244,
 			y = WG.TOP_BUTTON_Y,
-			width = 110,
+			width = 120,
 			height = WG.BUTTON_HEIGHT,
 			caption = i18n("download"),
 			objectOverrideFont = Configuration:GetButtonFont(3),

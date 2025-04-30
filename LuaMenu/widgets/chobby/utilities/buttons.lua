@@ -41,9 +41,11 @@ function ButtonUtilities.SetButtonSelected(button)
 	if VOTE_CLASS[button.classname] then
 		button.borderColor = button.focusColor
 	elseif STATE_CLASS[button.classname] then
-		button.borderColor = {selected_color[1] * (4/3), selected_color[2] * (4/3), selected_color[3] * (4/3), selected_color[4]}
+		-- button.borderColor = {selected_color[1] * (4/3), selected_color[2] * (4/3), selected_color[3] * (4/3), selected_color[4]}
+		button.borderColor = {1,1,1,.80}
 	else
-		button.borderColor = selected_color
+		-- button.borderColor = selected_color
+		button.borderColor = {1,1,1,.60}
 	end
 	button:Invalidate()
 end

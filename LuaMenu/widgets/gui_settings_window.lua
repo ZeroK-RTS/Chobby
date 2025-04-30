@@ -909,7 +909,7 @@ local function GetLobbyTabControls()
 		y = offset,
 		width  = COMBO_WIDTH,
 		height = 30,
-		value  = Configuration.gameOverlayOpacity or 0.5,
+		value  = Configuration.gameOverlayOpacity or 0.3,
 		min    = 0,
 		max    = 1,
 		step   = 0.02,
@@ -1743,7 +1743,7 @@ local function InitializeControls(window)
 		y = 45,
 		bottom = 1,
 		padding = {0, 0, 0, 0},
-		minTabWidth = 120,
+		minTabWidth = 140,
 		tabs = tabs,
 		parent = window,
 		OnTabChange = {
@@ -1788,6 +1788,7 @@ function SettingsWindow.GetControl()
 		y = "0%",
 		width = "100%",
 		height = "100%",
+		padding = {2, 2, 2, 7},
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then

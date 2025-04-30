@@ -229,7 +229,7 @@ local function GetProfileHandler()
 			x = "24%",
 			y = yPos,
 			right = "24%",
-			height = 26,
+			height = 32,
 			value = 0,
 			max = 1,
 			caption = "Level " .. 2,
@@ -342,15 +342,15 @@ local function InitializeControls(window)
 
 	-- Populate link panel
 	AddLinkButton(lowerLeft, "Edit Commander", "Edit custom commanders for use in games on the Zero-K server.",
-		"https://zero-k.info/My/Commanders", true, 0, 0, 0, "80.5%")
+		"https://zero-k.info/My/Commanders", true, 0, 0, 0, "79.5%")
 	AddLinkButton(lowerLeft, "Ladder Ratings",  "View detailed ladder statistics and charts.",
-		"https://zero-k.info/Charts/Ratings?RatingCategory=1&UserId=_USER_ID_", true, 0, 0, "20.5%", "60.5%")
+		"https://zero-k.info/Charts/Ratings?RatingCategory=1&UserId=_USER_ID_", true, 0, 0, "19.5%", "59.5%")
 	AddLinkButton(lowerLeft, "Replay List",     "View and comment on your recent games on the Zero-K server.",
-		"https://zero-k.info/Battles?Title=&Map=&PlayersFrom=&PlayersTo=&Age=0&Mission=0&Bots=0&Rank=8&Victory=0&UserId=_USER_ID_", true, 0, 0, "40.5%", "40.5%")
+		"https://zero-k.info/Battles?Title=&Map=&PlayersFrom=&PlayersTo=&Age=0&Mission=0&Bots=0&Rank=8&Victory=0&UserId=_USER_ID_", true, 0, 0, "39.5%", "39.5%")
 	AddLinkButton(lowerLeft, "Recent Posts",    "View your recently posted in forum threads.",
-		"https://zero-k.info/Forum?CategoryID=&Search=&OnlyUnread=false&User=_USER_NAME_&grorder=&grdesc=False&grpage=1", true, 0, 0, "60.5%", "20.5%")
+		"https://zero-k.info/Forum?CategoryID=&Search=&OnlyUnread=false&User=_USER_NAME_&grorder=&grdesc=False&grpage=1", true, 0, 0, "59.5%", "19.5%")
 	AddLinkButton(lowerLeft, "Contact Admins",       "Send a non-report message to the moderation team. If instead you want to report a player, click on their name and select 'Report' from the dropdown menu.",
-		"https://zero-k.info/Users/ReportToAdmin/_USER_ID_", true, 0, 0, "80.5%", 0)
+		"https://zero-k.info/Users/ReportToAdmin/_USER_ID_", true, 0, 0, "79.5%", 0)
 end
 
 --------------------------------------------------------------------------------

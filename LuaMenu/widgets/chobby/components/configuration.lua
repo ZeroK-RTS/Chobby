@@ -236,7 +236,7 @@ function Configuration:init()
 	self.menuMusicVolume = 0.5
 	self.menuNotificationVolume = 0.8
 	self.menuBackgroundBrightness = 1
-	self.gameOverlayOpacity = 0.5
+	self.gameOverlayOpacity = 0.3
 	self.coopConnectDelay = 5
 	self.showMatchMakerBattles = false
 	self.hideInterface = false
@@ -265,9 +265,9 @@ function Configuration:init()
 
 	self.chatFontSize = 18
 
-	self.fontName = "LuaMenu/widgets/chili/skins/Evolved/fonts/n019003l.pfb"
+	self.fontName = "LuaMenu/widgets/chili/skins/Evolved/fonts/Geist-Regular.ttf"
 	self.fontRaw = {
-		[0] = {size = 10, shadow = true},
+		[0] = {size = 11, shadow = true},
 		[1] = {size = 14, shadow = true},
 		[2] = {size = 18, shadow = true},
 		[3] = {size = 22, shadow = true},

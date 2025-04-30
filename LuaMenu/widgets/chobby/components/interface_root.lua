@@ -12,8 +12,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local userStatusPanelWidth = 250
 
 	local battleStatusWidth = 480
-	local panelButtonsWidth = 560 --578
-	local panelButtonsHeight = 42
+	local panelButtonsWidth = 564 --578
+	local panelButtonsHeight = 48
 	local panelButtonsRightPad = 4
 
 	local chatTabHolderHeight = 41
@@ -404,7 +404,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Background holder is put here to be at the back
 	-----------------------------------
 	local backgroundHolder = Background(nil, nil, nil, "menuBackgroundBrightness")
-	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.82}, nil, "gameOverlayOpacity")
+	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.3}, nil, "gameOverlayOpacity")
 	ingameBackgroundHolder:Disable()
 
 	-------------------------------------------------------------------
@@ -887,7 +887,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = 3,
 		width = 108,
 		height = 38,
-		classname = "option_button",
+		classname = "action_button",
 		name = "switchToMenuButton",
 		caption = "Menu",
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(3),
@@ -927,7 +927,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = "50.12%",
 		y = 3,
 		bottom = 5,
-		classname = "negative_button",
+		classname = "action_button",
 		name = "leaveGameButton",
 		caption = "Leave Battle",
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(4),

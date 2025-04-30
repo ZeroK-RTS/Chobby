@@ -99,7 +99,7 @@ local function CreateMissionEntry(missionData)
 		width = 65,
 		height = 34,
 		caption = i18n("play"),
-		classname = "action_button",
+		classname = "small_action_button",
 		objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(2),
 		OnClick = {
 			function()
@@ -205,17 +205,16 @@ local function InitializeControls(parentControl)
 		height = 30,
 		parent = parentControl,
 		objectOverrideFont = Configuration:GetFont(3),
-		caption = "Learn advanced techniques in these tutorials",
+		caption = "Game Tutorials",
 	}
 
 	local btnLeaveScreen = Button:New {
 		right = 11,
 		y = WG.TOP_BUTTON_Y,
-		width = 80,
+		width = WG.BUTTON_HEIGHT,
 		height = WG.BUTTON_HEIGHT,
-		objectOverrideFont =  WG.Chobby.Configuration:GetButtonFont(3),
-		caption = i18n("close"),
-		classname = "negative_button",
+		caption = "",
+		classname = "close_button",
 		OnClick = {
 			function()
 				parentControl:Hide()

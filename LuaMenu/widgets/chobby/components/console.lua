@@ -36,7 +36,9 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 		lineSpacing = 2,
 		bottom = 0,
 		text = "",
-		objectOverrideFont = Configuration:GetFont(Configuration.chatFontSize, "console_" .. Configuration.chatFontSize, false, true),
+		objectOverrideFont = Configuration:GetFont(Configuration.chatFontSize, "console_" .. Configuration.chatFontSize, {
+			shadow = true,
+		}, true),
 		parent = self.spHistory,
 		selectable = true,
 		subTooltips = true,

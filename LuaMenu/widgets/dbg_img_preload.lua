@@ -9,8 +9,8 @@ function widget:GetInfo()
     date      = "@2009",
     license   = "GPLv2",
     layer     = 1000,
-    enabled   = true,  --  loaded by default?
-    alwaysStart = true,
+    enabled   = false,  --  loaded by default?
+    alwaysStart = false,
   }
 end
 
@@ -42,6 +42,8 @@ function widget:Update()
 		MaybeAddFile(LUA_DIRNAME .. "images/heic1403aDowngrade.jpg")
 		AddDir("LuaMenu/widgets/chili/skins/evolved")
 		AddDir("LuaMenu/images")
+		AddDir("LuaMenu/images/flags")
+		AddDir("LuaMenu/images/ranks")
 		AddDir("LuaMenu/images/planets")
 		AddDir("LuaMenu/images/starbackgrounds")
 		AddDir("LuaMenu/configs/gameConfig/zk/unitpics")

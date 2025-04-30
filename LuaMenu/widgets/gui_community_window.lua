@@ -17,7 +17,7 @@ end
 --------------------------------------------------------------------------------
 -- Vars
 
--- local IMG_LINK = LUA_DIRNAME .. "images/link.png"
+local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 local IMG_MISSING = LUA_DIRNAME .. "images/minimapNotFound1.png"
 local IMG_BULLET = LUA_DIRNAME .. "images/bullet.png"
 
@@ -425,7 +425,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 	local externalFunctions = {}
 
 	function externalFunctions.AddEntry(entryData, parentPosition)
-		local textPos = 6
+		local textPos = 12
 		local headingPos = 2
 		local offset = 0
 
@@ -433,7 +433,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 			if not controls.bullet then
 				controls.bullet = Image:New{
 					x = 5,
-					y = offset + 2 + headFormat.inButton,
+					y = offset + 0 + headFormat.inButton,
 					width = 16,
 					height = 16,
 					file = IMG_BULLET,
@@ -453,8 +453,9 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 					height = headFormat.buttonSize,
 					caption = "",
 					padding = {0, 0, 0, 0},
-					backgroundColor = {0, 0, 0, 0.45},
+					backgroundColor = {0, 0, 0, 0},
 					parent = holder,
+					classname = "glow",
 					OnClick = {
 						function ()
 							WG.BrowserHandler.OpenUrl(linkString)
@@ -481,23 +482,25 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 				controls.heading:SetText(entryData.heading)
 			end
 
--- 			-- Possibly looks nicer without link image.
--- 			if not showBulletHeading then
--- 				if not controls.linkImage then
--- 					controls.linkImage = Image:New {
--- 						x = 0,
--- 						y = 5,
--- 						width = headFormat.linkSize,
--- 						height = headFormat.linkSize,
--- 						keepAspect = true,
--- 						file = IMG_LINK,
--- 						parent = controls.linkButton,
--- 					}
--- 				end
--- 
--- 				local length = controls.heading.font:GetTextWidth(entryData.heading)
--- 				controls.linkImage:SetPos(length + 8)
--- 			end
+			-- Possibly looks nicer without link image.
+			if not showBulletHeading then
+				if not controls.linkImage then
+					controls.linkImage = Image:New {
+						x = 0,
+						y = 5,
+						width = headFormat.linkSize + 10,
+						height = headFormat.linkSize + 10,
+						keepAspect = true,
+						file = IMG_LINK,
+						parent = controls.linkButton,
+					}
+				end
+
+				local length = controls.heading.font:GetTextWidth(entryData.heading)
+				controls.linkImage:SetPos(6)
+				
+				controls.heading:SetPos(54)
+			end
 
 			if controls.freeHeading then
 				controls.freeHeading:SetVisibility(false)
@@ -536,7 +539,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 					y = offset + 6,
 					width = headFormat.imageSize,
 					height = headFormat.imageSize,
-					keepAspect = true,
+					keepAspect = false,
 					checkFileExists = not WG.Chobby.Configuration:ImageFileExists(imagePath),
 					imageLoadTime = 5,
 					keepCheckingForImage = true,
@@ -604,7 +607,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 		local offset = 0
 
 		if controls.bullet then
-			controls.bullet:SetPos(nil, offset + 2 + headFormat.inButton)
+			controls.bullet:SetPos(nil, offset + 0 + headFormat.inButton)
 		end
 
 		local headingSize
@@ -780,10 +783,10 @@ local function InitializeControls(window)
 	--LeaveIntentionallyBlank(rightLower, "(reserved)")
 
 	-- Populate link panel
-	AddLinkButton(leftCenter, "Website",    "Visit the Zero-K website.", "https://zero-k.info/", 0, 0, "75.5%", 0)
-	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "https://zero-k.info/Forum",   0, 0, "25.5%", "50.5%")
-	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "https://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
-	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
+	AddLinkButton(leftCenter, "Website",    "Visit the Zero-K website.", "https://zero-k.info/", 0, 0, "74.5%", 0)
+	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "https://zero-k.info/Forum",   0, 0, "24.5%", "49.5%")
+	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "https://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "49.5%", "24.5%")
+	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "74.5%")
 
 
 	-- News Handler

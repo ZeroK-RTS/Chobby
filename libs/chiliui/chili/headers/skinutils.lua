@@ -528,7 +528,9 @@ function DrawButton(obj)
 	local bgcolor = obj.backgroundColor
 	if not obj.supressButtonReaction then
 		if (obj.state.pressed) then
-			bgcolor = obj.pressBackgroundColor or mulColor(bgcolor, 0.7)
+			-- bgcolor = obj.pressBackgroundColor or mulColor(bgcolor, 0.7)
+			-- bgcolor = {bgcolor[1] * 0.13, bgcolor[2] * 0.29, bgcolor[3] * 0.42, bgcolor[4] * 0.5}
+			bgcolor = {bgcolor[1], bgcolor[2], bgcolor[3], bgcolor[4] * 0.80}
 		elseif (obj.state.hovered) --[[ or (obj.state.focused)]] then
 			bgcolor = obj.focusColor
 			--bgcolor = mixColors(bgcolor, obj.focusColor, 0.5)
@@ -549,7 +551,9 @@ function DrawButton(obj)
 		fgcolor = mixColors(fgcolor, obj.disabledColor, 0.8)
 	elseif not obj.supressButtonReaction then
 		if (obj.state.pressed) then
-			fgcolor = obj.pressForegroundColor or mulColor(fgcolor, 0.7)
+			-- fgcolor = obj.pressForegroundColor or mulColor(fgcolor, 0.7)
+			-- fgcolor = {fgcolor[1] * 0.13, fgcolor[2] * 0.29, fgcolor[3] * 0.42, fgcolor[4] * 0.5}
+			fgcolor = {fgcolor[1], fgcolor[2], fgcolor[3], fgcolor[4] * 0.80}
 		elseif (obj.state.hovered) --[[ or (obj.state.focused)]] then
 			fgcolor = obj.focusColor
 		end
@@ -945,8 +949,8 @@ function DrawScrollPanel(obj)
 
 			local pos = obj.scrollPosY / contHeight
 			local visible = clientHeight / contHeight
-			local gripy = math.floor(y + h * pos) + 0.5
-			local griph = math.floor(h * visible)
+			local gripy = math.floor(y + h * pos)
+			local griph = math.floor(h * visible) + 1
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x, gripy, obj.scrollbarSize, griph, skLeft, skTop, skRight, skBottom, tw, th, 0)
 		--gl.Texture(0, false)
 
@@ -987,8 +991,8 @@ function DrawScrollPanel(obj)
 
 			local pos = obj.scrollPosX / contWidth
 			local visible = clientWidth / contWidth
-			local gripx = math.floor(x + w * pos) + 0.5
-			local gripw = math.floor(w * visible)
+			local gripx = math.floor(x + w * pos)
+			local gripw = math.floor(w * visible) + 1
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, gripx, y, gripw, obj.scrollbarSize, skLeft, skTop, skRight, skBottom, tw, th, 0)
 		--gl.Texture(0, false)
 	end
