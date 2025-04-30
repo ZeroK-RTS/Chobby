@@ -241,11 +241,11 @@ local function AddSaveEntryButton(saveFile, saveList)
 		-- load button
 		local loadButton = Button:New {
 			x = 3,
-			y = 3,
-			bottom = 3,
-			width = 65,
+			y = 9,
+			bottom = 9,
+			width = 100,
 			caption = i18n("load"),
-			classname = "action_button",
+			classname = "small_action_button",
 			objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(2),
 			OnClick = {
 				function()
@@ -255,9 +255,30 @@ local function AddSaveEntryButton(saveFile, saveList)
 			parent = container,
 		}
 	end
+	if current then
+		-- load button
+		local loadButton = Image:New {
+			x = 3,
+			y = 9,
+			bottom = 9,
+			width = 100,
+			classname = "simple_action_button",
+			objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(2),
+			parent = container,
+		}
+		local lblCurrent = Label:New {
+			x = 9,
+			y = 9,
+			bottom = 9,
+			width = 100,
+			objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(2),
+			caption = "Current",
+			parent = loadButton,
+		}
+	end
 
 	-- save name
-	local x = 95
+	local x = 130
 
 	local saveName = TextBox:New {
 		name = "saveName",
@@ -267,7 +288,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		height = 20,
 		valign = 'center',
 		objectOverrideFont = Configuration:GetFont(3),
-		text = saveFile.commanderName .. (current and " \255\0\255\255(current)\008" or ""),
+		text = saveFile.commanderName,
 		parent = container,
 	}
 
@@ -332,11 +353,11 @@ local function AddSaveEntryButton(saveFile, saveList)
 	local deleteButton = Button:New {
 		parent = container,
 		right = 3,
-		width = 65,
-		y = 4,
-		bottom = 4,
-		caption = i18n("delete"),
-		classname = "action_button",
+		width = 51,
+		y = 12,
+		bottom = 12,
+		caption = "",
+		classname = "delete_button",
 		objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(2),
 		OnClick = {
 			function(self)
@@ -375,7 +396,7 @@ local function InitializeControls(parent, saveMode)
 	local listHolder = Control:New {
 		x = 12,
 		right = 6,
-		y = 60,
+		y = 66,
 		bottom = 15,
 		parent = parent,
 		resizable = false,
@@ -384,7 +405,7 @@ local function InitializeControls(parent, saveMode)
 	}
 
 	local headings = {
-		{name = "Name", x = 85, right = 215},
+		{name = "Name", x = 110, right = 215},
 		{name = "Date", right = 100, width = 110},
 	}
 
@@ -394,8 +415,8 @@ local function InitializeControls(parent, saveMode)
 	local saveButton = Button:New {
 		x = 5,
 		y = 5,
-		width = 160,
-		height = 38,
+		width = 170,
+		height = 44,
 		caption = i18n("new_campaign"),
 		objectOverrideFont = Configuration:GetButtonFont(3),
 		classname = "option_button",

@@ -21,7 +21,7 @@ local function CreateLine(lineText, linkText, onClick)
 			height = WG.BUTTON_HEIGHT,
 			width = 110,
 			caption = linkText,
-			classname = "action_button",
+			classname = "small_action_button",
 			objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(2),
 			OnClick = {
 				onClick
@@ -208,11 +208,10 @@ local communityControl = Control:New {
 			Button:New {
 				right = 11,
 				y = WG.TOP_BUTTON_Y,
-				width = 80,
+				width = WG.BUTTON_HEIGHT,
 				height = WG.BUTTON_HEIGHT,
-				objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(3),
-				caption = i18n("close"),
-				classname = "negative_button",
+				caption = "",
+				classname = "close_button",
 				OnClick = {
 					function()
 						obj:Hide()
@@ -275,11 +274,10 @@ local bugControl = Control:New {
 			Button:New {
 				right = 11,
 				y = WG.TOP_BUTTON_Y,
-				width = 80,
+				width = WG.BUTTON_HEIGHT,
 				height = WG.BUTTON_HEIGHT,
-				objectOverrideFont = Configuration:GetButtonFont(3),
-				caption = i18n("close"),
-				classname = "negative_button",
+				caption = "",
+				classname = "close_button",
 				OnClick = {
 					function()
 						obj:Hide()
