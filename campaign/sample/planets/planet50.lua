@@ -981,6 +981,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[3] = {
 					satisfyByTime = 10*60,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 24,
 					alliedUnitsSatisfy = true,

@@ -564,6 +564,7 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 				[1] = { -- Have 12 Banshees
 					satisfyOnce = true,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 12,
 					unitTypes = {

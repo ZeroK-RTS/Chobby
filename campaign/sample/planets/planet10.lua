@@ -687,6 +687,7 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 				[1] = { -- Have 10 Badger
 					satisfyOnce = true,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 10,
 					unitTypes = {

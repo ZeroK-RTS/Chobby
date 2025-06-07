@@ -1507,6 +1507,7 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 				[1] = { -- Own ten Crabs
 					satisfyOnce = true,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 10,
 					unitTypes = {

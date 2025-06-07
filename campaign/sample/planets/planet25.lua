@@ -459,6 +459,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[2] = { -- Own nine mex by 5:00
 					satisfyByTime = 300,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 9,
 					unitTypes = {

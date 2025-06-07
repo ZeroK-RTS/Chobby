@@ -3915,6 +3915,7 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 				[1] = {
 					satisfyForever = true,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 20,
 					unitTypes = {

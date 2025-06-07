@@ -1033,6 +1033,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[2] = { -- Have 30 Metal Extractors by 9:00
 					satisfyByTime = 540,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 30,
 					unitTypes = {

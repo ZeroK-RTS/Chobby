@@ -962,7 +962,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "jumpscout.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 100 Puppies before 4:00",
+					description = "Build or spawn 100 Puppies before 4:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Make the enemy lose one factory by 6:00

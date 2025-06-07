@@ -261,6 +261,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[3] = { -- Have 12 mex by 7:30.
 					satisfyByTime = 450,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 12,
 					unitTypes = {

@@ -2387,6 +2387,7 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 				[1] = {
 					satisfyOnce = true,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 4,
 					unitTypes = {
@@ -2412,6 +2413,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[3] = {
 					satisfyByTime = 18*60,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 18,
 					unitTypes = {

@@ -1681,6 +1681,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[2] = { -- Have 20 Metal Extractors
 					satisfyByTime = 1200,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 20,
 					unitTypes = {

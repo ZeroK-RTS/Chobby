@@ -519,6 +519,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[2] = { -- Have 15 mex
                     satisfyOnce = true,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 15,
 					unitTypes = {

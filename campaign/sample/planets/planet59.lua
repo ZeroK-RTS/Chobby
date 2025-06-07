@@ -2830,6 +2830,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[2] = {
 					satisfyOnce = true,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 8,
 					unitTypes = {
@@ -2842,6 +2843,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[3] = {
 					satisfyOnce = true,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 4,
 					unitTypes = {

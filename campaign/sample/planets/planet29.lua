@@ -1306,6 +1306,7 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 				[1] = { -- Have 6 Fusions by 10:00
 					satisfyByTime = 600,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 6,
 					unitTypes = {
@@ -1318,6 +1319,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[2] = { -- Have 11 mex at all times after 10 minutes
 					satisfyAfterTime = 600,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 11,
 					unitTypes = {

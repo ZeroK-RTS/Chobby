@@ -5139,8 +5139,9 @@ local function GetPlanet(planetUtilities, planetID)
 					-- Indexed by bonusObjectiveID
 				[1] = {
 					satisfyByTime = 10*60,
+					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 12, -- The player starts with a Conjurer
+					targetNumber = 12,
 					unitTypes = {
 						"planeheavyfighter",
 					},
