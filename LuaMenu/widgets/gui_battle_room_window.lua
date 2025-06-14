@@ -1461,6 +1461,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 
 	function externalFunctions.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl, mapName)
 		UpdatePollType(pollType, mapPoll, mapName, pollUrl)
+		votesNeeded = math.max(1, votesNeeded)
 		-- Update votes
 		if pollType == "multi" then
 			SetMultiPollCandidates(candidates)
