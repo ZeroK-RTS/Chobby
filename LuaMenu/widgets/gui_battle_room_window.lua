@@ -94,17 +94,18 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	local minimapBottomClearance = 141
 
 	local currentMapName
-	local mapLinkWidth = 150
+	local mapLinkWidth = 160
 
 	local btnMapLink = Button:New {
-		x = 3,
+		x = 0,
 		y = 0,
-		right = 3,
-		height = 36,
-		classname = "button_square",
+		right = 0,
+		height = 46,
+		classname = "glow",
 		caption = "",
-		padding = {0, 0, 0, 0},
+		padding = {5, 5, 5, 5},
 		parent = rightInfo,
+		tooltip = "View additional map details on the website.",
 		OnClick = {
 			function ()
 				if currentMapName and config.gameConfig.link_particularMapPage ~= nil then
@@ -135,8 +136,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	local imMapLink = Image:New {
 		x = 0,
 		y = 1,
-		width = 18,
-		height = 18,
+		width = 32,
+		height = 32,
 		keepAspect = true,
 		file = IMG_LINK,
 		parent = btnMapLink,
@@ -160,7 +161,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			tbMapInfo:SetText("")
 		end
 		local length = tbMapName.font:GetTextWidth(mapName)
-		imMapLink:SetPos(length + 5)
+		imMapLink:SetPos(mapLinkWidth - 35)
 	end
 	SetMapName(battle.mapName, mapLinkWidth)
 
@@ -181,10 +182,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		y = 0,
 		right = 0,
 		bottom = 0,
-		classname = "button_square",
 		caption = "",
+		classname = "glow",
 		parent = minimapPanel,
-		padding = {2,2,2,2},
+		padding = {4,4,4,4},
+		tooltip = "Select a new map.",
 		OnClick = {
 			function()
 				WG.MapListPanel.Show(battleLobby, battle.mapName)
@@ -1197,7 +1199,6 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		y = 0,
 		right = 0,
 		bottom = 0,
-		classname = "button_square",
 		caption = "",
 		parent = minimapPanel,
 		padding = {1,1,1,1},
@@ -1245,7 +1246,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		bottom = 0,
 		width = height,
 		noFont = true,
-		classname = "positive_button",
+		classname = "yes_button",
 		OnClick = {
 			function (obj)
 				ButtonUtilities.SetButtonSelected(obj)
@@ -1258,16 +1259,16 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			end
 		},
 		padding = {10,10,10,10},
-		children = {
-			Image:New {
-				x = 0,
-				y = 0,
-				right = 0,
-				bottom = 0,
-				autosize = true,
-				file = IMG_READY,
-			}
-		},
+-- 		children = {
+-- 			Image:New {
+-- 				x = 0,
+-- 				y = 0,
+-- 				right = 0,
+-- 				bottom = 0,
+-- 				autosize = true,
+-- 				file = IMG_READY,
+-- 			}
+-- 		},
 		parent = activePanel,
 	}
 	offset = offset + height
@@ -1278,7 +1279,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		bottom = 0,
 		width = height,
 		noFont = true,
-		classname = "negative_button",
+		classname = "no_button",
 		OnClick = {
 			function (obj)
 				ButtonUtilities.SetButtonSelected(obj)
@@ -1291,15 +1292,15 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			end
 		},
 		padding = {10,10,10,10},
-		children = {
-			Image:New {
-				x = 0,
-				y = 0,
-				right = 0,
-				bottom = 0,
-				file = IMG_UNREADY,
-			}
-		},
+-- 		children = {
+-- 			Image:New {
+-- 				x = 0,
+-- 				y = 0,
+-- 				right = 0,
+-- 				bottom = 0,
+-- 				file = IMG_UNREADY,
+-- 			}
+-- 		},
 		parent = activePanel,
 	}
 	offset = offset + height
@@ -1814,7 +1815,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		right = "33%",
 		bottom = 0,
 		height = BOTTOM_SPACING,
-		padding = {EXTERNAL_PAD_HOR, INTERNAL_PAD, 1, INTERNAL_PAD},
+		padding = {EXTERNAL_PAD_HOR - 1, INTERNAL_PAD, 2, INTERNAL_PAD},
 		parent = topPanel,
 	}
 
@@ -1834,7 +1835,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		y = 0,
 		right = 0,
 		bottom = 0,
-		padding = {1, EXTERNAL_PAD_VERT, EXTERNAL_PAD_HOR, INTERNAL_PAD},
+		padding = {1, EXTERNAL_PAD_VERT, EXTERNAL_PAD_HOR - 1, INTERNAL_PAD},
 		parent = topPanel,
 	}
 
@@ -1843,11 +1844,11 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	local btnQuitBattle = Button:New {
 		right = 11,
 		y = WG.TOP_BUTTON_Y,
-		width = 80,
+		width = (isSingleplayer and WG.BUTTON_HEIGHT) or 80,
 		height = WG.BUTTON_HEIGHT,
 		objectOverrideFont = Configuration:GetButtonFont(3),
-		caption = (isSingleplayer and i18n("close")) or i18n("leave"),
-		classname = "negative_button",
+		caption = (isSingleplayer and "") or i18n("leave"),
+		classname = (isSingleplayer and "close_button") or "action_button",
 		OnClick = {
 			function()
 				battleLobby:LeaveBattle()
@@ -1857,7 +1858,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	}
 
 	local btnInviteFriends = Button:New {
-		right = 98,
+		right = (isSingleplayer and 59) or 98,
 		y = WG.TOP_BUTTON_Y,
 		width = 180,
 		height = WG.BUTTON_HEIGHT,
@@ -1982,7 +1983,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		parent = bottomPanel,
 	}
 
-	local CHAT_MENTION = "\255\255\0\0"
+	local CHAT_MENTION = "\255\120\250\110"
 	local CHAT_ME = Configuration.meColor
 
 	-- External Functions
