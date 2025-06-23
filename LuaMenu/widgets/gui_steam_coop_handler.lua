@@ -64,6 +64,13 @@ local function MakeExclusivePopup(text, buttonText, ClickFunc, buttonClass, widt
 	replacablePopup = WG.Chobby.InformationPopup(text, {caption = buttonText, closeFunc = ClickFunc, buttonClass = buttonClass, width = width, height = height})
 end
 
+local function MakeExclusiveInformationPopup(text)
+	if replacablePopup then
+		replacablePopup:Close()
+	end
+	replacablePopup = WG.Chobby.InformationPopup(text)
+end
+
 local function CloseExclusivePopup()
 	if replacablePopup then
 		replacablePopup:Close()
@@ -272,7 +279,7 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 		alreadyIn[steamID] = true
 	end
 
-	WG.Chobby.InformationPopup((userName or "???") .. " has joined your P2P party. Play a coop game by starting any game via the Singleplayer menu.")
+	MakeExclusiveInformationPopup((userName or "???") .. " has joined your P2P party. Play a coop game by starting any game via the Singleplayer menu.")
 
 	coopClient = false
 	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
