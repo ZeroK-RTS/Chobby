@@ -876,7 +876,7 @@ local options = {
 	name    = "Pathfinder type",
 	desc    = "Sets the pathfinding system used by units.",
 	type    = "list",
-	def     = "random",
+	def     = "qtpfs",
 	section = "experimental",
 	items  = {
 		{
@@ -884,11 +884,11 @@ local options = {
 			name = 'Standard',
 			desc = 'Standard pathfinder',
 		},
-		{
-			key  = 'random',
-			name = 'Random',
-			desc = 'Randomly pick a pathfinder',
-		},
+		--{ https://github.com/ZeroK-RTS/Zero-K/issues/5523
+		--	key  = 'random', 
+		--	name = 'Random',
+		--	desc = 'Randomly pick a pathfinder',
+		--},
 		{
 			key  = 'qtpfs',
 			name = 'QTPFS',
