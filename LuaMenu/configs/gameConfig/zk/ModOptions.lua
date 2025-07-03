@@ -246,6 +246,14 @@ local options = {
     def         = false,
   },
   {
+    key         = "aiusetechk",
+    name        = "AIs Use Tech-K",
+    desc        = "Diverts some AI metal income for automatic upgrades of factories and mexes. This lets any AI approximate an understanding of Tech-K with minimal cheating.",
+    type        = "bool",
+    section     = "experimental",
+    def         = true,
+  },
+  {
     key         = "disableresurrect",
     name        = "Disable resurrect",
     desc        = "Removes resurrect abilities from the game",
@@ -898,7 +906,7 @@ local options = {
   },
   {
 	key     = "luapathrequest",
-	name    = "Lua path requests",
+	name    = "Allow Lua Path Requests",
 	desc    = "When enabled, the game will probably desync. Don't do it.",
 	type = "bool",
 	def	= false,
