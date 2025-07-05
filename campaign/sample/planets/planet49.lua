@@ -2599,13 +2599,6 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 3,
 						},
  						{
-							name = "terraunit",
-							x = 7184,
-							z = 6400,
-							facing = 0,
-							buildProgress = 0.0003,
-						},
- 						{
 							name = "turretimpulse",
 							x = 7488,
 							z = 4560,
@@ -3909,13 +3902,6 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 8504,
 							z = 312,
 							facing = 1,
-						},
- 						{
-							name = "terraunit",
-							x = 7328,
-							z = 1408,
-							facing = 0,
-							buildProgress = 0.0003,
 						},
  						{
 							name = "energyfusion",
