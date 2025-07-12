@@ -36,6 +36,9 @@ local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
 local MINIMUM_QUICKPLAY_PLAYERS = 4 -- Hax until the server tells me a number.
 
+local PLAYER_SORT_FRAMES = 3
+local wantPlayerSort = PLAYER_SORT_FRAMES
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Download management
@@ -1037,7 +1040,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				PositionChildren(parentStack, parentScroll.height)
 			end
 
-			function teamData.UpdateMaxPlayers()
+			function teamData.SortPlayerLists()
 				UpdatePlayerPositions()
 			end
 			
@@ -1164,9 +1167,9 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		RemovePlayerFromTeam(botName)
 	end
 
-	function externalFunctions.UpdateMaxPlayers()
+	function externalFunctions.SortPlayerLists()
 		for teamIndex, teamData in pairs(team) do
-			teamData.UpdateMaxPlayers()
+			teamData.SortPlayerLists()
 		end
 	end
 
@@ -2020,6 +2023,13 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		playerHandler.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
 		playerHandler.ValidatePlayerList()
 	end
+	
+	local function OnUpdateUserBattleStatus(listener, userName, status, changedAllyTeam, changedSpectator)
+		if changedAllyTeam or changedSpectator then
+			return -- These updates will cause a resort already
+		end
+		wantPlayerSort = PLAYER_SORT_FRAMES
+	end
 
 	local function OnBattleIngameUpdate(listener, updatedBattleID, isRunning)
 		infoHandler.BattleIngameUpdate(updatedBattleID, isRunning)
@@ -2039,7 +2049,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			playerHandler.ValidatePlayerList()
 		end
 		if newInfo.maxPlayers or newInfo.maxEvenPlayers then
-			playerHandler.UpdateMaxPlayers()
+			playerHandler.SortPlayerLists()
 		end
 	end
 
@@ -2120,6 +2130,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	end
 
 	battleLobby:AddListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
+	battleLobby:AddListener("OnUpdateUserBattleStatus", OnUpdateUserBattleStatus)
 	battleLobby:AddListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
 	battleLobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
 	battleLobby:AddListener("OnLeftBattle", OnLeftBattle)
@@ -2138,6 +2149,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		emptyTeamIndex = 0
 
 		oldLobby:RemoveListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
+		oldLobby:RemoveListener("OnUpdateUserBattleStatus", OnUpdateUserBattleStatus)
 		oldLobby:RemoveListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
 		oldLobby:RemoveListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
 		oldLobby:RemoveListener("OnLeftBattle", OnLeftBattle)
@@ -2365,11 +2377,30 @@ local function DelayedInitialize()
 	WG.Chobby.Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 
+local function UpdatePlayerSort()
+	if not wantPlayerSort then
+		return
+	end
+	wantPlayerSort = wantPlayerSort - 1
+	if wantPlayerSort > 0 then
+		return
+	end
+	wantPlayerSort = false
+	if not battleLobby or not playerHandler then
+		return false
+	end
+	playerHandler.SortPlayerLists()
+end
+
 function widget:ActivateMenu()
 	if mainWindowFunctions then
 		WG.Delay(mainWindowFunctions.ValidatePlayerList, 0.2)
 		WG.Delay(mainWindowFunctions.ValidatePlayerList, 3)
 	end
+end
+
+function widget:Update(dt)
+	UpdatePlayerSort()
 end
 
 function widget:Initialize()

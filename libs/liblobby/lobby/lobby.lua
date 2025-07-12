@@ -946,7 +946,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.teamColor    = userData.teamColor
 	status.joinTime     = userData.joinTime
 	status.queueOrder   = userData.queueOrder
-	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
+	self:_CallListeners("OnUpdateUserBattleStatus", userName, status, changedAllyTeam, changedSpectator)
 
 end
 
