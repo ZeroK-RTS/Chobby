@@ -915,7 +915,8 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	local userData = self.userBattleStatus[userName]
 
 	-- If userData.allyNumber is present then an update must occur.
-	local changedAllyTeam = userData.allyNumber or (status.allyNumber ~= userData.allyNumber)
+	local recommendTeamUpdate = userData.allyNumber or (status.allyNumber ~= userData.allyNumber)
+	local changedAllyTeam = ((status.allyNumber or userData.allyNumber) ~= (userData.allyNumber or status.allyNumber))
 	local changedSpectator = (status.isSpectator ~= userData.isSpectator)
 
 	userData.allyNumber = status.allyNumber or userData.allyNumber
@@ -931,7 +932,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	userData.joinTime   = status.joinTime or userData.JoinTime
 	userData.queueOrder = status.queueOrder or userData.queueOrder
 
-	if changedSpectator or changedAllyTeam then
+	if changedSpectator or recommendTeamUpdate then
 		self:UpdateMyBattlePlayerCount()
 		self:_CallListeners("OnUpdateUserTeamStatus", userName, userData.allyNumber, userData.isSpectator)
 	end
@@ -946,7 +947,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.teamColor    = userData.teamColor
 	status.joinTime     = userData.joinTime
 	status.queueOrder   = userData.queueOrder
-	self:_CallListeners("OnUpdateUserBattleStatus", userName, status, changedAllyTeam, changedSpectator)
+	self:_CallListeners("OnUpdateUserBattleStatus", userName, status, recommendTeamUpdate, changedAllyTeam, changedSpectator)
 
 end
 

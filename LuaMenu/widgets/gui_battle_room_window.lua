@@ -2017,6 +2017,10 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		playerHandler.ValidatePlayerList()
 	end
 
+	function externalFunctions.SortPlayerLists()
+		playerHandler.SortPlayerLists()
+	end
+
 	-- Lobby interface
 	local function OnUpdateUserTeamStatus(listener, userName, allyNumber, isSpectator)
 		infoHandler.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
@@ -2024,7 +2028,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		playerHandler.ValidatePlayerList()
 	end
 	
-	local function OnUpdateUserBattleStatus(listener, userName, status, changedAllyTeam, changedSpectator)
+	local function OnUpdateUserBattleStatus(listener, userName, status, recommendUpdate, changedAllyTeam, changedSpectator)
 		if changedAllyTeam or changedSpectator then
 			return -- These updates will cause a resort already
 		end
@@ -2386,10 +2390,10 @@ local function UpdatePlayerSort()
 		return
 	end
 	wantPlayerSort = false
-	if not battleLobby or not playerHandler then
+	if not battleLobby or not mainWindowFunctions then
 		return false
 	end
-	playerHandler.SortPlayerLists()
+	mainWindowFunctions.SortPlayerLists()
 end
 
 function widget:ActivateMenu()
