@@ -838,7 +838,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		userTooltip.debugText:SetText(text)
 		userTooltip.debugText:UpdateLayout()
 		local _, _, numLines = userTooltip.debugText.font:GetTextHeight(text)
-		local height = numLines * 14 + 8 + 7
+		local height = numLines * 14 + 8 + 7 + 50 -- Some lines wrap
 
 		offset = offset + height
 	elseif userTooltip.debugText and userTooltip.debugText.parent then
