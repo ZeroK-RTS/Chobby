@@ -216,7 +216,7 @@ function Configuration:init()
 	self.friendNotifyIngame = true
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
-	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
+	self.devMode = VFS.FileExists("devmode.txt") or VFS.FileExists("devmode.txt.txt")
 	self.debugRawMessages = false
 	self.enableProfiler = false
 	self.showPlanetUnlocks = false
