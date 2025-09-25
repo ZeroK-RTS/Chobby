@@ -1,0 +1,7 @@
+The following icons along with their respective Krita (.kra) and SVG (.svg) sources were authored by cabinboy (CC-BY-SA):
+
+friend.png
+noChat.png
+robot.png
+
+player.png is a vectorization of armcommander.dds included in the main Zero-K repository.
