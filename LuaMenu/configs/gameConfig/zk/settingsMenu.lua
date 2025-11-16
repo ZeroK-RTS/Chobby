@@ -98,7 +98,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Basic",
 					WaterQuality = "Low",
-					DeferredRendering = "Off",
 					UnitReflections = "Off",
 					Shadows = "None",
 					ShadowMapSize = "1024",
@@ -127,7 +126,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Bumpmapped",
 					WaterQuality = "Low",
-					DeferredRendering = "Off",
 					UnitReflections = "Low",
 					Shadows = "None",
 					ShadowMapSize = "1024",
@@ -156,7 +154,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Bumpmapped",
 					WaterQuality = "Low",
-					DeferredRendering = "Off",
 					UnitReflections = "Low",
 					Shadows = "Units Only",
 					ShadowMapSize = "2048",
@@ -185,7 +182,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Bumpmapped",
 					WaterQuality = "Medium",
-					DeferredRendering = "On",
 					UnitReflections = "Medium",
 					Shadows = "Units and Terrain",
 					ShadowMapSize = "2048",
@@ -214,7 +210,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Bumpmapped",
 					WaterQuality = "High",
-					DeferredRendering = "On",
 					UnitReflections = "Medium",
 					Shadows = "Units and Terrain",
 					ShadowMapSize = "8192",
@@ -325,23 +320,10 @@ local settingsConfig = {
 				humanName = "Compatibility Mode",
 				options = {
 					{
-						name = "On",
-						apply = {
-							LoadingMT = 0,
-							AdvUnitShading = 0,
-							AdvMapShading = 0,
-							LuaShaders = 0,
-							ForceDisableShaders = 1,
-							UsePBO = 0,
-							["3DTrees"] = 0,
-							MaxDynamicMapLights = 0,
-							MaxDynamicModelLights = 0,
-							ROAM = 1,
-						}
-					},
-					{
 						name = "Off",
 						apply = {
+							AllowDeferredModelRendering = 1,
+							AllowDeferredMapRendering = 1,
 							LoadingMT = 0, -- See https://github.com/spring/spring/commit/bdd6b641960759ccadf3e7201e37f2192d873791
 							AdvUnitShading = 1,
 							AdvMapShading = 1,
@@ -352,6 +334,40 @@ local settingsConfig = {
 							MaxDynamicMapLights = 1,
 							MaxDynamicModelLights = 1,
 							ROAM = 1, --Maybe ROAM = 0 when the new renderer is fully developed
+						}
+					},
+					{
+						name = "On",
+						apply = {
+							AllowDeferredModelRendering = 1,
+							AllowDeferredMapRendering = 1,
+							LoadingMT = 0,
+							AdvUnitShading = 0,
+							AdvMapShading = 0,
+							LuaShaders = 0,
+							ForceDisableShaders = 0,
+							UsePBO = 0,
+							["3DTrees"] = 0,
+							MaxDynamicMapLights = 0,
+							MaxDynamicModelLights = 0,
+							ROAM = 1,
+						}
+					},
+					{
+						name = "Extreme",
+						apply = {
+							AllowDeferredModelRendering = 0,
+							AllowDeferredMapRendering = 0,
+							LoadingMT = 0,
+							AdvUnitShading = 0,
+							AdvMapShading = 0,
+							LuaShaders = 0,
+							ForceDisableShaders = 1,
+							UsePBO = 0,
+							["3DTrees"] = 0,
+							MaxDynamicMapLights = 0,
+							MaxDynamicModelLights = 0,
+							ROAM = 1,
 						}
 					},
 				},
@@ -367,26 +383,6 @@ local settingsConfig = {
 					{
 						name = "Beam",
 						applyFunction = UpdateLups,
-					},
-				},
-			},
-			{
-				name = "DeferredRendering",
-				humanName = "Deferred Rendering",
-				options = {
-					{
-						name = "On",
-						apply = {
-							AllowDeferredModelRendering = 1,
-							AllowDeferredMapRendering = 1,
-						}
-					},
-					{
-						name = "Off",
-						apply = {
-							AllowDeferredModelRendering = 0,
-							AllowDeferredMapRendering = 0,
-						}
 					},
 				},
 			},
@@ -1327,7 +1323,6 @@ local settingsConfig = {
 local settingsDefault = {
 	WaterType_2 = "Bumpmapped",
 	WaterQuality = "Medium",
-	DeferredRendering = "On",
 	UnitReflections = "Medium",
 	Shadows = "Units and Terrain",
 	ShadowMapSize = "2048",

@@ -296,6 +296,10 @@ function Configuration:init()
 		AdvSky = 0,
 		UsePBO = 0,
 		VSync = 1,
+		FSAA = 0,
+		MSAALevel = 0,
+		SmoothLines = 0,
+		SmoothPoints = 0,
 	}
 
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
