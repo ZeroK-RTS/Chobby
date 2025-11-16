@@ -294,7 +294,6 @@ function Configuration:init()
 
 	self.AtiIntelSettingsOverride = {
 		AdvSky = 0,
-		UsePBO = 0,
 		VSync = 1,
 		FSAA = 0,
 		MSAALevel = 0,
