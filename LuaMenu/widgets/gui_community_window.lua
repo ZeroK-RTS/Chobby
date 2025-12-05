@@ -98,7 +98,7 @@ local function AddLinkButton(scroll, name, tooltip, link, x, right, y, bottom)
 		bottom = bottom,
 		caption = name,
 		tooltip = tooltip,
-		classname = "option_button",
+		classname = "link_button",
 		align = "left",
 		alignPadding = 0.12,
 		objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(3),
@@ -385,25 +385,25 @@ local headingFormats = {
 		buttonSize = 28,
 		height = 24,
 		linkSize = 16,
-		spacing = 2,
+		spacing = 4,
 		buttonPos = 2,
-		inButton = 4,
+		inButton = 8,
 		paragraphSpacing = 0,
 		topHeadingOffset = 30,
 		imageSize = 120,
-		buttonBot = 6,
+		buttonBot = 12, -- clickable area size
 	},
 	[4] = {
 		buttonSize = 40,
 		height = 34,
 		linkSize = 28,
-		spacing = 16,
+		spacing = 24,
 		buttonPos = 5,
-		inButton = 7,
+		inButton = 14,
 		paragraphSpacing = 30,
 		topHeadingOffset = 50,
 		imageSize = 120,
-		buttonBot = 10,
+		buttonBot = 20,
 	},
 }
 
@@ -425,15 +425,15 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 	local externalFunctions = {}
 
 	function externalFunctions.AddEntry(entryData, parentPosition)
-		local textPos = 6
+		local textPos = 12
 		local headingPos = 2
 		local offset = 0
 
 		if showBulletHeading then
 			if not controls.bullet then
 				controls.bullet = Image:New{
-					x = 2,
-					y = offset + 5,
+					x = 5,
+					y = offset + 0 + headFormat.inButton,
 					width = 16,
 					height = 16,
 					file = IMG_BULLET,
@@ -451,10 +451,11 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 					y = offset + 5,
 					right = 2,
 					height = headFormat.buttonSize,
-					classname = "button_square",
 					caption = "",
 					padding = {0, 0, 0, 0},
+					backgroundColor = {0, 0, 0, 0},
 					parent = holder,
+					classname = "glow",
 					OnClick = {
 						function ()
 							WG.BrowserHandler.OpenUrl(linkString)
@@ -467,7 +468,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 
 			if not controls.heading then
 				controls.heading = TextBox:New{
-					x = 4,
+					x = 8,
 					y = headFormat.inButton,
 					right = 4,
 					height = headFormat.height,
@@ -487,8 +488,8 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 					controls.linkImage = Image:New {
 						x = 0,
 						y = 5,
-						width = headFormat.linkSize,
-						height = headFormat.linkSize,
+						width = headFormat.linkSize + 10,
+						height = headFormat.linkSize + 10,
 						keepAspect = true,
 						file = IMG_LINK,
 						parent = controls.linkButton,
@@ -496,7 +497,9 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 				end
 
 				local length = controls.heading.font:GetTextWidth(entryData.heading)
-				controls.linkImage:SetPos(length + 8)
+				controls.linkImage:SetPos(6)
+				
+				controls.heading:SetPos(54)
 			end
 
 			if controls.freeHeading then
@@ -536,7 +539,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 					y = offset + 6,
 					width = headFormat.imageSize,
 					height = headFormat.imageSize,
-					keepAspect = true,
+					keepAspect = false,
 					checkFileExists = not WG.Chobby.Configuration:ImageFileExists(imagePath),
 					imageLoadTime = 5,
 					keepCheckingForImage = true,
@@ -604,7 +607,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, sho
 		local offset = 0
 
 		if controls.bullet then
-			controls.bullet:SetPos(nil, offset + 5)
+			controls.bullet:SetPos(nil, offset + 0 + headFormat.inButton)
 		end
 
 		local headingSize
@@ -780,10 +783,10 @@ local function InitializeControls(window)
 	--LeaveIntentionallyBlank(rightLower, "(reserved)")
 
 	-- Populate link panel
-	AddLinkButton(leftCenter, "Website",    "Visit the Zero-K website.", "https://zero-k.info/", 0, 0, "75.5%", 0)
-	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "https://zero-k.info/Forum",   0, 0, "25.5%", "50.5%")
-	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "https://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
-	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
+	AddLinkButton(leftCenter, "Website",    "Visit the Zero-K website.", "https://zero-k.info/", 0, 0, "74.5%", 0)
+	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "https://zero-k.info/Forum",   0, 0, "24.5%", "49.5%")
+	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "https://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "49.5%", "24.5%")
+	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "74.5%")
 
 
 	-- News Handler
