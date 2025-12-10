@@ -98,7 +98,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Basic",
 					WaterQuality = "Low",
-					UnitReflections = "Off",
 					Shadows = "None",
 					ShadowMapSize = "1024",
 					ShadowDetail = "Low",
@@ -126,7 +125,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Bumpmapped",
 					WaterQuality = "Low",
-					UnitReflections = "Low",
 					Shadows = "None",
 					ShadowMapSize = "1024",
 					ShadowDetail = "Low",
@@ -154,7 +152,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Bumpmapped",
 					WaterQuality = "Low",
-					UnitReflections = "Low",
 					Shadows = "Units Only",
 					ShadowMapSize = "2048",
 					ShadowDetail = "Low",
@@ -182,7 +179,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Bumpmapped",
 					WaterQuality = "Medium",
-					UnitReflections = "Medium",
 					Shadows = "Units and Terrain",
 					ShadowMapSize = "2048",
 					ShadowDetail = "Medium",
@@ -210,7 +206,6 @@ local settingsConfig = {
 				settings = {
 					WaterType_2 = "Bumpmapped",
 					WaterQuality = "High",
-					UnitReflections = "Medium",
 					Shadows = "Units and Terrain",
 					ShadowMapSize = "8192",
 					ShadowDetail = "High",
@@ -328,6 +323,7 @@ local settingsConfig = {
 							AdvUnitShading = 1,
 							AdvMapShading = 1,
 							LuaShaders = 1,
+							CubeTexSizeReflection = 1024,
 							ForceDisableShaders = 0,
 							UsePBO = 1,
 							["3DTrees"] = 1,
@@ -345,6 +341,7 @@ local settingsConfig = {
 							AdvUnitShading = 0,
 							AdvMapShading = 0,
 							LuaShaders = 0,
+							CubeTexSizeReflection = 1024,
 							ForceDisableShaders = 0,
 							UsePBO = 0,
 							["3DTrees"] = 0,
@@ -362,6 +359,7 @@ local settingsConfig = {
 							AdvUnitShading = 0,
 							AdvMapShading = 0,
 							LuaShaders = 0,
+							CubeTexSizeReflection = 1,
 							ForceDisableShaders = 1,
 							UsePBO = 0,
 							["3DTrees"] = 0,
@@ -739,35 +737,30 @@ local settingsConfig = {
 					{
 						name="Off",
 						apply = {
-							CubeTexSizeReflection = 1,
 							CubeTexSizeSpecular = 1,
 						}
 					},
 					{
 						name="Low",
 						apply = {
-							CubeTexSizeReflection = 64,
 							CubeTexSizeSpecular = 64,
 						}
 					},
 					{
 						name="Medium",
 						apply = {
-							CubeTexSizeReflection = 128,
 							CubeTexSizeSpecular = 128,
 						}
 					},
 					{
 						name="High",
 						apply = {
-							CubeTexSizeReflection = 256,
 							CubeTexSizeSpecular = 256,
 						}
 					},
 					{
 						name="Ultra",
 						apply = {
-							CubeTexSizeReflection = 1024,
 							CubeTexSizeSpecular = 1024,
 						}
 					},
@@ -1192,37 +1185,37 @@ local settingsConfig = {
 					{
 						name = "Highest performance",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 1,
+							LuaGarbageCollectionMemLoadMult = 1.7,
 						}
 					},
 					{
 						name = "Higher performance",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 1.7,
+							LuaGarbageCollectionMemLoadMult = 2.4,
 						}
 					},
 					{
 						name = "More performance",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 2.4,
+							LuaGarbageCollectionMemLoadMult = 3.2,
 						}
 					},
 					{
 						name = "Recommended",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 3.2,
+							LuaGarbageCollectionMemLoadMult = 4.5,
 						}
 					},
 					{
 						name = "More Stability",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 4,
+							LuaGarbageCollectionMemLoadMult = 6,
 						}
 					},
 					{
 						name = "Higher Stability",
 						apply = {
-							LuaGarbageCollectionMemLoadMult = 6,
+							LuaGarbageCollectionMemLoadMult = 8,
 						}
 					},
 					{
@@ -1240,43 +1233,43 @@ local settingsConfig = {
 					{
 						name = "Highest performance",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 1,
+							LuaGarbageCollectionRunTimeMult = 1.4,
 						}
 					},
 					{
 						name = "Higher Performance",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 1.4,
+							LuaGarbageCollectionRunTimeMult = 1.7,
 						}
 					},
 					{
 						name = "More Performance",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 1.7,
+							LuaGarbageCollectionRunTimeMult = 2,
 						}
 					},
 					{
 						name = "Recommended",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 2,
+							LuaGarbageCollectionRunTimeMult = 3,
 						}
 					},
 					{
 						name = "More Stability",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 3,
+							LuaGarbageCollectionRunTimeMult = 4,
 						}
 					},
 					{
 						name = "Higher Stability",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 4,
+							LuaGarbageCollectionRunTimeMult = 5,
 						}
 					},
 					{
 						name = "Highest Stability",
 						apply = {
-							LuaGarbageCollectionRunTimeMult = 5,
+							LuaGarbageCollectionRunTimeMult = 6,
 						}
 					},
 				},
@@ -1323,7 +1316,6 @@ local settingsConfig = {
 local settingsDefault = {
 	WaterType_2 = "Bumpmapped",
 	WaterQuality = "Medium",
-	UnitReflections = "Medium",
 	Shadows = "Units and Terrain",
 	ShadowMapSize = "2048",
 	ShadowDetail = "Medium",
