@@ -353,7 +353,7 @@ function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendL
 
 	for i = 1, #friendList do
 		local friendName = friendList[i]
-		scriptTable["player" .. i] = {
+		scriptTable["player" .. i] = scriptTable["player" .. i] or { -- Do not override if the script supplies players
 			Name = friendName,
 			Team = 0, -- Player is always team 0 (I hope)
 			IsFromDemo = 0,

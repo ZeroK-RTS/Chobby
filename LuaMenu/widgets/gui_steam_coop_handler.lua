@@ -87,6 +87,22 @@ local function CornerEcho(title, stuff)
 	})
 end
 
+local function GetSteamFriendsJoined()
+	if not friendsInGame then
+		return {}
+	end
+	local Configuration = WG.Chobby.Configuration
+	local myName = Configuration:GetPlayerName()
+	local usedNames = {
+		[myName] = true,
+	}
+	local names = {}
+	for i = 1, #friendsInGame do
+		names[i] = Configuration:SanitizeName(friendsInGame[i], usedNames)
+	end
+	return names
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Top Notification
@@ -268,6 +284,10 @@ local SteamCoopHandler = {
 	CheckDownloads = CheckDownloads,
 }
 
+function SteamCoopHandler.GetJoinedFriends()
+	return GetSteamFriendsJoined()
+end
+
 function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 	if not alreadyIn[steamID] then
 		friendsInGame = friendsInGame or {}
@@ -448,26 +468,22 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 			return
 		end
 
-		local usedNames = {
-			[myName] = true,
-		}
-
 		MakeExclusivePopup("Starting game.")
-
 		local appendName = ""
 		if startReplayFile then
 			appendName = "(spec)"
 		end
-		WG.Analytics.SendOnetimeEvent("lobby:steamcoop:attemptgamestart")
+		local friendNames = GetSteamFriendsJoined()
 		local players = {}
-		for i = 1, #friendsInGame do
-			saneFriendsInGame[i] = Configuration:SanitizeName(friendsInGame[i], usedNames) .. appendName
+		for i = 1, #friendNames do
+			saneFriendsInGame[i] = friendNames[i] .. appendName
 			players[#players + 1] = {
 				SteamID = friendsInGameSteamID[i],
 				Name = saneFriendsInGame[i],
 				ScriptPassword = "12345",
 			}
 		end
+		WG.Analytics.SendOnetimeEvent("lobby:steamcoop:attemptgamestart")
 
 		local args = {
 			Players = players,

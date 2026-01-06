@@ -266,7 +266,6 @@ local function InitializeDifficultySetting()
 		height = 28,
 		--debugPosition = true,
 		items = {"Easy", "Normal", "Hard", "Brutal"},
-		selected = 2,
 		preferComboUp = true,
 		objectOverrideFont = Configuration:GetFont(2),
 		selected = WG.CampaignData.GetDifficultySetting(),
