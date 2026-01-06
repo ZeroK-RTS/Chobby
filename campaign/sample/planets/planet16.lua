@@ -807,8 +807,8 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "staticmex",
-							x = 4673,
-							z = 3890,
+							x = 4680,
+							z = 3680,
 							facing = 3,
 							difficultyAtLeast = 4,
 						},
