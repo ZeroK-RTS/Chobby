@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="112mm"
+   height="112mm"
+   viewBox="0 0 112 112"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="partyInvite.svg"
+   inkscape:export-filename="partyInvite.png"
+   inkscape:export-xdpi="107.04285"
+   inkscape:export-ydpi="107.04285"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="87.327687"
+     inkscape:cy="214.60691"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2740">
+      <stop
+         style="stop-color:#91dbde;stop-opacity:1;"
+         offset="0.32279909"
+         id="stop2736" />
+      <stop
+         style="stop-color:#6883ab;stop-opacity:1;"
+         offset="1"
+         id="stop2738" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2740"
+       id="linearGradient4754"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(90,-1.7575645,9.82591)"
+       x1="107.08157"
+       y1="-92.154396"
+       x2="197.47516"
+       y2="-190.43167" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-92.500039,-98.05859)">
+    <path
+       id="rect1998"
+       style="fill:url(#linearGradient4754);fill-opacity:1;stroke-width:6.4158e-08;stroke-linejoin:round;stop-color:#000000"
+       d="m 198.50001,139.64215 v 10 h -40 v -10 z m -25,-15 h 10 v 40 h -10 z m -44.99997,-25.5836 a 20,20 0 0 0 -19.99982,19.99983 20,20 0 0 0 19.99982,20.00033 20,20 0 0 0 19.99981,-20.00033 20,20 0 0 0 -19.99981,-19.99983 z m -2.6e-4,50.5836 c -16.56853,1.5e-4 -29.99985,13.43171 -29.999717,30.00024 v 29.41624 h 59.999947 v -29.41624 c 1.3e-4,-16.56873 -13.4315,-30.00037 -30.00023,-30.00024 z" />
+  </g>
+</svg>

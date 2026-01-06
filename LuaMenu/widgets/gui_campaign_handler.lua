@@ -18,10 +18,10 @@ local DEBUG_SHOW_INGAME_BRIEF = false
 
 local GALAXY_IMAGE = LUA_DIRNAME .. "images/heic1403aDowngrade.jpg"
 local IMAGE_BOUNDS = {
-	x = 810/4000,
-	y = 710/2602,
-	width = 2400/4000,
-	height = 1500/2602,
+	x = 0.2025,
+	y = 0.2725,
+	width = 0.6,
+	height = 0.56,
 }
 
 local TRANSFORM_BOUNDS = {
@@ -42,12 +42,14 @@ local difficultyNameMap = {
 local edgeDrawList = 0
 local planetConfig, planetAdjacency, planetEdgeList
 
-local ACTIVE_COLOR = {0,1,0,0.75}
-local INACTIVE_COLOR = {0.2, 0.2, 0.2, 0.75}
+local ACTIVE_COLOR = {104/255, 107/255, 190/255, 1}
+local BORDER_COLOR = {1, 0.2, 0.2, 1}
+local INACTIVE_COLOR = {47/255, 39/255, 48/255, 0.6}
 local HIDDEN_COLOR = {0.2, 0.2, 0.2, 0}
+local OUTLINE_COLOR = {0, 0, 0, 0.90}
 
 local PLANET_START_COLOR = {1, 1, 1, 1}
-local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
+local PLANET_NO_START_COLOR = {0.40, 0.40, 0.55, 1}
 
 local TARGET_IMAGE = LUA_DIRNAME .. "images/nicecircle.png"
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
@@ -89,7 +91,22 @@ local function DrawEdgeLines()
 				local planetData = planetList[pid]
 				local hidden = not (planetData and planetData.GetVisible()) -- Note that planets not in the whitelist have planetData = nil
 				local x, y = planetHandler.GetZoomTransform(planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y)
-				gl.Color((hidden and HIDDEN_COLOR) or (planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
+				gl.Color((hidden and HIDDEN_COLOR) or (planetData.GetCaptured() and ACTIVE_COLOR) or (planetData.GetCapturedOrStarable_Unsafe() and BORDER_COLOR) or INACTIVE_COLOR)
+				gl.Vertex(x, y)
+			end
+		end
+	end
+end
+
+local function DrawEdgeLineOutline()
+	for i = 1, #planetEdgeList do
+		if IsEdgeVisible(planetEdgeList[i][1], planetEdgeList[i][2]) then
+			for p = 1, 2 do
+				local pid = planetEdgeList[i][p]
+				local planetData = planetList[pid]
+				local hidden = not (planetData and planetData.GetVisible()) -- Note that planets not in the whitelist have planetData = nil
+				local x, y = planetHandler.GetZoomTransform(planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y)
+				gl.Color((hidden and HIDDEN_COLOR) or OUTLINE_COLOR)
 				gl.Vertex(x, y)
 			end
 		end
@@ -100,9 +117,15 @@ local function CreateEdgeList()
 	gl.BeginEnd(GL.LINES, DrawEdgeLines)
 end
 
+local function CreateEdgeListOutline()
+	gl.BeginEnd(GL.LINES, DrawEdgeLineOutline)
+end
+
 local function UpdateEdgeList()
 	gl.DeleteList(edgeDrawList)
+	gl.DeleteList(edgeDrawListOutline)
 	edgeDrawList = gl.CreateList(CreateEdgeList)
+	edgeDrawListOutline = gl.CreateList(CreateEdgeListOutline)
 	planetHandler.SendEdgesToBack()
 end
 
@@ -182,12 +205,12 @@ local function MakeFeedbackButton(parentControl, link, x, y, right, bottom)
 	local feedbackButton = Button:New {
 		x = x,
 		y = y,
-		right = right,
+		right = right - 35,
 		bottom = bottom,
 		width = 116,
 		height = WG.BUTTON_HEIGHT,
 		padding = {0, 0, 0, 0},
-		caption = "Feedback   ",
+		caption = "Feedback",
 		classname = "option_button",
 		objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(2),
 		tooltip = "Post feedback on the forum",
@@ -199,15 +222,15 @@ local function MakeFeedbackButton(parentControl, link, x, y, right, bottom)
 		parent = parentControl,
 	}
 
-	local imMapLink = Image:New {
-		right = 6,
-		y = 13,
-		width = 16,
-		height = 16,
-		keepAspect = true,
-		file = IMG_LINK,
-		parent = feedbackButton,
-	}
+--	local imMapLink = Image:New {
+--		right = 6,
+--		y = 13,
+--		width = 16,
+--		height = 16,
+--		keepAspect = true,
+--		file = IMG_LINK,
+--		parent = feedbackButton,
+--	}
 end
 
 --------------------------------------------------------------------------------
@@ -954,7 +977,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		bottom = 32,
 		resizable = false,
 		draggable = false,
-		padding = {12, 7, 12, 7},
+		padding = {5, 5, 5, 5},
 	}
 
 	local planetName = string.upper(planetData.name)
@@ -1014,8 +1037,8 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 	local buttonHolder = Control:New{
 		x = "50%",
 		y = "4%",
-		right = "3%",
-		bottom = "4%",
+		right = "2%",
+		bottom = "3%",
 		padding = {0,0,0,0},
 		parent = starmapInfoPanel,
 	}
@@ -1053,7 +1076,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				height = 38,
 				padding = {0, 0, 0, 0},
 				objectOverrideFont = Configuration:GetButtonFont(2),
-				caption = i18n("invite_friends") .. "   ",
+				caption = i18n("invite_friends"),
 				classname = "option_button",
 				OnClick = {
 					function()
@@ -1062,15 +1085,15 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				},
 				parent = buttonHolder,
 			}
-			local imPartyLink = Image:New {
-				right = 6,
-				y = 4,
-				width = 24,
-				height = 24,
-				keepAspect = true,
-				file = PARTY_LINK,
-				parent = btnInviteFriends,
-			}
+--			local imPartyLink = Image:New {
+--				right = 6,
+--				y = 4,
+--				width = 24,
+--				height = 24,
+--				keepAspect = true,
+--				file = PARTY_LINK,
+--				parent = btnInviteFriends,
+--			}
 		end
 
 		if planetData.tutorialSkip then
@@ -1185,10 +1208,10 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 	Button:New{
 		y = 0,
 		right = 0,
-		width = 80,
+		width = WG.BUTTON_HEIGHT,
 		height = WG.BUTTON_HEIGHT,
-		classname = "negative_button",
-		caption = i18n("close"),
+		classname = "close_button_alt",
+		caption = "",
 		objectOverrideFont = Configuration:GetButtonFont(3),
 		OnClick = {
 			CloseFunc
@@ -1876,8 +1899,33 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			gl.PushMatrix()
 			gl.Translate(x, y, 0)
 			gl.Scale(w, h, 1)
-			gl.LineWidth(3 * scale)
+			gl.LineWidth(4 * scale)
 			gl.CallList(edgeDrawList)
+			gl.PopMatrix()
+		end,
+		parent = window,
+	}
+	
+		local graphOutline = Chili.Control:New{
+		x       = 0,
+		y       = 0,
+		height  = "100%",
+		width   = "100%",
+		padding = {0,0,0,0},
+		drawcontrolv2 = true,
+		DrawControl = function (obj)
+			local x = obj.x
+			local y = obj.y
+			local w = obj.width
+			local h = obj.height
+
+			local _,_,scale = planetHandler.GetZoomTransformValues()
+
+			gl.PushMatrix()
+			gl.Translate(x, y, 0)
+			gl.Scale(w, h, 1)
+			gl.LineWidth(6 * scale)
+			gl.CallList(edgeDrawListOutline)
 			gl.PopMatrix()
 		end,
 		parent = window,
@@ -1986,6 +2034,9 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	function externalFunctions.SendEdgesToBack()
 		if graph then
 			graph:SendToBack()
+		end
+		if graphOutline then
+			graphOutline:SendToBack()
 		end
 	end
 
