@@ -62,8 +62,11 @@ end
 
 local function DelayedViewResize()
 	local window = holderWindow
+	if not (window and window.parent) then
+		return
+	end
 	local x, y = window:LocalToScreen(0, 0)
-	RepositionBackground(x, y, window.width, window.height)
+	RepositionBackground(x, y, window.xSize, window.ySize)
 end
 
 --------------------------------------------------------------------------------
@@ -340,7 +343,7 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
-					difficultyWindow = difficultyWindow or InitializeDifficultySetting(obj)
+					InitializeDifficultySetting(obj)
 					InitializeMainDisplay(obj)
 				end
 
