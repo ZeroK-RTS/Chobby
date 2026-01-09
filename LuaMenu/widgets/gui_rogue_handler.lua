@@ -40,6 +40,7 @@ local difficultySetting = 4
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Background positioning
 
 local windowX, windowY, windowWidth, windowHeight
 local function RepositionBackground(newX, newY, newWidth, newHeight)
@@ -71,8 +72,43 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Difficulty Setting
+-- Encoding
 
+local function TableToBase64(inputTable)
+	if not inputTable then
+		return
+	end
+	return Spring.Utilities.Base64Encode(Spring.Utilities.TableToString(inputTable))
+end
+
+local function MakeCircuitDisableString(unlockedUnits)
+	local Configuration = WG.Chobby.Configuration
+	local unitList = Configuration.gameConfig.gameUnitInformation.nameList
+	if not unitList then
+		return nil
+	end
+	local unlockedMap = {}
+	if unlockedUnits then
+		for i = 1, #unlockedUnits do
+			unlockedMap[unlockedUnits[i]] = true
+		end
+	end
+	local disabled
+	for i = 1, #unitList do
+		if not unlockedMap[unitList[i]] then
+			if not disabled then
+				disabled = unitList[i]
+			else
+				disabled = disabled .. "+" .. unitList[i]
+			end
+		end
+	end
+	return disabled
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Difficulty Setting
 
 local function InitializeDifficultySetting(parent)
 	local Configuration = WG.Chobby.Configuration
@@ -150,7 +186,7 @@ local function StartFreshGame()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
 	local playerName = Configuration:GetPlayerName()
 
-	-- Add the player, this is to make the player team 0.
+	-- Add the player, this is to make the host player team 0.
 	players[playerCount] = {
 		Name = playerName,
 		Team = teamCount,
@@ -213,7 +249,69 @@ local function StartFreshGame()
 		}
 	end
 
-	local modoptions = {}
+	local modoptions = {
+		rk_enabled = 1,
+		rk_post_game_only = 1,
+		rk_battle_planet = 1,
+		rk_galaxy = {
+			planets = {
+				{
+					name = "Home Planet",
+					map = "TitanDuel 2.2",
+					image = "swamp01.png",
+					pos = {0, 1},
+					state = false,
+					rewards = {
+						"cheap_combat",
+						"constructor",
+						"turret",
+					},
+				},
+				{
+					name = "Option 1",
+					map = "Fallendell_V4",
+					image = "inferno03.png",
+					pos = {0, 0},
+					state = false,
+					rewards = {
+						"cheap_combat",
+						"constructor",
+						"turret",
+					},
+				},
+				{
+					name = "Option 2",
+					map = "Red Comet Remake 1.7",
+					image = "ocean01.png",
+					pos = {1, 1},
+					state = false,
+					rewards = {
+						"cheap_combat",
+						"constructor",
+						"turret",
+					},
+				},
+				{
+					name = "End Planet",
+					map = "Banana Republic v1.0.1",
+					image = "barren03.png",
+					pos = {1, 0},
+					state = false,
+					rewards = {
+						"cheap_combat",
+						"constructor",
+						"turret",
+					},
+				},
+			},
+			edges = {
+				{1, 2},
+				{1, 3},
+				{4, 2},
+				{4, 3},
+			}
+		}
+	}
 	for key, value in pairs(modoptions) do
 		modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
 	end

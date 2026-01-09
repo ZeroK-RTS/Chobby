@@ -20,7 +20,7 @@ local START_UNITS_BLOCK_SIZE = 40
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Encording
+-- Encoding
 
 local function TableToBase64(inputTable)
 	if not inputTable then
