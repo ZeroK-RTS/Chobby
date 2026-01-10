@@ -166,6 +166,38 @@ end
 
 local aiConfig = VFS.Include("campaign/sample/aiConfig.lua")
 
+local baseLoadout = {
+	rerolls = 3,
+	factories = {
+		{
+			baseDef = "factoryjump",
+			units = {},
+		},
+		{
+			baseDef = "factorytank",
+			units = {},
+		},
+		{
+			baseDef = "factoryplane",
+			units = {},
+		},
+	},
+	structures = {
+		{
+			name = "staticmex",
+		},
+		{
+			name = "energywind",
+		},
+		{
+			name = "energysolar",
+		},
+		{
+			name = "staticradar",
+		},
+	},
+}
+
 local function StartFreshGame()
 	local friendNames = WG.SteamCoopHandler.GetJoinedFriends()
 
@@ -184,26 +216,11 @@ local function StartFreshGame()
 	local mapName = "TitanDuel 2.2"
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
-	local playerName = Configuration:GetPlayerName()
+	local myName = Configuration:GetPlayerName()
 
-	-- Add the player, this is to make the host player team 0.
-	players[playerCount] = {
-		Name = playerName,
-		Team = teamCount,
-		IsFromDemo = 0,
-		rank = 0,
-	}
-	teams[teamCount] = {
-		TeamLeader = playerCount,
-		AllyTeam = 0,
-		rgbcolor = '0 0 0',
-	}
-	playerCount = playerCount + 1
-	teamCount = teamCount + 1
-	
-	for i = 1, #friendNames do
+	local function SetupPlayer(playerName)
 		players[playerCount] = {
-			Name = friendNames[i],
+			Name = playerName,
 			Team = teamCount,
 			IsFromDemo = 0,
 			rank = 0,
@@ -212,9 +229,15 @@ local function StartFreshGame()
 			TeamLeader = playerCount,
 			AllyTeam = 0,
 			rgbcolor = '0 0 0',
+			rk_loadout = TableToBase64(baseLoadout),
 		}
 		playerCount = playerCount + 1
 		teamCount = teamCount + 1
+	end
+	
+	SetupPlayer(myName)
+	for i = 1, #friendNames do
+		SetupPlayer(friendNames[i])
 	end
 
 	-- Add the AIs
@@ -262,9 +285,9 @@ local function StartFreshGame()
 					pos = {0, 1},
 					state = false,
 					rewards = {
-						"cheap_combat",
+						"light_combat",
 						"constructor",
-						"turret",
+						"light_turret",
 					},
 				},
 				{
@@ -274,9 +297,9 @@ local function StartFreshGame()
 					pos = {0, 0},
 					state = false,
 					rewards = {
-						"cheap_combat",
+						"light_combat",
 						"constructor",
-						"turret",
+						"light_turret",
 					},
 				},
 				{
@@ -286,9 +309,9 @@ local function StartFreshGame()
 					pos = {1, 1},
 					state = false,
 					rewards = {
-						"cheap_combat",
+						"light_combat",
 						"constructor",
-						"turret",
+						"light_turret",
 					},
 				},
 				{
@@ -298,9 +321,9 @@ local function StartFreshGame()
 					pos = {1, 0},
 					state = false,
 					rewards = {
-						"cheap_combat",
+						"light_combat",
 						"constructor",
-						"turret",
+						"light_turret",
 					},
 				},
 			},
@@ -319,7 +342,7 @@ local function StartFreshGame()
 	local script = {
 		gametype = gameName,
 		mapname = mapName,
-		myplayername = playerName,
+		myplayername = myName,
 		nohelperais = 0,
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
