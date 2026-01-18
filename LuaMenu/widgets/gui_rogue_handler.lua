@@ -167,35 +167,7 @@ end
 local aiConfig = VFS.Include("campaign/sample/aiConfig.lua")
 
 local baseLoadout = {
-	rerolls = 3,
-	factories = {
-		{
-			baseDef = "factoryjump",
-			units = {},
-		},
-		{
-			baseDef = "factorytank",
-			units = {},
-		},
-		{
-			baseDef = "factoryplane",
-			units = {},
-		},
-	},
-	structures = {
-		{
-			name = "staticmex",
-		},
-		{
-			name = "energywind",
-		},
-		{
-			name = "energysolar",
-		},
-		{
-			name = "staticradar",
-		},
-	},
+	needInit = true,
 }
 
 local function StartFreshGame()
@@ -288,6 +260,7 @@ local function StartFreshGame()
 						"light_combat",
 						"constructor",
 						"light_turret",
+						"comm_chassis",
 					},
 				},
 				{
