@@ -12,8 +12,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local userStatusPanelWidth = 250
 
 	local battleStatusWidth = 480
-	local panelButtonsWidth = 560 --578
-	local panelButtonsHeight = 42
+	local panelButtonsWidth = 564 --578
+	local panelButtonsHeight = 48
 	local panelButtonsRightPad = 4
 
 	local chatTabHolderHeight = 41
@@ -46,7 +46,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local statusButtonWidth = 290
 	local statusButtonWidthSmall = 290
 
-	local topBarHeight = 86
+	local topBarHeight = 60
 
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1360
@@ -196,7 +196,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local status_panelButtons = Control:New {
 		bottom = 0,
 		right = 0,
-		width = panelButtonsWidth,
+		width = panelButtonsWidth + 10,
 		height = panelButtonsHeight,
 		name = "status_panelButtons",
 		parent = holder_status,
@@ -279,7 +279,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	local buttonsHolder_buttons = Control:New {
 		x = "0%",
-		y = buttonsDoubleOffsetRel,
+		y = 0,
 		width = "100%",
 		height = "100%",
 		name = "buttonsHolder_buttons",
@@ -404,7 +404,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Background holder is put here to be at the back
 	-----------------------------------
 	local backgroundHolder = Background(nil, nil, nil, "menuBackgroundBrightness")
-	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.82}, nil, "gameOverlayOpacity")
+	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.3}, nil, "gameOverlayOpacity")
 	ingameBackgroundHolder:Disable()
 
 	-------------------------------------------------------------------
@@ -587,7 +587,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_panelButtons:AddChild(panelButtons_buttons)
 
 			panelButtons_buttons:SetPosRelative("0%","0%", "100%","100%")
-			buttonsHolder_buttons:SetPosRelative("0%", buttonsDoubleOffsetRel, "100%","100%")
+			buttonsHolder_buttons:SetPosRelative("0%", "0%", "100%","100%")
 
 			-- Make Main Window take up more space
 			status_panelButtons:Show()
@@ -725,7 +725,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		submenuWindow_mainContent._relativeBounds.bottom = bottomPad
 		submenuWindow_mainContent:UpdateClientArea()
 
-		status_panelButtons._relativeBounds.right = panelButtonsRightPad -- rightPad
+		status_panelButtons._relativeBounds.right = rightPad
 		rightPanel_window:UpdateClientArea()
 
 		buttons_exit._relativeBounds.bottom = (bottomPad > 0 and bottomPad) or 4
@@ -887,6 +887,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = 3,
 		width = 108,
 		height = 38,
+		classname = "action_button",
 		name = "switchToMenuButton",
 		caption = "Menu",
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(3),
@@ -905,7 +906,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		x = "50.12%",
 		right = "30%",
 		y = 3,
-		bottom = 11,
+		bottom = 5,
+		classname = "option_button",
 		name = "switchToGameButton",
 		caption = "Return to Battle",
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(4),
@@ -924,7 +926,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		x = "30%",
 		right = "50.12%",
 		y = 3,
-		bottom = 11,
+		bottom = 5,
+		classname = "action_button",
 		name = "leaveGameButton",
 		caption = "Leave Battle",
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(4),
@@ -935,7 +938,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 		OnClick = {
 			function ()
-				ConfirmationPopup(LeaveGameFunction, "Are you sure you want to leave the game?", nil, 315, 200)
+				ConfirmationPopup(LeaveGameFunction, "Are you sure you want to leave the match?", nil, 315, 200)
 			end
 		}
 	}

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="145mm"
+   height="145mm"
+   viewBox="0 0 145 145"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="clock.svg"
+   inkscape:export-filename="clock.png"
+   inkscape:export-xdpi="82.681381"
+   inkscape:export-ydpi="82.681381"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="-14.849242"
+     inkscape:cy="30.405592"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2402">
+      <stop
+         style="stop-color:#ededf6;stop-opacity:1;"
+         offset="0"
+         id="stop2398" />
+      <stop
+         style="stop-color:#b7b1c5;stop-opacity:1;"
+         offset="1"
+         id="stop2400" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2402"
+       id="linearGradient2404"
+       x1="37.500099"
+       y1="80.084381"
+       x2="177.49982"
+       y2="220.08411"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-34.999993,-77.584278)">
+    <path
+       id="path2255"
+       style="fill:url(#linearGradient2404);fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+       d="M 107.49996 80.083867 C 68.840173 80.083944 37.500173 111.42394 37.500099 150.08373 C 37.500176 188.74351 68.840175 220.08403 107.49996 220.08411 C 146.15974 220.08403 177.49974 188.74351 177.49982 150.08373 C 177.49975 111.42394 146.15975 80.083944 107.49996 80.083867 z M 107.49996 92.583879 C 137.87539 92.584023 164.99967 119.7083 164.99981 150.08373 C 164.99996 180.45936 137.87559 207.58395 107.49996 207.58409 C 77.124329 207.58395 49.999967 180.45936 50.000111 150.08373 C 50.00025 119.7083 77.124529 92.584021 107.49996 92.583879 z M 107.49996 105.36915 C 84.087097 105.36867 62.784896 126.67086 62.785377 150.08373 C 62.784896 173.49661 84.087097 194.79931 107.49996 194.79883 C 130.91283 194.79931 152.21555 173.49661 152.21506 150.08373 L 107.49996 150.08373 L 107.49996 105.36915 z " />
+  </g>
+</svg>

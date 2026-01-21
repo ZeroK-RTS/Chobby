@@ -604,11 +604,10 @@ local function InitializeControls(window)
 	local btnClose = Button:New {
 		right = 11,
 		y = WG.TOP_BUTTON_Y,
-		width = 80,
+		width = WG.BUTTON_HEIGHT,
 		height = WG.BUTTON_HEIGHT,
-		caption = i18n("close"),
-		objectOverrideFont = Configuration:GetButtonFont(3),
-		classname = "negative_button",
+		caption = "",
+		classname = "close_button",
 		OnClick = {
 			function()
 				window:Hide()
@@ -618,7 +617,7 @@ local function InitializeControls(window)
 	}
 
 	local btnInviteFriends = Button:New {
-		right = 98,
+		right = 59,
 		y = WG.TOP_BUTTON_Y,
 		width = 180,
 		height = WG.BUTTON_HEIGHT,
@@ -636,7 +635,7 @@ local function InitializeControls(window)
 
 	if Configuration.gameConfig.link_matchmakerMapBans then
 		Button:New {
-			right = 285,
+			right = 246,
 			y = WG.TOP_BUTTON_Y,
 			width = 180,
 			height = WG.BUTTON_HEIGHT,
@@ -670,7 +669,7 @@ local function InitializeControls(window)
 		right = 5,
 		y = offset,
 		height = 200,
-		objectOverrideFont = Configuration:GetFont(3),
+		objectOverrideFont = Configuration:GetFont(2),
 		text = "Matching options:",
 		parent = window
 	}
@@ -694,7 +693,7 @@ local function InitializeControls(window)
 			caption = optData.humanName,
 			checked = checked,
 			tooltip = optData.tooltip,
-			objectOverrideFont = Configuration:GetFont(3),
+			objectOverrideFont = Configuration:GetFont(2),
 			OnChange = {
 				function (obj, newState)
 					Configuration:SetConfigValue(optData.confKey, newState)

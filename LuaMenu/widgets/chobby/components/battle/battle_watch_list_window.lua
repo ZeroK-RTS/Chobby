@@ -95,6 +95,10 @@ function BattleWatchListWindow:Update()
 	for _, battle in pairs(battles) do
 		self:AddBattle(battle.battleID, battle)
 	end
+	
+	for _, battle in pairs(battles) do
+		self:UpdateButtonColor(battle.battleID)
+	end
 end
 
 function BattleWatchListWindow:AddBattle(battleID)
@@ -262,6 +266,7 @@ function BattleWatchListWindow:JoinedBattle(battleID)
 	local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")
 	local playerCount = lobby:GetBattlePlayerCount(battleID)
 	playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
+	self:UpdateButtonColor(battleID)
 	self:RecalculateOrder(battleID)
 end
 
@@ -274,6 +279,7 @@ function BattleWatchListWindow:LeftBattle(battleID)
 	local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")
 	local playerCount = lobby:GetBattlePlayerCount(battleID)
 	playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
+	self:UpdateButtonColor(battleID)
 	self:RecalculateOrder(battleID)
 end
 
@@ -305,7 +311,7 @@ function BattleWatchListWindow:OnUpdateBattleInfo(battleID)
 	local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")
 	local playerCount = lobby:GetBattlePlayerCount(battleID)
 	playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
-
+	self:UpdateButtonColor(battleID)
 	self:RecalculateOrder(battleID)
 end
 

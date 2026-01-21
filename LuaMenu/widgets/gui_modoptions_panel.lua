@@ -644,7 +644,7 @@ local function InitializeModoptionsDisplay()
 		right = 1,
 		y = 1,
 		autoresize = true,
-		objectOverrideFont = WG.Chobby.Configuration:GetFont(1),
+		objectOverrideFont = WG.Chobby.Configuration:GetFont(8),
 		text = "",
 		parent = mainScrollPanel,
 	}
@@ -655,7 +655,7 @@ local function InitializeModoptionsDisplay()
 		modoptions = modoptions or {}
 		for key, value in pairs(modoptions) do
 			if modoptionDefaults[key] == nil or modoptionDefaults[key] ~= value then
-				text = text .. "\255\120\120\120" .. tostring(key) .. " = \255\255\255\255" .. tostring(value) .. "\n"
+				text = text .. "\255\160\160\160" .. tostring(key) .. " = \255\255\255\255" .. tostring(value) .. "\n"
 				empty = false
 			end
 		end

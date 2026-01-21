@@ -97,7 +97,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		y = 2,
 		width = 73,
 		height = 73,
-		padding = {1,1,1,1},
+		padding = {3,3,3,3},
 		parent = mainControl,
 	}
 
@@ -139,9 +139,9 @@ local function GetBattleInfoHolder(parent, battleID)
 			lblTitle:SetPos(36, 1, 150)
 
 			lblPlayerStatus.font = Configuration:GetFont(1)
-			lblPlayerStatus:SetPos(58, 18)
+			lblPlayerStatus:SetPos(58, 19)
 
-			imPlayerStatus:SetPos(43, 18, 12, 12)
+			imPlayerStatus:SetPos(43, 17, 12, 12)
 
 			lblPlayers.font = Configuration:GetFont(1)
 			lblPlayers:SetPos(165, 18)
@@ -154,16 +154,16 @@ local function GetBattleInfoHolder(parent, battleID)
 			lblTitle:SetPos(76, 2, 225)
 
 			lblPlayerStatus.font = Configuration:GetFont(2)
-			lblPlayerStatus:SetPos(103, 26)
+			lblPlayerStatus:SetPos(103, 27)
 
-			imPlayerStatus:SetPos(82, 26, 18, 18)
+			imPlayerStatus:SetPos(82, 25, 18, 18)
 
 			lblPlayers.font = Configuration:GetFont(2)
 			lblPlayers:SetPos(80, 48)
 
 			playersPrefix = PLAYER_PREFIX_BIG
 		end
-		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, smallMode and 160 or 130)
+		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, smallMode and 160 or 200)
 		lblTitle:SetCaption(text)
 
 		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
@@ -253,11 +253,12 @@ local function InitializeControls(parentControl)
 	local statusWindowHandler = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 
 	local infoHolder = Panel:New {
-		x = 68,
+		x = 3,
 		right = 4,
-		y = 4,
+		y = 3,
 		bottom = 4,
 		parent = parentControl,
+		classname = "empty",
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -375,7 +376,7 @@ function BattleStatusPanel.GetControl(fontSizeScale)
 		bottom = 0,
 		padding = {0,0,0,0},
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(fontSizeScale),
-		caption = "Battle                                    ",
+		caption = "",
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then

@@ -59,8 +59,8 @@ function ChatWindows:init()
 	end
 	lobby:AddListener("OnUserCount", self.onUserCount)
 
-	local CHAT_EX_MENTION = "\255\255\0\0"
-	local CHAT_MENTION ="\255\255\0\0"
+	local CHAT_EX_MENTION = "\255\120\250\110"
+	local CHAT_MENTION ="\255\120\250\110"
 
 	-- channel chat
 	lobby:AddListener("OnSaid",
@@ -168,6 +168,7 @@ function ChatWindows:init()
 		right = 7,
 		y = 0,
 		bottom = 9,
+		minTabWidth = 120,
 		padding = {0, 0, 0, 0},
 		tabs = {
 			[1] = (Configuration.debugMode and { name = "debug", caption = i18n("debug"), children = {
@@ -247,10 +248,11 @@ function ChatWindows:init()
 	self.joinButton = Button:New {
 		x = 2000,
 		y = 5,
-		width = 30,
-		height = 30,
+		width = 32,
+		height = 32,
 		parent = self.tabScrollPanel,
-		caption = "+",
+		caption = "",
+		classname = "tabbar_square_button_positive",
 		OnClick = {
 			function()
 				if self.joinWindow == nil then
@@ -428,7 +430,8 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 	end
 	local nameColor
 	if source == lobby.SOURCE_DISCORD then
-		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\40\210\220", "Discord user.", true)
+		-- channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\96\125\248", "Discord user.", true)
+		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\110\137\251", "Discord user.", true)
 	else
 		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, nameColor)
 	end
@@ -512,9 +515,7 @@ function ChatWindows:SetTabActivation(tabName, activationLevel, outlineColor)
 		end
 	else
 		ctrl.font = Configuration:GetFont(1, "chat_badge_white", {
-			outline = false,
-			outlineColor = {0,0,0,1},
-			color = {1,1,1,1},
+			shadow = true,
 		})
 	end
 	ctrl.activationLevel = activationLevel
@@ -674,7 +675,7 @@ function ChatWindows:UpdateChannels(channelsArray)
 			width = 100,
 			y = 0,
 			height = 20,
-			caption = "#",
+			caption = "# ",
 		}
 	)
 	self.serverPanel:AddChild(
@@ -734,8 +735,8 @@ function ChatWindows:UpdateChannels(channelsArray)
 end
 
 function ChatWindows:UpdateJoinPosition()
-	self.joinButton:SetPos(#self.tabPanel.tabBar.children * 70 + 10)
-	self.tabBarFudgeHolder:SetPos(nil, nil, #self.tabPanel.tabBar.children * 70 + 5)
+	self.joinButton:SetPos(#self.tabPanel.tabBar.children * 120 + 10)
+	self.tabBarFudgeHolder:SetPos(nil, nil, #self.tabPanel.tabBar.children * 120 + 5)
 end
 
 function ChatWindows:GetChannelConsole(chanName)
@@ -764,7 +765,7 @@ function ChatWindows:GetChannelConsole(chanName)
 		local userListPanel = UserListPanel(function() return lobby:GetChannel(chanName) end, 22, true, false, chanName or "_missing")
 		self.userListPanels[chanName] = userListPanel
 
-		local caption = "#" .. chanName
+		local caption = "# " .. chanName
 		local tooltip = nil
 		local origCaption = caption
 		local fontSize = 1
@@ -774,8 +775,9 @@ function ChatWindows:GetChannelConsole(chanName)
 		end
 
 		local closeChannelButton = Button:New {
-			width = 24, height = 24, y = 5, right = Configuration.userListWidth + 18,
-			caption = "x",
+			width = 32, height = 32, y = 5, right = Configuration.userListWidth + 20,
+			classname = "tabbar_square_button_negative",
+			caption = "",
 			OnClick = {
 				function()
 					self.channelConsoles[chanName] = nil

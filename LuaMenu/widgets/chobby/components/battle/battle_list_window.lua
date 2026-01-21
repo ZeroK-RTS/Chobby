@@ -7,11 +7,11 @@ local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 
 function BattleListWindow:init(parent)
-	self:super("init", parent, "Play or watch a game", true, nil, nil, nil, 34)
+	self:super("init", parent, "Play or Watch Games", true, nil, nil, nil, 34)
 
 	if not Configuration.gameConfig.disableBattleListHostButton then
 		self.btnNewBattle = Button:New {
-			x = 260,
+			right = 59,
 			y = WG.TOP_BUTTON_Y,
 			width = 150,
 			height = WG.BUTTON_HEIGHT,
@@ -61,7 +61,7 @@ function BattleListWindow:init(parent)
 		right = 5,
 		bottom = 11,
 		height = 20,
-		objectOverrideFont = Configuration:GetFont(2),
+		objectOverrideFont = Configuration:GetFont(6), -- same as 2, but without font shadow
 		caption = "Filter out:",
 		parent = self.window
 	}
@@ -75,7 +75,7 @@ function BattleListWindow:init(parent)
 		boxsize = 20,
 		caption = " Passworded",
 		checked = Configuration.battleFilterPassworded3 or false,
-		objectOverrideFont = Configuration:GetFont(2),
+		objectOverrideFont = Configuration:GetFont(6),
 		OnChange = {
 			function (obj, newState)
 				Configuration:SetConfigValue("battleFilterPassworded3", newState)
@@ -93,7 +93,7 @@ function BattleListWindow:init(parent)
 		boxsize = 20,
 		caption = " Non-friend",
 		checked = Configuration.battleFilterNonFriend or false,
-		objectOverrideFont = Configuration:GetFont(2),
+		objectOverrideFont = Configuration:GetFont(6),
 		OnChange = {
 			function (obj, newState)
 				Configuration:SetConfigValue("battleFilterNonFriend", newState)
@@ -111,7 +111,7 @@ function BattleListWindow:init(parent)
 		boxsize = 20,
 		caption = " Running",
 		checked = Configuration.battleFilterRunning or false,
-		objectOverrideFont = Configuration:GetFont(2),
+		objectOverrideFont = Configuration:GetFont(6),
 		OnChange = {
 			function (obj, newState)
 				Configuration:SetConfigValue("battleFilterRunning", newState)
@@ -181,6 +181,7 @@ function BattleListWindow:init(parent)
 			return
 		end
 		self:OnUpdateBattleInfo(battleID)
+		self:UpdateButtonColor(battleID)
 		SoftUpdate()
 	end
 	lobby:AddListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
@@ -235,6 +236,11 @@ function BattleListWindow:Update()
 	for _, battle in pairs(battles) do
 		self:AddBattle(battle.battleID, battle)
 	end
+	
+	for _, battle in pairs(battles) do
+		self:UpdateButtonColor(battle.battleID)
+	end
+	
 	self:UpdateFilters()
 	self:UpdateInfoPanel()
 end
@@ -274,7 +280,7 @@ end
 function BattleListWindow:MakeWatchBattle(battleID, battle)
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
-		classname = "button_rounded",
+		classname = "battle_default_button",
 		name = "battleButton",
 		x = 0,
 		right = 0,
@@ -468,7 +474,7 @@ end
 function BattleListWindow:MakeJoinBattle(battleID, battle)
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
-		classname = "button_rounded",
+		classname = "battle_default_button",
 		name = "battleButton",
 		x = 0,
 		right = 0,
@@ -633,6 +639,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 	end
 
 	self:AddRow({button}, battle.battleID)
+	self:UpdateButtonColor(battleID) -- necessary for some reason, despite BAR not needing this
 end
 
 function BattleListWindow:ItemInFilter(id)
@@ -686,6 +693,45 @@ function BattleListWindow:CompareItems(id1, id2)
 		Spring.Echo("battle1", id1, battle1, battle1 and battle1.users)
 		Spring.Echo("battle2", id2, battle2, battle2 and battle2.users)
 		return false
+	end
+end
+
+function BattleListWindow:UpdateButtonColor(battleID)
+
+	local items = self:GetRowItems(battleID)
+	if not items then
+		return
+	end
+	local battle = lobby:GetBattle(battleID)
+	if battle == nil then return end
+
+	local oldbuttonstyle = items.battleButton.backgroundColor
+	local battlebuttonstyle = {0.10, 0.30, 0.60, 0.60} --blue
+	if battle.passworded then
+		battlebuttonstyle =  {0.65, 0.10, 0.20, 0.35} --red
+	elseif battle.isMatchMaker then
+		battlebuttonstyle =  {0.40, 0.35, 0.55, 0.60} --violet
+	elseif lobby:GetBattlePlayerCount(battleID) < 1 then
+		battlebuttonstyle = {0.10, 0.30, 0.60, 0.60} --blue
+	elseif battle.isRunning then
+		battlebuttonstyle =  {0.60, 0.45, 0.2, 0.65} --yellow
+	else
+		battlebuttonstyle =  {0.30, 0.60, 0.40, 0.65} --green
+	end
+	local colorChanged = false
+	for i, c in ipairs(oldbuttonstyle) do
+		if c ~= battlebuttonstyle[i] then
+			colorChanged = true
+			break
+		end
+	end
+	--Spring.Echo("BattleListWindow:UpdateButtonColor",battleID,battlebuttonstyle, items.battleButton.backgroundColor,battle.isRunning ,battle.passworded, lobby:GetBattlePlayerCount(battleID))
+
+	if colorChanged then
+		--Spring.Echo("BattleListWindow:UpdateButtonColor",battleID,battlebuttonstyle, items.battleButton.backgroundColor,battle.isRunning ,battle.passworded, lobby:GetBattlePlayerCount(battleID))
+		items.battleButton.backgroundColor = battlebuttonstyle
+		items.battleButton.focusColor = battlebuttonstyle
+		items.battleButton:Invalidate()
 	end
 end
 
@@ -774,6 +820,7 @@ function BattleListWindow:JoinedBattle(battleID)
 		local playerCount = lobby:GetBattlePlayerCount(battleID)
 		playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
 	end
+	self:UpdateButtonColor(battleID)
 	self:RecalculateOrder(battleID)
 end
 
@@ -797,6 +844,7 @@ function BattleListWindow:LeftBattle(battleID)
 		local playerCount = lobby:GetBattlePlayerCount(battleID)
 		playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
 	end
+	self:UpdateButtonColor(battleID)
 	self:RecalculateOrder(battleID)
 end
 
@@ -875,6 +923,7 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		local playerCount = lobby:GetBattlePlayerCount(battleID)
 		playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
 	end
+	self:UpdateButtonColor(battleID)
 	self:RecalculateOrder(battleID)
 end
 
@@ -897,6 +946,7 @@ function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 		runningImage.file = BATTLE_NOT_RUNNING
 	end
 	runningImage:Invalidate()
+	self:UpdateButtonColor(battleID)
 	self:RecalculateOrder(battleID)
 end
 

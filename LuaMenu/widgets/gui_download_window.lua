@@ -32,9 +32,9 @@ local NAME_MAP = {
 	active = "",
 	connecting = "Connecting...",
 	pending = "Queued",
-	cancel = "\255\255\255\0Cancelled",
-	fail = "\255\255\0\0Failed",
-	success = "\255\0\255\0Complete",
+	cancel = "\255\255\255\60Cancelled",
+	fail = "\255\255\40\40Failed",
+	success = "\255\40\255\40Complete",
 }
 
 local BUTTON_MAP = {
