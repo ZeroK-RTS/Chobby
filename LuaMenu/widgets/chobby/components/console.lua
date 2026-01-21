@@ -5,6 +5,12 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 	self.showDate = true
 	self.dateFormat = "%H:%M"
 
+	self.sentMsgHistory = {}
+	self.sentMsgHistoryCount = 0
+	self.sentMsgHistoryMax = 500
+	self.sentMsgHistoryCursor = 1
+	self.currentMsgBuffer = ""
+
 	self.channelName = channelName
 
 	local onResize
@@ -89,24 +95,73 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 
+	local keyUP, keyDOWN, keyENTER, keyKP_ENTER, keyESCAPE, keyTAB = 
+		Spring.GetKeyCode("up"),
+		Spring.GetKeyCode("down"),
+		Spring.GetKeyCode("enter"),
+		Spring.GetKeyCode("numpad_enter"),
+		Spring.GetKeyCode("escape"),
+		Spring.GetKeyCode("tab")
+
 	self.ebInputText.KeyPress = function(something, key, ...)
-		if key == Spring.GetKeyCode("tab") then
+		if key == keyTAB then
 			self:Autocomplete(self.ebInputText.text)
 			return false
 		else
 			self.subword = nil
+
+			local up, down = key == keyUP, key == keyDOWN
+			local newtext, block = false, false
+			if up or down then
+				local cursor = self.sentMsgHistoryCursor
+				local count = self.sentMsgHistoryCount
+				cursor = cursor + (up and -1 or 1)
+				if cursor == count + 2 then
+					-- skip, the msg history has not yet be browsed up, nothing to do
+				elseif cursor == 0 then
+					-- skip, we've already gone to the first msg in history
+				else
+					if cursor == count + 1 then -- we gone back to the current text
+						newtext = self.currentMsgBuffer
+						self.currentMsgBuffer = ""
+					else
+						if up and cursor == count then -- we're starting going into history, saving the current text
+							self.currentMsgBuffer = self.ebInputText.text
+						end
+						newtext = self.sentMsgHistory[cursor]
+					end
+					self.sentMsgHistoryCursor = cursor
+				end
+			elseif key == keyESCAPE then
+				if self.ebInputText.text ~= "" then
+					-- clearing field and resetting cursor pos
+					self.sentMsgHistoryCursor = self.sentMsgHistoryCount + 1
+					newtext = ""
+					block = true -- block the action of escape that would leave the current lobby tab
+				end
+			end
+			if newtext then
+				self.ebInputText:SetText(newtext)
+				self.ebInputText.cursor = #self.ebInputText.text + 1
+				self.ebInputText:Invalidate()
+				return block
+			end
+
 			return Chili.EditBox.KeyPress(something, key, ...)
 		end
 	end
+
+
 	self.ebInputText.OnKeyPress = {
 		function(obj, key, mods, ...)
-			if key == Spring.GetKeyCode("enter") or
-				key == Spring.GetKeyCode("numpad_enter") then
+			if key == keyENTER or
+				key == keyKP_ENTER then
 				self:SendMessage()
 				return true
 			end
 		end
 	}
+
 	self.fakeImage = Image:New {
 		x = 0, y = 0,
 		bottom = 0, right = 0,
@@ -186,6 +241,23 @@ end
 function Console:SendMessage()
 	if self.ebInputText.text ~= "" then
 		message = self.ebInputText.text
+
+		local cursor = self.sentMsgHistoryCursor
+		local count = self.sentMsgHistoryCount
+		if cursor == count  and self.sentMsgHistory[cursor] == self.ebInputText.text then
+			-- skip, don't add to history the last message coming from history 
+			self.sentMsgHistoryCursor = count + 1
+		else
+			if count == self.sentMsgHistoryMax then
+				table.remove(self.sentMsgHistory, 1)
+			else
+				count = count + 1
+				self.sentMsgHistoryCount = count
+			end
+			self.sentMsgHistory[count] = message
+			self.sentMsgHistoryCursor = count + 1
+		end
+
 		if self.listener then
 			self.listener(message)
 		end
