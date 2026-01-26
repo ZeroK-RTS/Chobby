@@ -22,12 +22,7 @@ local START_UNITS_BLOCK_SIZE = 40
 --------------------------------------------------------------------------------
 -- Encoding
 
-local function TableToBase64(inputTable)
-	if not inputTable then
-		return
-	end
-	return Spring.Utilities.Base64Encode(Spring.Utilities.TableToString(inputTable))
-end
+local UsefulTableToCustomKey = Spring.Utilities.UsefulTableToCustomKey
 
 local function MakeCircuitDisableString(unlockedUnits)
 	local Configuration = WG.Chobby.Configuration
@@ -77,7 +72,7 @@ local function AddStartUnits(teamTable, unitList, prefix)
 		for i = 1, START_UNITS_BLOCK_SIZE do
 			unitsTable[i] = unitList[offset + i]
 		end
-		teamTable[prefix .. block] = TableToBase64(unitsTable)
+		teamTable[prefix .. block] = UsefulTableToCustomKey(unitsTable)
 		block = block + 1
 	end
 end
@@ -199,14 +194,14 @@ local function StartBattleForReal(planetID, planetData)
 		start_energy = gameConfig.playerConfig.startEnergy,
 		staticcomm = "player_commander",
 		static_level = WG.CampaignData.GetPlayerCommanderInformation(),
-		campaignunlocks = TableToBase64(fullPlayerUnlocks),
-		campaignabilities = TableToBase64(fullAbilitiesList),
-		campaignunitwhitelist = TableToBase64(gameConfig.playerConfig.unitWhitelist),
-		campaignunitblacklist = TableToBase64(gameConfig.playerConfig.unitBlacklist),
-		commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),
-		midgameunits = TableToBase64(gameConfig.playerConfig.midgameUnits),
-		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
-		typevictorylocation = TableToBase64(gameConfig.playerConfig.typeVictoryAtLocation)
+		campaignunlocks = UsefulTableToCustomKey(fullPlayerUnlocks),
+		campaignabilities = UsefulTableToCustomKey(fullAbilitiesList),
+		campaignunitwhitelist = UsefulTableToCustomKey(gameConfig.playerConfig.unitWhitelist),
+		campaignunitblacklist = UsefulTableToCustomKey(gameConfig.playerConfig.unitBlacklist),
+		commanderparameters = UsefulTableToCustomKey(gameConfig.playerConfig.commanderParameters),
+		midgameunits = UsefulTableToCustomKey(gameConfig.playerConfig.midgameUnits),
+		retinuestartunits = UsefulTableToCustomKey(WG.CampaignData.GetActiveRetinue()),
+		typevictorylocation = UsefulTableToCustomKey(gameConfig.playerConfig.typeVictoryAtLocation)
 	}
 	AddStartUnits(teams[teamCount], gameConfig.playerConfig.startUnits, "extrastartunits_")
 
@@ -282,10 +277,10 @@ local function StartBattleForReal(planetID, planetData)
 			start_metal = aiData.startMetal,
 			start_energy = aiData.startEnergy,
 			static_level = (aiData.commanderLevel or 1) - 1, -- Comm level is 0 indexed but on the UI it is 1 indexed.
-			campaignunlocks = TableToBase64(availibleUnits),
-			commanderparameters = TableToBase64(aiData.commanderParameters),
-			midgameunits = TableToBase64(aiData.midgameUnits),
-			typevictorylocation = TableToBase64(aiData.typeVictoryAtLocation)
+			campaignunlocks = UsefulTableToCustomKey(availibleUnits),
+			commanderparameters = UsefulTableToCustomKey(aiData.commanderParameters),
+			midgameunits = UsefulTableToCustomKey(aiData.midgameUnits),
+			typevictorylocation = UsefulTableToCustomKey(aiData.typeVictoryAtLocation)
 		}
 		AddStartUnits(teams[teamCount], aiData.startUnits, "extrastartunits_")
 		teamCount = teamCount + 1
@@ -308,20 +303,20 @@ local function StartBattleForReal(planetID, planetData)
 	}
 
 	local modoptions = {
-		commandertypes = TableToBase64(commanderTypes),
-		defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
-		objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
-		bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
-		featurestospawn = TableToBase64(gameConfig.initialWrecks),
-		planetmissioninformationtext = TableToBase64(informationText),
-		planetmissionnewtonfirezones = TableToBase64(gameConfig.playerConfig.newtonFirezones),
+		commandertypes = UsefulTableToCustomKey(commanderTypes),
+		defeatconditionconfig = UsefulTableToCustomKey(gameConfig.defeatConditionConfig),
+		objectiveconfig = UsefulTableToCustomKey(gameConfig.objectiveConfig),
+		bonusobjectiveconfig = UsefulTableToCustomKey(gameConfig.bonusObjectiveConfig),
+		featurestospawn = UsefulTableToCustomKey(gameConfig.initialWrecks),
+		planetmissioninformationtext = UsefulTableToCustomKey(informationText),
+		planetmissionnewtonfirezones = UsefulTableToCustomKey(gameConfig.playerConfig.newtonFirezones),
 		fixedstartpos = 1,
 		init_terra_save_fix = gameConfig.initTerraSaveFix and "1" or "0",
 		planetmissiondifficulty = missionDifficulty,
 		singleplayercampaignbattleid = planetID,
-		initalterraform = TableToBase64(gameConfig.terraform),
-		planetmissionmapmarkers = TableToBase64(gameConfig.mapMarkers),
-		campaignpartialsavedata = TableToBase64(WG.CampaignData.GetCampaignPartialSaveData()),
+		initalterraform = UsefulTableToCustomKey(gameConfig.terraform),
+		planetmissionmapmarkers = UsefulTableToCustomKey(gameConfig.mapMarkers),
+		campaignpartialsavedata = UsefulTableToCustomKey(WG.CampaignData.GetCampaignPartialSaveData()),
 	}
 	AddStartUnits(modoptions, gameConfig.neutralUnits, "neutralstartunits_")
 
@@ -331,14 +326,14 @@ local function StartBattleForReal(planetID, planetData)
 
 	if gameConfig.modoptions then
 		for key, value in pairs(gameConfig.modoptions) do
-			modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
+			modoptions[key] = (type(value) == "table" and UsefulTableToCustomKey(value)) or value
 		end
 	end
 
 	local difficultyModoptions = gameConfig.modoptionDifficulties and gameConfig.modoptionDifficulties[missionDifficulty]
 	if difficultyModoptions then
 		for key, value in pairs(difficultyModoptions) do
-			modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
+			modoptions[key] = (type(value) == "table" and UsefulTableToCustomKey(value)) or value
 		end
 	end
 

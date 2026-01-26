@@ -53,6 +53,7 @@ local LUAMENU_SETTING = "changeSetting "
 local OPEN_SETTINGS_TAB = "openSettingsTab "
 local LOAD_FILENAME = "loadFilename "
 local RESTART_GAME = "restartGame"
+local START_FROM_SCRIPT = "startFromScript_"
 local GAME_INIT = "ingameInfoInit"
 local GAME_START = "ingameInfoStart"
 local REPORT_USER = "reportUser"
@@ -180,6 +181,16 @@ local function HandleRestartGame(msg)
 		return
 	end
 	WG.SteamCoopHandler.RestartGame()
+end
+
+local function HandleStartFromScript(msg)
+	if string.find(msg, START_FROM_SCRIPT) ~= 1 then
+		return
+	end
+	msg = string.sub(msg, 17)
+	Spring.Echo("msg", msg)
+	local script = Spring.Utilities.CustomKeyToUsefulTable(msg)
+	WG.SteamCoopHandler.AttemptGameStart("script", script.gametype, script.mapname, script)
 end
 
 --------------------------------------------------------------------------------
@@ -424,6 +435,9 @@ function widget:RecvLuaMsg(msg)
 		return
 	end
 	if HandleRestartGame(msg) then
+		return
+	end
+	if HandleStartFromScript(msg) then
 		return
 	end
 	if HandleGameInfoInit(msg) then

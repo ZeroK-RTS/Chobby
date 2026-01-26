@@ -35,6 +35,8 @@ local difficultyWindow
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+local UsefulTableToCustomKey = Spring.Utilities.UsefulTableToCustomKey
+
 local difficultySetting = 4
 
 
@@ -74,12 +76,6 @@ end
 --------------------------------------------------------------------------------
 -- Encoding
 
-local function TableToBase64(inputTable)
-	if not inputTable then
-		return
-	end
-	return Spring.Utilities.Base64Encode(Spring.Utilities.TableToString(inputTable))
-end
 
 local function MakeCircuitDisableString(unlockedUnits)
 	local Configuration = WG.Chobby.Configuration
@@ -201,7 +197,7 @@ local function StartFreshGame()
 			TeamLeader = playerCount,
 			AllyTeam = 0,
 			rgbcolor = '0 0 0',
-			rk_loadout = TableToBase64(baseLoadout),
+			rk_loadout = UsefulTableToCustomKey(baseLoadout),
 		}
 		playerCount = playerCount + 1
 		teamCount = teamCount + 1
@@ -213,7 +209,7 @@ local function StartFreshGame()
 	end
 
 	-- Add the AIs
-	for i = 1, 3 do
+	for i = 1, #friendNames + 1 do
 		local shortName = aiConfig.aiLibFunctions.Circuit_difficulty_autofill(difficultySetting) .. bitExtension
 
 		ais[aiCount] = {
@@ -251,11 +247,11 @@ local function StartFreshGame()
 		rk_galaxy = {
 			planets = {
 				{
-					name = "Home Planet",
+					humanName = "Home Planet",
 					map = "TitanDuel 2.2",
 					image = "swamp01.png",
 					pos = {0, 1},
-					state = false,
+					state = "active",
 					rewards = {
 						"light_combat",
 						"constructor",
@@ -264,7 +260,25 @@ local function StartFreshGame()
 					},
 				},
 				{
-					name = "Option 1",
+					humanName = "Won Planet",
+					map = "TitanDuel 2.2",
+					image = "swamp01.png",
+					pos = {0, 2},
+					state = "won",
+					rewards = {
+					},
+				},
+				{
+					humanName = "Lost Planet",
+					map = "TitanDuel 2.2",
+					image = "swamp01.png",
+					pos = {0, 3},
+					state = "lost",
+					rewards = {
+					},
+				},
+				{
+					humanName = "Option 1",
 					map = "Fallendell_V4",
 					image = "inferno03.png",
 					pos = {0, 0},
@@ -276,7 +290,7 @@ local function StartFreshGame()
 					},
 				},
 				{
-					name = "Option 2",
+					humanName = "Option 2",
 					map = "Red Comet Remake 1.7",
 					image = "ocean01.png",
 					pos = {1, 1},
@@ -288,7 +302,7 @@ local function StartFreshGame()
 					},
 				},
 				{
-					name = "End Planet",
+					humanName = "End Planet",
 					map = "Banana Republic v1.0.1",
 					image = "barren03.png",
 					pos = {1, 0},
@@ -309,7 +323,7 @@ local function StartFreshGame()
 		}
 	}
 	for key, value in pairs(modoptions) do
-		modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
+		modoptions[key] = (type(value) == "table" and UsefulTableToCustomKey(value)) or value
 	end
 
 	local script = {
@@ -336,6 +350,7 @@ local function StartFreshGame()
 	for i, allyTeam in pairs(allyTeams) do
 		script["allyTeam" .. i] = allyTeam
 	end
+	script.modoptions.start_script = UsefulTableToCustomKey(script)
 
 	WG.SteamCoopHandler.AttemptGameStart("roguek", gameName, mapName, script)
 end

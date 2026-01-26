@@ -20,14 +20,9 @@ local START_UNITS_BLOCK_SIZE = 40
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Encording
+-- Encoding
 
-local function TableToBase64(inputTable)
-	if not inputTable then
-		return
-	end
-	return Spring.Utilities.Base64Encode(Spring.Utilities.TableToString(inputTable))
-end
+local UsefulTableToCustomKey = Spring.Utilities.UsefulTableToCustomKey
 
 local function MakeCircuitDisableString(unlockedUnits)
 	local Configuration = WG.Chobby.Configuration
@@ -77,7 +72,7 @@ local function AddStartUnits(teamTable, unitList, prefix)
 		for i = 1, START_UNITS_BLOCK_SIZE do
 			unitsTable[i] = unitList[offset + i]
 		end
-		teamTable[prefix .. block] = TableToBase64(unitsTable)
+		teamTable[prefix .. block] = UsefulTableToCustomKey(unitsTable)
 		block = block + 1
 	end
 end
@@ -175,10 +170,10 @@ local function GenerateScriptFromConfig(gameConfig)
 			start_energy = gameConfig.playerConfig.startEnergy,
 			nocommander = noCommander,
 			staticcomm = "player_commander",
-			commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),
-			midgameunits = TableToBase64(gameConfig.playerConfig.midgameUnits),
-			retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
-			typevictorylocation = TableToBase64(gameConfig.playerConfig.typeVictoryAtLocation)
+			commanderparameters = UsefulTableToCustomKey(gameConfig.playerConfig.commanderParameters),
+			midgameunits = UsefulTableToCustomKey(gameConfig.playerConfig.midgameUnits),
+			retinuestartunits = UsefulTableToCustomKey(WG.CampaignData.GetActiveRetinue()),
+			typevictorylocation = UsefulTableToCustomKey(gameConfig.playerConfig.typeVictoryAtLocation)
 		}
 		AddStartUnits(teams[teamCount], gameConfig.playerConfig.startUnits, "extrastartunits_")
 
@@ -235,10 +230,10 @@ local function GenerateScriptFromConfig(gameConfig)
 			start_metal = aiData.startMetal,
 			start_energy = aiData.startEnergy,
 			static_level = (aiData.commanderLevel or 1) - 1, -- Comm level is 0 indexed but on the UI it is 1 indexed.
-			campaignunlocks = TableToBase64(availibleUnits),
-			commanderparameters = TableToBase64(aiData.commanderParameters),
-			midgameunits = TableToBase64(aiData.midgameUnits),
-			typevictorylocation = TableToBase64(aiData.typeVictoryAtLocation)
+			campaignunlocks = UsefulTableToCustomKey(availibleUnits),
+			commanderparameters = UsefulTableToCustomKey(aiData.commanderParameters),
+			midgameunits = UsefulTableToCustomKey(aiData.midgameUnits),
+			typevictorylocation = UsefulTableToCustomKey(aiData.typeVictoryAtLocation)
 		}
 		AddStartUnits(teams[teamCount], aiData.startUnits, "extrastartunits_")
 		teamCount = teamCount + 1
@@ -254,11 +249,11 @@ local function GenerateScriptFromConfig(gameConfig)
 	end
 
 	local modoptions = {
-		commandertypes = TableToBase64(commanderTypes),
-		featurestospawn = TableToBase64(gameConfig.initialWrecks),
-		planetmissionnewtonfirezones = TableToBase64(gameConfig.playerConfig.newtonFirezones),
+		commandertypes = UsefulTableToCustomKey(commanderTypes),
+		featurestospawn = UsefulTableToCustomKey(gameConfig.initialWrecks),
+		planetmissionnewtonfirezones = UsefulTableToCustomKey(gameConfig.playerConfig.newtonFirezones),
 		fixedstartpos = 1,
-		initalterraform = TableToBase64(gameConfig.terraform),
+		initalterraform = UsefulTableToCustomKey(gameConfig.terraform),
 	}
 	AddStartUnits(modoptions, gameConfig.neutralUnits, "neutralstartunits_")
 
@@ -268,7 +263,7 @@ local function GenerateScriptFromConfig(gameConfig)
 
 	if gameConfig.modoptions then
 		for key, value in pairs(gameConfig.modoptions) do
-			modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
+			modoptions[key] = (type(value) == "table" and UsefulTableToCustomKey(value)) or value
 		end
 	end
 
