@@ -47,7 +47,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Iceland_v1",
+			mapName = "Argent Strata 1.1",
 			playerConfig = {
 				startX = 3280,
 				startZ = 7425,
@@ -288,8 +288,8 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "turretriot",
-							x = 6666,
-							z = 1860,
+							x = 6866,
+							z = 1720,
 							facing = 1,
 						},
 						{
