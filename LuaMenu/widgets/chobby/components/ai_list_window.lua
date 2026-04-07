@@ -29,6 +29,11 @@ function AiListWindow:CompareItems(id1, id2)
 	return true
 end
 
+local function IsLuaAI(aiName)
+	-- Maybe engine will have a better way to filter out engine packaged AIs in the future.
+	return aiName and not string.find(aiName, "Circuit") and not string.find(aiName, "BARb")
+end
+
 function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit, engineName)
 	local shortName = ai.shortName or "Unknown"
 	if blackList and blackList[shortName] then
@@ -55,8 +60,10 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit, 
 
 	local displayName = aiName
 	if Configuration.simpleAiList2 and Configuration.gameConfig.GetAiSimpleName then
-		displayName = Configuration.gameConfig.GetAiSimpleName(displayName, engineName)
-		if not displayName then
+		local niceName = Configuration.gameConfig.GetAiSimpleName(displayName, engineName)
+		if niceName then
+			displayName = niceName
+		elseif not IsLuaAI(aiName) then
 			return
 		end
 	end
