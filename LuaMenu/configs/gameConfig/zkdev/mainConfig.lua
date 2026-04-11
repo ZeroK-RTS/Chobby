@@ -2,7 +2,7 @@ local zkBaseConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/mainConfi
 local shortname = "zkdev"
 
 local singleplayerConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/singleplayerMenu.lua")
-local skirmishDefault    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skirmishDefault.lua")
+local skirmishDefault    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skirmishDefaultPw.lua")
 
 ---------------------------------------------------------------------------------
 -- Getters
