@@ -113,17 +113,28 @@ local function IsAttackUrgent()
 	return timeRemaining and timeRemaining < URGENT_ATTACK_TIME
 end
 
+local function FindMyAttackingPlanet(planets)
+	local planetID = lobby.planetwarsData.attackingPlanet
+	if not planetID then
+		return false
+	end
+	for i = 1, #planets do
+		if planets[i].PlanetID == planetID then
+			return planets[i]
+		end
+	end
+	return false
+end
+
 local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
 	if not (planets and planets[1]) then
 		return false
 	end
 
 	if lobby.planetwarsData.attackingPlanet and planets then
-		local planetID = lobby.planetwarsData.attackingPlanet
-		for i = 1, #planets do
-			if planets[i].PlanetID == planetID then
-				return planets[i], true, true, false
-			end
+		local myPlanet = FindMyAttackingPlanet(planets)
+		if myPlanet then
+			return myPlanet, true, true, false
 		end
 		return false
 	end
@@ -1163,26 +1174,40 @@ local function InitializeControls(window)
 
 		if attacking then
 			if currentMode == lobby.PW_ATTACK then
-				statusText:SetText("Select a planet to attack. The invasion will launch when you are joined by enough players.")
+				statusText:SetText("Attack a planet. All complete invasions launch when the timer reaches zero.")
 			else
 				local planets = lobby.planetwarsData.planets
-				local planetName = planets and planets[1] and planets[1].PlanetName
+				local noPlanets = not (planets and planets[1])
+				local planetName = planets and (FindMyAttackingPlanet(planets) or (planets[1] and not planets[2] and planets[1].PlanetName))
 				if lobby.planetwarsData.attackingPlanet then
-					statusText:SetText("You have launched an attack on " .. (planetName or "an enemy planet") .. ". The defenders have limited time to respond.")
+					if planetName then
+						statusText:SetText("You are attacking " .. planetName .. ". The defenders have limited time to respond.")
+					else
+						statusText:SetText("You attacking a planet. Wait for the defenders have limited time to respond.")
+					end
+				elseif noPlanets then
+					statusText:SetText("Your faction has launched an attack. The defenders have limited time to respond")
+
+				elseif planetName then
+					statusText:SetText("Your faction is attacking " .. planetName .. ". The defenders have limited time to respond")
 				else
-					statusText:SetText("Your faction is attacking " .. (planetName or "an enemy planet") .. ". The defenders have limited time to respond")
+					statusText:SetText("Your faction is attacking multiple planets. The defenders have limited time to respond")
 				end
 			end
 		else
 			if currentMode == lobby.PW_ATTACK then
-				statusText:SetText("Waiting for your enemies to launch an attack.")
+				statusText:SetText("Waiting for another faction to launch an attack.")
 			elseif defending then
 				local planets = lobby.planetwarsData.planets
-				local planetName = planets and planets[1] and planets[1].PlanetName
+				local planetName = planets and planets[1] and not planets[2] and planets[1].PlanetName
 				if planetName then
 					planetName = " " .. planetName
 				end
-				statusText:SetText("Your planet" .. (planetName or "") .. " is under attack. Join the defense before it is too late!")
+				if planetName then
+					statusText:SetText("Your planet " .. planetName .. " is under attack. Join the defence before it is too late!")
+				else
+					statusText:SetText("Your planets are under attack. Join the defence before it is too late!")
+				end
 			elseif currentMode == lobby.PW_DEFEND then
 				statusText:SetText("Another faction is preparing their response to an invasion.")
 			else
