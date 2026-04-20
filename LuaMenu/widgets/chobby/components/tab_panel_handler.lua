@@ -23,19 +23,19 @@ function GetTabPanelHandler(name, conf)
 	local BUTTON_SIDE_SPACING = 1
 
 	local yellowFontParams = {
-		outline = true,
-		outlineColor = {0.8,1,0,1},
+		--outline = true,
+		--outlineColor = {0.8,1,0,1},
 		color = {0.8,1,0,1},
 	}
 	local whiteFontParams = {
-		outline = true,
-		outlineColor = {1,1,1,1},
+		--outline = true,
+		--outlineColor = {1,1,1,1},
 		color = {1,1,1,1},
 	}
 	local redFontParams = {
-		outline = true,
-		outlineColor = {1,0,0,1},
-		color = {1,0,0,1},
+		--outline = true,
+		--outlineColor = {1,.16,.16,1},
+		color = {1,.16,.16,1},
 	}
 
 	-------------------------------------------------------------------

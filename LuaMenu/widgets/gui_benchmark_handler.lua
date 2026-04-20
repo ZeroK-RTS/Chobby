@@ -169,11 +169,10 @@ local function InitializeControls(parentControl)
 	Button:New {
 		right = 11,
 		y = WG.TOP_BUTTON_Y,
-		width = 80,
+		width = WG.BUTTON_HEIGHT,
 		height = WG.BUTTON_HEIGHT,
-		objectOverrideFont = Configuration:GetButtonFont(3),
-		caption = i18n("close"),
-		classname = "negative_button",
+		caption = "",
+		classname = "close_button",
 		OnClick = {
 			function()
 				parentControl:Hide()
@@ -194,7 +193,7 @@ local function InitializeControls(parentControl)
 			height = 50,
 			caption = benchmarkData[i].humanName,
 			objectOverrideFont = Configuration:GetButtonFont(3),
-			classname = "action_button",
+			classname = "small_action_button",
 			OnClick = {
 				function()
 					benchmarkData = VFS.Include("benchmarks/config.lua")

@@ -124,7 +124,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		y = (pos and pos.y) or ((not pos) and 0),
 		right = (pos and pos.right) or ((not pos) and 0),
 		bottom = (pos and pos.bottom) or ((not pos) and 0),
-		classname = "overlay_panel",
+		classname = "button",
 		width = pos and pos.width,
 		height = pos and pos.height,
 		padding = {0,0,0,0},
@@ -143,7 +143,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		padding = {0,0,0,0},
 		caption = "Cancel",
 		objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(3),
-		classname = "negative_button",
+		classname = "action_button",
 		OnClick = {
 			function()
 				lobby:LeaveMatchMakingAll()
@@ -163,8 +163,8 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 	local timeString = ""
 
 	local queueStatusText = TextBox:New {
-		x = 8,
-		y = 12,
+		x = 12,
+		y = 16,
 		right = rightBound,
 		bottom = bottomBound,
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(2),
@@ -285,7 +285,7 @@ local function InitializeInstantQueueHandler()
 		y = 0,
 		right = 0,
 		bottom = 0,
-		classname = "overlay_panel",
+		classname = "button",
 		padding = {0,0,0,0},
 		caption = "",
 		resizable = false,
@@ -319,7 +319,7 @@ local function InitializeInstantQueueHandler()
 		y = 18,
 		right = rightBound,
 		bottom = bottomBound,
-		objectOverrideFont = WG.Chobby.Configuration:GetFont(3),
+		objectOverrideFont = WG.Chobby.Configuration:GetFont(2),
 		text = "",
 		parent = queuePanel
 	}
@@ -335,12 +335,12 @@ local function InitializeInstantQueueHandler()
 		queueStatusText._relativeBounds.bottom = bottomBound
 		queueStatusText:UpdateClientArea()
 		if ySize < 60 then
-			queueStatusText:SetPos(xSize/4 - 52, 2)
+			queueStatusText:SetPos(math.floor(xSize/4) - 52, 2)
 			queueStatusText.font = WG.Chobby.Configuration:GetFont(2)
 			queueStatusText:Invalidate()
 			bigMode = false
 		else
-			queueStatusText:SetPos(xSize/4 - 62, 18)
+			queueStatusText:SetPos(math.floor(xSize/4) - 62, 18)
 			queueStatusText.font = WG.Chobby.Configuration:GetFont(3)
 			queueStatusText:Invalidate()
 			bigMode = true
@@ -530,7 +530,7 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 		caption = i18n("reject"),
 		objectOverrideFont = Configuration:GetButtonFont(3),
 		parent = readyCheckWindow,
-		classname = "negative_button",
+		classname = "option_button",
 		OnClick = {
 			function()
 				CancelFunc()
