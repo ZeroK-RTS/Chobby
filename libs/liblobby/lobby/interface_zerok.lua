@@ -1960,6 +1960,20 @@ function Interface:_PwMatchCommand(data)
 	end
 	--<PwMatchCommand {"AttackerFaction":"Hegemony","DeadlineSeconds":993,"DefenderFactions":[],"Mode":1,"Options":[{"Count":0,"Map":"RustyDelta_Final","Needed":2,"PlanetID":3932,"PlanetName":"Vishnu"},{"Count":0,"Map":"Altored Divide Remake V3","Needed":2,"PlanetID":3933,"PlanetName":"Brunhilde"}]}
 	self:_OnPwMatchCommand(data.AttackerFaction, data.DefenderFactions, data.Mode, data.Options, data.DeadlineSeconds)
+	-- data.Options
+	--	{
+	--		public int Count { get; set; }
+	--		public string Map { get; set; }
+	--		public int Needed { get; set; }
+	--		public int PlanetID { get; set; }
+	--		public string PlanetImage { get; set; }
+	--		public List<string> StructureImages { get; set; }
+	--		public int IconSize { get; set; }
+	--		public string PlanetName { get; set; }
+	--		public bool CanSelectForBattle { get; set; }
+	--		public bool PlayerIsAttacker { get; set; }
+	--		public bool PlayerIsDefender { get; set; }
+	--	}
 end
 Interface.jsonCommands["PwMatchCommand"] = Interface._PwMatchCommand
 

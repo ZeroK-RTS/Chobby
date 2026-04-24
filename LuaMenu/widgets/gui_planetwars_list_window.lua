@@ -520,13 +520,16 @@ end
 --------------------------------------------------------------------------------
 -- Planet List
 
-local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defending)
+local function MakePlanetControl(planetData, DeselectOtherFunc)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 
 	local config = WG.Chobby.Configuration
 	local mapName = planetData.Map
 	local planetID = planetData.PlanetID
+	local canSelectPlanet = planetData.CanSelectForBattle
+	local attacking = planetData.PlayerIsAttacker
+	local defending = planetData. PlayerIsDefender
 
 	local joinedBattle = false
 	local downloading = false
@@ -646,7 +649,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defen
 	end
 
 	local function UpdateJoinButton()
-		if not (attacking or defending) then
+		if not canSelectPlanet then
 			playerCaption:SetPos(104)
 			UpdatePlayerCaption()
 			btnJoin:SetVisibility(false)
@@ -663,8 +666,10 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defen
 					btnJoin:SetCaption(i18n("attack_planet"))
 				elseif defending then
 					btnJoin:SetCaption(i18n("defend_planet"))
+				else
+					btnJoin:SetCaption("???")
 				end
-			else
+			else then
 				if downloading then
 					btnJoin:SetCaption(i18n("downloading"))
 				else
@@ -721,7 +726,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defen
 
 	local externalFunctions = {}
 
-	function externalFunctions.UpdatePlanetControl(newPlanetData, newAttacking, newDefending, resetJoinedBattle)
+	function externalFunctions.UpdatePlanetControl(newPlanetData, resetJoinedBattle)
 		mapName = newPlanetData.Map
 		currentPlayers = newPlanetData.Count or 0
 		maxPlayers = newPlanetData.Needed or 0
@@ -730,7 +735,9 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defen
 			joinedBattle = false
 		end
 
-		attacking, defending = newAttacking, newDefending
+		canSelectPlanet = newPlanetData.CanSelectForBattle
+		attacking = newPlanetData.PlayerIsAttacker
+		defending = newPlanetData. PlayerIsDefender
 
 		if planetID ~= newPlanetData.PlanetID then
 			planetImage:Dispose()
@@ -795,7 +802,7 @@ local function GetPlanetList(parentControl)
 
 	local externalFunctions = {}
 
-	function externalFunctions.SetPlanetList(newPlanetList, attacking, defending, modeSwitched)
+	function externalFunctions.SetPlanetList(newPlanetList, modeSwitched)
 		if modeSwitched then
 			queuePlanetJoin = nil
 		end
@@ -804,9 +811,9 @@ local function GetPlanetList(parentControl)
 		if newPlanetList then
 			for i = 1, #newPlanetList do
 				if planets[i] then
-					planets[i].UpdatePlanetControl(newPlanetList[i], attacking, defending, modeSwitched)
+					planets[i].UpdatePlanetControl(newPlanetList[i], modeSwitched)
 				else
-					planets[i] = MakePlanetControl(newPlanetList[i], DeselectPlanets, attacking, defending, modeSwitched)
+					planets[i] = MakePlanetControl(newPlanetList[i], DeselectPlanets, modeSwitched)
 				end
 				items[i] = {i, planets[i].GetControl()}
 			end
@@ -1244,7 +1251,7 @@ local function InitializeControls(window)
 		local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 		UpdateStatusText(attacking, defending, currentMode)
 
-		planetList.SetPlanetList(planets, (currentMode == lobby.PW_ATTACK) and attacking, (currentMode == lobby.PW_DEFEND) and defending, modeSwitched)
+		planetList.SetPlanetList(planets, modeSwitched)
 	end
 
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
