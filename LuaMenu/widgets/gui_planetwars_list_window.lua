@@ -26,6 +26,7 @@ local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 local panelInterface
 local PLANET_NAME_LENGTH = 210
 local FACTION_SPACING = 134
+local LIST_PHASE_FRACTIONS = false
 
 local phaseTimer
 local requiredGame = false
@@ -94,18 +95,27 @@ local function TryToJoinPlanet(planetData)
 	WG.Analytics.SendOnetimeEvent("lobby:multiplayer:planetwars:join_site")
 end
 
-local function GetAttackingOrDefending(lobby, attackerFaction, defenderFactions, currentMode)
+local function GetattackPhaseOrDefending(lobby, attackerFactions, defenderFactions, currentMode)
 	local myFaction = lobby:GetMyFaction()
-	local attacking = (myFaction == attackerFaction)
-	local defending = false
-	if defenderFactions then
-		for i = 1, #defenderFactions do
-			if myFaction == defenderFactions[i] then
-				return attacking, true
+	local attackPhase = false
+	local defendPhase = false
+	if attackerFactions then
+		for i = 1, #attackerFactions do
+			if myFaction == attackerFactions[i] then
+				attackPhase = true
+				break
 			end
 		end
 	end
-	return attacking, false
+	if defenderFactions then
+		for i = 1, #defenderFactions do
+			if myFaction == defenderFactions[i] then
+				defendPhase = true
+				break
+			end
+		end
+	end
+	return attackPhase, defendPhase
 end
 
 local function IsAttackUrgent()
@@ -113,8 +123,8 @@ local function IsAttackUrgent()
 	return timeRemaining and timeRemaining < URGENT_ATTACK_TIME
 end
 
-local function FindMyAttackingPlanet(planets)
-	local planetID = lobby.planetwarsData.attackingPlanet
+local function FindMyattackPhasePlanet(planets)
+	local planetID = lobby.planetwarsData.attackPhasePlanet
 	if not planetID then
 		return false
 	end
@@ -126,34 +136,34 @@ local function FindMyAttackingPlanet(planets)
 	return false
 end
 
-local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
+local function GetActivityToPrompt(lobby, attackerFactions, defenderFactions, currentMode, planets)
 	if not (planets and planets[1]) then
 		return false
 	end
 
-	if lobby.planetwarsData.attackingPlanet and planets then
-		local myPlanet = FindMyAttackingPlanet(planets)
+	if lobby.planetwarsData.attackPhasePlanet and planets then
+		local myPlanet = FindMyattackPhasePlanet(planets)
 		if myPlanet then
 			return myPlanet, true, true, false
 		end
 		return false
 	end
 
-	local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
+	local attackPhase, defendPhase = GetattackPhaseOrDefending(lobby, attackerFactions, defenderFactions)
 
 	if lobby.planetwarsData.joinPlanet and planets then
 		local planetID = lobby.planetwarsData.joinPlanet
 		for i = 1, #planets do
 			if planets[i].PlanetID == planetID then
-				return planets[i], attacking, true, true
+				return planets[i], attackPhase, true, true
 			end
 		end
 		return false
 	end
 
-	attacking, defending = (currentMode == lobby.PW_ATTACK) and attacking, (currentMode == lobby.PW_DEFEND) and defending
+	attackPhase, defendPhase = (currentMode == lobby.PW_ATTACK) and attackPhase, (currentMode == lobby.PW_DEFEND) and defendPhase
 
-	if attacking then
+	if attackPhase then
 		if IsAttackUrgent() then
 			local attackPlanet, attackMissing
 			for i = 1, #planets do
@@ -171,10 +181,22 @@ local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, cur
 				end
 			end
 		end
-	elseif defending then
+	elseif defendPhase then
 		return planets[1], false
 	end
 	return false
+end
+
+local function ListToString(list)
+	local outStr = ""
+	for i = 1, #list do
+		if i == #list then
+			outStr = outStr .. list[i]
+		else
+			outStr = outStr .. list[i] .. ", "
+		end
+	end
+	return outStr
 end
 
 --------------------------------------------------------------------------------
@@ -466,7 +488,7 @@ local function InitializeActivityPromptHandler()
 		PossiblyPlayWarning(isAttacker)
 		if alreadyJoined then
 			if isAttacker then
-				planetStatusTextBox:SetText("Attacking: " .. planetData.PlanetName)
+				planetStatusTextBox:SetText("attackPhase: " .. planetData.PlanetName)
 				if waitingForAllies then
 					battleStatusText = "Attackers " .. newPlanetData.Count .. "/" .. newPlanetData.Needed .. ", "
 				else
@@ -520,23 +542,24 @@ end
 --------------------------------------------------------------------------------
 -- Planet List
 
-local function MakePlanetControl(planetData, DeselectOtherFunc)
+local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, defendPhase)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 
 	local config = WG.Chobby.Configuration
+	local planetName = planetData.PlanetName
 	local mapName = planetData.Map
 	local planetID = planetData.PlanetID
+	local planetAttacker = planetData.AttackerFaction
 	local canSelectPlanet = planetData.CanSelectForBattle
-	local attacking = planetData.PlayerIsAttacker
-	local defending = planetData. PlayerIsDefender
+	local myAttacking = planetData.PlayerIsAttacker
 
 	local joinedBattle = false
 	local downloading = false
 	local currentPlayers = planetData.Count or 0
 	local maxPlayers = planetData.Needed or 0
 
-	local btnJoin
+	local btnJoin, btnLeave
 
 	local holder = Panel:New {
 		x = 0,
@@ -624,7 +647,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 	local playerCaption = TextBox:New {
 		name = "missionName",
 		x = 270,
-		y = 54,
+		y = 55,
 		width = 350,
 		height = 20,
 		valign = 'center',
@@ -638,6 +661,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 		tbPlanetName:SetText(newPlanetName)
 		local length = tbPlanetName.font:GetTextWidth(newPlanetName)
 		imgPlanetLink:SetPos(length + 7)
+		planetName = newPlanetName
 	end
 
 	local function UpdatePlayerCaption()
@@ -653,6 +677,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 			playerCaption:SetPos(104)
 			UpdatePlayerCaption()
 			btnJoin:SetVisibility(false)
+			btnLeave:SetVisibility(false)
 			return
 		end
 
@@ -662,14 +687,14 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 			playerCaption:SetPos(270)
 			local haveMap = VFS.HasArchive(mapName)
 			if haveMap then
-				if attacking then
+				if attackPhase and canSelectPlanet then
 					btnJoin:SetCaption(i18n("attack_planet"))
-				elseif defending then
+				elseif defendPhase and canSelectPlanet then
 					btnJoin:SetCaption(i18n("defend_planet"))
 				else
 					btnJoin:SetCaption("???")
 				end
-			else
+			elseif canSelectPlanet then
 				if downloading then
 					btnJoin:SetCaption(i18n("downloading"))
 				else
@@ -679,6 +704,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 		end
 		UpdatePlayerCaption()
 		btnJoin:SetVisibility(not joinedBattle)
+		btnLeave:SetVisibility(joinedBattle)
 	end
 
 	btnJoin = Button:New {
@@ -711,10 +737,28 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 				end
 
 				joinedBattle = true
-				lobby:PwJoinPlanet(planetID)
+				lobby:PwJoinPlanet(planetID, planetAttacker)
 				UpdateJoinButton()
 				DeselectOtherFunc(planetID)
 				WG.Analytics.SendOnetimeEvent("lobby:multiplayer:planetwars:join")
+			end
+		},
+		parent = holder
+	}
+
+	btnLeave = Button:New {
+		x = 430,
+		width = 80,
+		bottom = 6,
+		height = WG.BUTTON_HEIGHT,
+		caption = i18n("leave"),
+		objectOverrideFont = Configuration:GetButtonFont(3),
+		classname = "negative_button",
+		OnClick = {
+			function(obj)
+				joinedBattle = false
+				lobby:PwCancel()
+				UpdateJoinButton()
 			end
 		},
 		parent = holder
@@ -726,7 +770,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 
 	local externalFunctions = {}
 
-	function externalFunctions.UpdatePlanetControl(newPlanetData, resetJoinedBattle)
+	function externalFunctions.UpdatePlanetControl(newPlanetData, newAttackPhase, newDefendPhase, resetJoinedBattle)
 		mapName = newPlanetData.Map
 		currentPlayers = newPlanetData.Count or 0
 		maxPlayers = newPlanetData.Needed or 0
@@ -735,9 +779,10 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 			joinedBattle = false
 		end
 
+		planetAttacker = newPlanetData.AttackerFaction
 		canSelectPlanet = newPlanetData.CanSelectForBattle
-		attacking = newPlanetData.PlayerIsAttacker
-		defending = newPlanetData. PlayerIsDefender
+		attackPhase, defendPhase = newAttackPhase, newDefendPhase
+		myAttacking = newPlanetData.PlayerIsAttacker
 
 		if planetID ~= newPlanetData.PlanetID then
 			planetImage:Dispose()
@@ -775,6 +820,16 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 		return holder
 	end
 
+	function externalFunctions.GetSortOrder(defaultOrder)
+		if defendPhase and myAttacking then
+			return {"000", planetName} -- Put the planet I am attacking at the top
+		end
+		if canSelectPlanet then
+			return {string.format("%03d", defaultOrder), planetName}
+		end
+		return {"a" .. planetName, planetName}
+	end
+
 	function externalFunctions.SetPlanetJoinedIfIDMatches(checkPlanetID)
 		if (not holder.visible) or (planetID ~= checkPlanetID) then
 			return
@@ -798,11 +853,24 @@ local function GetPlanetList(parentControl)
 		end
 	end
 
-	local sortableList = WG.Chobby.SortableList(parentControl, nil, 90, 1)
+	local headings = {
+		{
+			name = "Priority",
+			x = 0,
+			width = 160,
+		},
+		{
+			name = "Name",
+			x = 160,
+			width = 160,
+		
+		},
+	}
+	local sortableList = WG.Chobby.SortableList(parentControl, nil, 90, 1, true, false, nil, true)
 
 	local externalFunctions = {}
 
-	function externalFunctions.SetPlanetList(newPlanetList, modeSwitched)
+	function externalFunctions.SetPlanetList(newPlanetList, attackPhase, defendPhase, modeSwitched)
 		if modeSwitched then
 			queuePlanetJoin = nil
 		end
@@ -811,11 +879,11 @@ local function GetPlanetList(parentControl)
 		if newPlanetList then
 			for i = 1, #newPlanetList do
 				if planets[i] then
-					planets[i].UpdatePlanetControl(newPlanetList[i], modeSwitched)
+					planets[i].UpdatePlanetControl(newPlanetList[i], attackPhase, defendPhase, modeSwitched)
 				else
-					planets[i] = MakePlanetControl(newPlanetList[i], DeselectPlanets, modeSwitched)
+					planets[i] = MakePlanetControl(newPlanetList[i], DeselectPlanets, attackPhase, defendPhase)
 				end
-				items[i] = {i, planets[i].GetControl()}
+				items[i] = {i, planets[i].GetControl(), planets[i].GetSortOrder(i)}
 			end
 			sortableList:AddItems(items)
 		end
@@ -903,7 +971,7 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc, righ
 		Button:New {
 			x = buttonPos,
 			y = offset,
-			width = 260,
+			width = 290,
 			height = WG.BUTTON_HEIGHT,
 			caption = "Join " .. name,
 			objectOverrideFont = Configuration:GetButtonFont(3),
@@ -1025,7 +1093,7 @@ local function MakeFactionSelectionPopup()
 		factionWindow:Dispose()
 	end
 
-	MakeFactionSelector(factionWindow, 16, 55, CancelFunc, CancelFunc)
+	MakeFactionSelector(factionWindow, 16, 45, CancelFunc, CancelFunc)
 
 	TextBox:New {
 		x = 38,
@@ -1083,7 +1151,7 @@ local function InitializeControls(window)
 	local listHolder = Control:New {
 		x = 5,
 		right = 5,
-		y = 100,
+		y = 180,
 		bottom = 52,
 		padding = {0, 0, 0, 0},
 		parent = window,
@@ -1167,7 +1235,7 @@ local function InitializeControls(window)
 		end
 
 		if not lobby:GetFactionData(myUserInfo.faction) then
-			statusText:SetText(((planetwarsSoon and PW_SOON_TEXT) or "") .. "You need to join a faction.")
+			statusText:SetText(((planetwarsSoon and PW_SOON_TEXT) or "") .. "Choose a faction and join the fight.")
 			if not factionLinkButton then
 				factionLinkButton = MakeFactionSelector(window, 15, 80, nil, nil, 15, 52)
 			end
@@ -1194,7 +1262,7 @@ local function InitializeControls(window)
 		return true
 	end
 
-	local function UpdateStatusText(attacking, defending, currentMode)
+	local function UpdateStatusText(attackPhase, defending, currentMode)
 		if not CheckPlanetwarsRequirements() then
 			return
 		end
@@ -1203,26 +1271,26 @@ local function InitializeControls(window)
 			return
 		end
 
-		if attacking then
+		if attackPhase then
 			if currentMode == lobby.PW_ATTACK then
-				statusText:SetText("Attack a planet. All complete invasions launch when the timer reaches zero.")
+				statusText:SetText("Choose a planet to attack. All attacks that reach the player threshold are launched when the timer reaches zero.")
 			else
 				local planets = lobby.planetwarsData.planets
 				local noPlanets = not (planets and planets[1])
-				local planetName = planets and (FindMyAttackingPlanet(planets) or (planets[1] and not planets[2] and planets[1].PlanetName))
-				if lobby.planetwarsData.attackingPlanet then
+				local planetName = planets and (FindMyattackPhasePlanet(planets) or (planets[1] and not planets[2] and planets[1].PlanetName))
+				if lobby.planetwarsData.attackPhasePlanet then
 					if planetName then
-						statusText:SetText("You are attacking " .. planetName .. ". The defenders have limited time to respond.")
+						statusText:SetText("You are attackPhase " .. planetName .. ". The defenders have limited time to respond.")
 					else
-						statusText:SetText("You attacking a planet. Wait for the defenders have limited time to respond.")
+						statusText:SetText("You attackPhase a planet. Wait for the defenders have limited time to respond.")
 					end
 				elseif noPlanets then
 					statusText:SetText("Your faction has launched an attack. The defenders have limited time to respond")
 
 				elseif planetName then
-					statusText:SetText("Your faction is attacking " .. planetName .. ". The defenders have limited time to respond")
+					statusText:SetText("Your faction is attackPhase " .. planetName .. ". The defenders have limited time to respond")
 				else
-					statusText:SetText("Your faction is attacking multiple planets. The defenders have limited time to respond")
+					statusText:SetText("Your faction is attackPhase multiple planets. The defenders have limited time to respond")
 				end
 			end
 		else
@@ -1247,49 +1315,41 @@ local function InitializeControls(window)
 		end
 	end
 
-	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
-		oldAttackerFaction, oldDefenderFactions, oldMode = attackerFaction, defenderFactions, currentMode
+	local function OnPwMatchCommand(listener, attackerFactions, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
+		oldAttackerFaction, oldDefenderFactions, oldMode = attackerFactions, defenderFactions, currentMode
 
 		if currentMode == lobby.PW_ATTACK then
-			if attackerFaction then
-				title = "Planetwars: " .. attackerFaction .. " attacking - "
+			if attackerFactions and #attackerFactions and LIST_PHASE_FRACTIONS then
+				title = "Planetwars: " .. ListToString(attackerFactions) .. " attacking - "
 			else
-				title = "Planetwars: attacking - "
+				title = "Planetwars: Launch Attacks - "
 			end
 		else
-			if defenderFactions and #defenderFactions then
-				local defenderString = ""
-				for i = 1, #defenderFactions do
-					if i == #defenderFactions then
-						defenderString = defenderString .. defenderFactions[i]
-					else
-						defenderString = defenderString .. defenderFactions[i] .. ", "
-					end
-					title = "Planetwars: " .. defenderString .. " defending - "
-				end
+			if defenderFactions and #defenderFactions and LIST_PHASE_FRACTIONS then
+				title = "Planetwars: " .. ListToString(defenderFactions) .. " defending - "
 			else
-				title = "Planetwars: defending - "
+				title = "Planetwars: Prepare Defense - "
 			end
 		end
 
-		local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions, currentMode)
-		UpdateStatusText(attacking, defending, currentMode)
+		local attackPhase, defendPhase = GetattackPhaseOrDefending(lobby, attackerFactions, defenderFactions, currentMode)
+		UpdateStatusText(attackPhase, defendPhase, currentMode)
 
-		planetList.SetPlanetList(planets, modeSwitched)
+		planetList.SetPlanetList(planets, attackPhase, defendPhase, modeSwitched)
 	end
 
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
 
-	local function OnPwAttackingPlanet()
-		local attacking, defending = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions, oldMode)
-		UpdateStatusText(attacking, defending, oldMode)
+	local function OnPwattackPhasePlanet()
+		local attackPhase, defendPhase = GetattackPhaseOrDefending(lobby, oldAttackerFaction, oldDefenderFactions, oldMode)
+		UpdateStatusText(attackPhase, defendPhase, oldMode)
 	end
-	lobby:AddListener("OnPwAttackingPlanet", OnPwAttackingPlanet)
+	lobby:AddListener("OnPwattackPhasePlanet", OnPwattackPhasePlanet)
 
 	local function OnUpdateUserStatus(listener, userName, status)
 		if lobby:GetMyUserName() == userName then
-			local attacking, defending = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions, oldMode)
-			UpdateStatusText(attacking, defending, oldMode)
+			local attackPhase, defendPhase = GetattackPhaseOrDefending(lobby, oldAttackerFaction, oldDefenderFactions, oldMode)
+			UpdateStatusText(attackPhase, defendPhase, oldMode)
 		end
 	end
 	lobby:AddListener("OnUpdateUserStatus", OnUpdateUserStatus)
@@ -1332,7 +1392,7 @@ local function InitializeControls(window)
 	externalFunctions.CheckDownloads()
 
 	local planetwarsData = lobby:GetPlanetwarsData()
-	OnPwMatchCommand(_, planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets, 457)
+	OnPwMatchCommand(_, planetwarsData.attackerFactions, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets, 457)
 
 	return externalFunctions
 end
@@ -1389,8 +1449,8 @@ function DelayedInitialize()
 	lobby:AddListener("OnQueueOpened", AddQueue)
 
 
-	local function UpdateActivity(attackerFaction, defenderFactions, currentMode, planets)
-		local planetData, isAttacker, alreadyJoined, waitingForAllies = GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
+	local function UpdateActivity(attackerFactions, defenderFactions, currentMode, planets)
+		local planetData, isAttacker, alreadyJoined, waitingForAllies = GetActivityToPrompt(lobby, attackerFactions, defenderFactions, currentMode, planets)
 		if planetData then
 			activityPromptHandler.SetActivity(planetData, isAttacker, alreadyJoined, waitingForAllies)
 			statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
@@ -1433,7 +1493,7 @@ function DelayedInitialize()
 		end
 		CheckFactionPopupCreation(myInfo)
 		local planetwarsData = lobby:GetPlanetwarsData()
-		UpdateActivity(planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
+		UpdateActivity(planetwarsData.attackerFactions, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
 	end
 	lobby:AddListener("OnPwStatus", OnPwStatus)
 
@@ -1447,7 +1507,7 @@ function DelayedInitialize()
 		end
 		CheckFactionPopupCreation(status)
 		local planetwarsData = lobby:GetPlanetwarsData()
-		UpdateActivity(planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
+		UpdateActivity(planetwarsData.attackerFactions, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
 	end
 
 	lobby:AddListener("OnUpdateUserStatus", OnUpdateUserStatus)
@@ -1467,18 +1527,18 @@ function DelayedInitialize()
 	--end
 	--WG.Delay(TestAttack, 3)
 
-	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
+	local function OnPwMatchCommand(listener, attackerFactions, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 		phaseTimer.SetNewDeadline(deadlineSeconds)
-		UpdateActivity(attackerFaction, defenderFactions, currentMode, planets)
+		UpdateActivity(attackerFactions, defenderFactions, currentMode, planets)
 	end
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
 
 	local function UnMatchedActivityUpdate()
 		local planetwarsData = lobby:GetPlanetwarsData()
-		UpdateActivity(planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
+		UpdateActivity(planetwarsData.attackerFactions, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
 	end
 	lobby:AddListener("OnPwJoinPlanetSuccess", UnMatchedActivityUpdate)
-	lobby:AddListener("OnPwAttackingPlanet", UnMatchedActivityUpdate)
+	lobby:AddListener("OnPwattackPhasePlanet", UnMatchedActivityUpdate)
 	lobby:AddListener("OnLoginInfoEnd", UnMatchedActivityUpdate)
 
 	local function OnDisconnected()

@@ -417,6 +417,11 @@ function Lobby:PwJoinPlanet(planetID)
 	return self
 end
 
+
+function Lobby:PwCancel()
+	return self
+end
+
 function Lobby:JoinFactionRequest(factionName)
 	return self
 end
@@ -1281,28 +1286,32 @@ end
 -- Planetwars Commands
 ------------------------
 
-function Lobby:_OnPwStatus(planetWarsMode, minLevel)
-	self:_CallListeners("OnPwStatus", planetWarsMode, minLevel)
+function Lobby:_OnPwStatus(planetWarsMode, minLevel, attackerMinutes, defenderMinutes)
+	self:_CallListeners("OnPwStatus", planetWarsMode, minLevel, attackerMinutes, defenderMinutes)
 end
 
-function Lobby:_OnPwMatchCommand(attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
-	local modeSwitched = (self.planetwarsData.currentMode ~= currentMode) or (self.planetwarsData.attackerFaction ~= attackerFaction)
-	self.planetwarsData.attackerFaction  = attackerFaction
+function Lobby:_OnPwMatchCommand(attackerFactions, defenderFactions, currentMode, planets, deadlineSeconds)
+	self.planetwarsData.attackerFactions  = attackerFactions
 	self.planetwarsData.defenderFactions = defenderFactions
 	self.planetwarsData.currentMode      = currentMode
 	self.planetwarsData.planets          = planets
-
-	Spring.Echo("OnPwMatchCommand modeSwitched", modeSwitched)
+	
+	local modeSwitched = (deadlineSeconds or 0) > (self.planetwarsData.deadlineSeconds or 0) + 10
+	self.planetwarsData.deadlineSeconds = deadlineSeconds
 	if modeSwitched then
 		self.planetwarsData.joinPlanet = nil
 		self.planetwarsData.attackingPlanet = nil
 	end
 
-	self:_CallListeners("OnPwMatchCommand", attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
+	self:_CallListeners("OnPwMatchCommand", attackerFactions, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 end
 
-function Lobby:_OnPwRequestJoinPlanet(planetID)
-	self:_CallListeners("OnPwRequestJoinPlanet", planetID)
+function Lobby:_OnPwAttackCharges(charges, nextRechargeTime)
+	self:_CallListeners("OnPwAttackCharges", charges, nextRechargeTime)
+end
+
+function Lobby:_OnPwRequestJoinPlanet(planetID, attacker)
+	self:_CallListeners("OnPwRequestJoinPlanet", planetID, attacker)
 end
 
 function Lobby:_OnPwJoinPlanetSuccess(planetID)
@@ -1310,9 +1319,10 @@ function Lobby:_OnPwJoinPlanetSuccess(planetID)
 	self:_CallListeners("OnPwJoinPlanetSuccess", planetID)
 end
 
-function Lobby:_OnPwAttackingPlanet(planetID)
+function Lobby:_OnPwAttackingPlanet(planetID, attacker)
 	self.planetwarsData.attackingPlanet = planetID
-	self:_CallListeners("OnPwAttackingPlanet", planetID)
+	self.planetwarsData.attackingPlanetFaction = attacker
+	self:_CallListeners("OnPwAttackingPlanet", planetID, attacker)
 end
 
 function Lobby:_OnPwFactionUpdate(factionData)

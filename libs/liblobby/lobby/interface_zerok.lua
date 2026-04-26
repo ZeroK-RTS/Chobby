@@ -1029,11 +1029,17 @@ end
 -- Planetwars commands
 ------------------------
 
-function Interface:PwJoinPlanet(planetID)
+function Interface:PwJoinPlanet(planetID, attacker)
 	local sendData = {
-		PlanetID = planetID
+		PlanetID = planetID,
+		AttackerFaction = attacker,
 	}
 	self:_SendCommand("PwJoinPlanet " .. json.encode(sendData))
+	return self
+end
+
+function Interface:PwCancel() -- Leave attack or defend queue
+	self:_SendCommand("PwCancel {}")
 	return self
 end
 
@@ -1948,7 +1954,7 @@ function Interface:_PwStatus(data)
 		self.PW_ENABLED = 2
 	end
 	--PwStatus {"PlanetWarsMode":2,"MinLevel":5}
-	self:_OnPwStatus(data.PlanetWarsMode, data.MinLevel)
+	self:_OnPwStatus(data.PlanetWarsMode, data.MinLevel, data.AttackerPhaseMinutes , data.DefenderPhaseMinutes)
 end
 Interface.jsonCommands["PwStatus"] = Interface._PwStatus
 
@@ -1958,8 +1964,8 @@ function Interface:_PwMatchCommand(data)
 		self.PW_DEFEND = 2
 		self.PW_INACTIVE = 3
 	end
-	--<PwMatchCommand {"AttackerFaction":"Hegemony","DeadlineSeconds":993,"DefenderFactions":[],"Mode":1,"Options":[{"Count":0,"Map":"RustyDelta_Final","Needed":2,"PlanetID":3932,"PlanetName":"Vishnu"},{"Count":0,"Map":"Altored Divide Remake V3","Needed":2,"PlanetID":3933,"PlanetName":"Brunhilde"}]}
-	self:_OnPwMatchCommand(data.AttackerFaction, data.DefenderFactions, data.Mode, data.Options, data.DeadlineSeconds)
+	local attackerList = data.AttackerFactions or (data.AttackerFaction and {data.AttackerFaction})
+	self:_OnPwMatchCommand(attackerList, data.DefenderFactions, data.Mode, data.Options, data.DeadlineSeconds)
 	-- data.Options
 	--	{
 	--		public int Count { get; set; }
@@ -1973,31 +1979,38 @@ function Interface:_PwMatchCommand(data)
 	--		public bool CanSelectForBattle { get; set; }
 	--		public bool PlayerIsAttacker { get; set; }
 	--		public bool PlayerIsDefender { get; set; }
+	--		/// <summary>
+	--		/// Faction shortcut of the attacker. Together with <see cref="PlanetID"/> forms the (planet, attacker)
+	--		/// key that identifies this attack slot. Clients must echo it back in <see cref="PwJoinPlanet"/>.
+	--		/// </summary>
+	--		public string AttackerFaction { get; set; }
+	--		/// <summary>Average PW-WHR of the projected attacker squad (top-TeamSize volunteers). 0 when none.</summary>
+	--		public int AttackerAvgWhr { get; set; }
+	--		/// <summary>Average PW-WHR of the projected defender squad. Null in AttackCollect phase or when no volunteers.</summary>
+	--		public int? DefenderAvgWhr { get; set; }
+	--		/// <summary>Attacker win chance 0-100 derived from WHR delta. Null when either side is empty.</summary>
+	--		public int? WinChance { get; set; }
 	--	}
 end
 Interface.jsonCommands["PwMatchCommand"] = Interface._PwMatchCommand
 
 function Interface:_PwAttackCharges(data)
-	self:_OnPwMatchCommand(data.AttackerFaction, data.DefenderFactions, data.Mode, data.Options, data.DeadlineSeconds)
-	--{
-	--	public int Current { get; set; }
-	--	public int? NextRechargeTurn { get; set; }
-	--}
+	self:_OnPwAttackCharges(data.Current , data.NextRechargeTime)
 end
 Interface.jsonCommands["PwAttackCharges"] = Interface._PwAttackCharges
 
 function Interface:_PwRequestJoinPlanet(data)
-	self:_OnPwRequestJoinPlanet(data.PlanetID)
+	self:_OnPwRequestJoinPlanet(data.PlanetID, data.AttackerFaction)
 end
 Interface.jsonCommands["PwRequestJoinPlanet"] = Interface._PwRequestJoinPlanet
 
 function Interface:_PwJoinPlanetSuccess(data)
-	self:_OnPwJoinPlanetSuccess(data.PlanetID)
+	self:_OnPwJoinPlanetSuccess(data.PlanetID, data.AttackerFaction)
 end
 Interface.jsonCommands["PwJoinPlanetSuccess"] = Interface._PwJoinPlanetSuccess
 
 function Interface:_PwAttackingPlanet(data)
-	self:_OnPwAttackingPlanet(data.PlanetID)
+	self:_OnPwAttackingPlanet(data.PlanetID, data.AttackerFaction)
 end
 Interface.jsonCommands["PwAttackingPlanet"] = Interface._PwAttackingPlanet
 
