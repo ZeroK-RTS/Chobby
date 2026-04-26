@@ -1304,7 +1304,9 @@ function Lobby:_OnPwMatchCommand(attackerFactions, defenderFactions, currentMode
 	self.planetwarsData.deadlineSeconds = deadlineSeconds
 	if modeSwitched then
 		self.planetwarsData.joinPlanet = nil
+		self.planetwarsData.joinPlanetAttacker = nil
 		self.planetwarsData.attackingPlanet = nil
+		self.planetwarsData.attackingPlanetFaction = nil
 	end
 
 	self:_CallListeners("OnPwMatchCommand", attackerFactions, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
@@ -1320,9 +1322,10 @@ function Lobby:_OnPwRequestJoinPlanet(planetID, attacker)
 	self:_CallListeners("OnPwRequestJoinPlanet", planetID, attacker)
 end
 
-function Lobby:_OnPwJoinPlanetSuccess(planetID)
+function Lobby:_OnPwJoinPlanetSuccess(planetID, attackerFaction)
 	self.planetwarsData.joinPlanet = planetID
-	self:_CallListeners("OnPwJoinPlanetSuccess", planetID)
+	self.planetwarsData.joinPlanetAttacker = attackerFaction
+	self:_CallListeners("OnPwJoinPlanetSuccess", planetID, attackerFaction)
 end
 
 function Lobby:_OnPwAttackingPlanet(planetID, attacker)
