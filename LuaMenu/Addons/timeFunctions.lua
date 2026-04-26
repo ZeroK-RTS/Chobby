@@ -180,9 +180,10 @@ function Spring.Utilities.ArchaicFormatDate(timeTable, translator)
 	return timeString
 end
 
-function Spring.Utilities.FormatRelativeTime(timeTable)
+function Spring.Utilities.FormatRelativeTime(timeTable, includeSeconds)
 	local timeText
-	for i = 4, 2, -1 do
+	local base = includeSeconds and 1 or 2
+	for i = 4, base, -1 do
 		if timeText or timeTable[i] > 0 then
 			timeText = string.format((timeText or "") .. (timeText and ", " or "") .. "%d" .. " " .. baseName[i] .. (timeTable[i] == 1 and "" or "s"), timeTable[i])
 		end
@@ -329,7 +330,7 @@ function Spring.Utilities.TimeStringToTable(timeString)
 	return timeTable
 end
 
-function Spring.Utilities.GetTimeDifference(targetTimeString, otherTime)
+function Spring.Utilities.GetTimeDifference(targetTimeString, otherTime, showSeconds)
 	local targetTime = Spring.Utilities.TimeStringToTable(targetTimeString)
 	if not targetTime then
 		return false
@@ -339,7 +340,14 @@ function Spring.Utilities.GetTimeDifference(targetTimeString, otherTime)
 	end
 
 	local difference, targetInTheFuture = Spring.Utilities.GetTimeDifferenceTable(targetTime, otherTime)
-	local timeText, isNow = Spring.Utilities.FormatRelativeTime(difference, targetInTheFuture)
+	if showSeconds then
+		for i = 2, 6 do
+			if difference[i] > 0 then
+				showSeconds = false
+			end
+		end
+	end
+	local timeText, isNow = Spring.Utilities.FormatRelativeTime(difference, showSeconds)
 	return timeText, targetInTheFuture, isNow
 end
 

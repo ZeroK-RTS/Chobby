@@ -1286,12 +1286,16 @@ end
 -- Planetwars Commands
 ------------------------
 
-function Lobby:_OnPwStatus(planetWarsMode, minLevel, attackerMinutes, defenderMinutes)
-	self:_CallListeners("OnPwStatus", planetWarsMode, minLevel, attackerMinutes, defenderMinutes)
+function Lobby:_OnPwStatus(planetWarsMode, minLevel, attackerMinutes, defenderMinutes, maxCharges)
+	self.planetwarsData.attackerMinutes = attackerMinutes or self.planetwarsData.attackerMinutes or 10
+	self.planetwarsData.defenderMinutes = defenderMinutes or self.planetwarsData.defenderMinutes or 10
+	self.planetwarsData.maxCharges = maxCharges or self.planetwarsData.maxCharges or 2
+
+	self:_CallListeners("OnPwStatus", planetWarsMode, minLevel, attackerMinutes, defenderMinutes, maxCharges)
 end
 
 function Lobby:_OnPwMatchCommand(attackerFactions, defenderFactions, currentMode, planets, deadlineSeconds)
-	self.planetwarsData.attackerFactions  = attackerFactions
+	self.planetwarsData.attackerFactions = attackerFactions
 	self.planetwarsData.defenderFactions = defenderFactions
 	self.planetwarsData.currentMode      = currentMode
 	self.planetwarsData.planets          = planets
@@ -1307,6 +1311,8 @@ function Lobby:_OnPwMatchCommand(attackerFactions, defenderFactions, currentMode
 end
 
 function Lobby:_OnPwAttackCharges(charges, nextRechargeTime)
+	self.planetwarsData.charges          = charges
+	self.planetwarsData.nextRechargeTime = nextRechargeTime
 	self:_CallListeners("OnPwAttackCharges", charges, nextRechargeTime)
 end
 

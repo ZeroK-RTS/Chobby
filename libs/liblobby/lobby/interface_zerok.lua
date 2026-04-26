@@ -1954,7 +1954,7 @@ function Interface:_PwStatus(data)
 		self.PW_ENABLED = 2
 	end
 	--PwStatus {"PlanetWarsMode":2,"MinLevel":5}
-	self:_OnPwStatus(data.PlanetWarsMode, data.MinLevel, data.AttackerPhaseMinutes , data.DefenderPhaseMinutes)
+	self:_OnPwStatus(data.PlanetWarsMode, data.MinLevel, data.AttackerPhaseMinutes , data.DefenderPhaseMinutes, data.MaxAttackCharges)
 end
 Interface.jsonCommands["PwStatus"] = Interface._PwStatus
 
