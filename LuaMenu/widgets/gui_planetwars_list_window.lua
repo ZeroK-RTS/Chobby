@@ -25,7 +25,7 @@ local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
 local PLANET_NAME_LENGTH = 210
-local FACTION_SPACING = 156
+local FACTION_SPACING = 134
 
 local phaseTimer
 local requiredGame = false
@@ -94,7 +94,7 @@ local function TryToJoinPlanet(planetData)
 	WG.Analytics.SendOnetimeEvent("lobby:multiplayer:planetwars:join_site")
 end
 
-local function GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
+local function GetAttackingOrDefending(lobby, attackerFaction, defenderFactions, currentMode)
 	local myFaction = lobby:GetMyFaction()
 	local attacking = (myFaction == attackerFaction)
 	local defending = false
@@ -669,7 +669,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc)
 				else
 					btnJoin:SetCaption("???")
 				end
-			else then
+			else
 				if downloading then
 					btnJoin:SetCaption(i18n("downloading"))
 				else
@@ -853,7 +853,7 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc, righ
 
 	local HolderType = (right and bottom and ScrollPanel) or Control
 
-	local offset = 0
+	local offset = 15
 	local holder = HolderType:New {
 		x = x,
 		y = y,
@@ -876,6 +876,7 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc, righ
 		local name = factionList[i].Name
 		local factionData = factionText[shortname] or {}
 
+		local buttonPos = 140
 		if factionData.imageLarge then
 			Image:New {
 				x = 2,
@@ -886,10 +887,21 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc, righ
 				file = factionData.imageLarge,
 				parent = holder,
 			}
+		elseif factionData.image then
+			buttonPos = 86
+			Image:New {
+				x = 8,
+				y = offset,
+				width = 64,
+				height = 64,
+				keepAspect = true,
+				file = factionData.image,
+				parent = holder,
+			}
 		end
 
 		Button:New {
-			x = 140,
+			x = buttonPos,
 			y = offset,
 			width = 260,
 			height = WG.BUTTON_HEIGHT,
@@ -907,14 +919,26 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc, righ
 			parent = holder,
 		}
 
-		if factionData.motto and factionData.desc then
+		if factionData.motto then
 			TextBox:New {
-				x = 140,
+				x = buttonPos,
 				y = offset + 56,
-				width = 240,
+				width = 360,
 				height = 45,
 				objectOverrideFont = Configuration:GetFont(2),
-				text = [["]] .. factionData.motto .. [["]] .. "\n" .. factionData.desc,
+				text = [["]] .. factionData.motto .. [["]],
+				parent = holder,
+			}
+			offset = offset + 30
+		end
+		if factionData.motto then
+			TextBox:New {
+				x = buttonPos,
+				y = offset + 56,
+				width = 360,
+				height = 45,
+				objectOverrideFont = Configuration:GetFont(2),
+				text = factionData.desc,
 				parent = holder,
 			}
 		end
@@ -1248,7 +1272,7 @@ local function InitializeControls(window)
 			end
 		end
 
-		local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
+		local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions, currentMode)
 		UpdateStatusText(attacking, defending, currentMode)
 
 		planetList.SetPlanetList(planets, modeSwitched)
@@ -1257,14 +1281,14 @@ local function InitializeControls(window)
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
 
 	local function OnPwAttackingPlanet()
-		local attacking, defending = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions)
+		local attacking, defending = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions, oldMode)
 		UpdateStatusText(attacking, defending, oldMode)
 	end
 	lobby:AddListener("OnPwAttackingPlanet", OnPwAttackingPlanet)
 
 	local function OnUpdateUserStatus(listener, userName, status)
 		if lobby:GetMyUserName() == userName then
-			local attacking, defending = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions)
+			local attacking, defending = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions, oldMode)
 			UpdateStatusText(attacking, defending, oldMode)
 		end
 	end
@@ -1395,6 +1419,7 @@ function DelayedInitialize()
 	end
 
 	local function OnPwStatus(_, enabledStatus, requiredLevel)
+		Spring.Echo("OnPwStatus", enabledStatus, requiredLevel, lobby.PW_PREGAME, lobby.PW_ENABLED)
 		local myInfo = lobby:GetMyInfo()
 		myLevel = myInfo.level
 		planetwarsLevelRequired = requiredLevel

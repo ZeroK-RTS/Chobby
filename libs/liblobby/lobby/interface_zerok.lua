@@ -1977,6 +1977,15 @@ function Interface:_PwMatchCommand(data)
 end
 Interface.jsonCommands["PwMatchCommand"] = Interface._PwMatchCommand
 
+function Interface:_PwAttackCharges(data)
+	self:_OnPwMatchCommand(data.AttackerFaction, data.DefenderFactions, data.Mode, data.Options, data.DeadlineSeconds)
+	--{
+	--	public int Current { get; set; }
+	--	public int? NextRechargeTurn { get; set; }
+	--}
+end
+Interface.jsonCommands["PwAttackCharges"] = Interface._PwAttackCharges
+
 function Interface:_PwRequestJoinPlanet(data)
 	self:_OnPwRequestJoinPlanet(data.PlanetID)
 end
@@ -2153,5 +2162,6 @@ Interface.jsonCommands["SiteToLobbyCommand"] = Interface._OnSiteToLobbyCommand
 --ForceJoinBattle
 --LinkSteam
 --PwMatchCommand
+--PwAttackCharges
 
 return Interface
