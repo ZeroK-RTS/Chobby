@@ -147,7 +147,6 @@ local function GetActivityToPrompt(lobby, attackerFactions, defenderFactions, cu
 		return false
 	end
 
-	Spring.Echo("GetActivityToPromptGetActivityToPrompt", lobby.planetwarsData.attackingPlanet, lobby.planetwarsData.joinPlanet)
 	if lobby.planetwarsData.attackingPlanet and planets then
 		local myPlanet = FindMyAttackPhasePlanet(planets)
 		if myPlanet then

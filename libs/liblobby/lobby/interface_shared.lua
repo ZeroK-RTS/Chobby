@@ -290,6 +290,9 @@ function Interface:_SocketUpdate()
 					if not (success and internalSuccess) then
 						Spring.Echo("Processing failed for", commands[1])
 						self.allFailRepeats = (self.allFailRepeats or 0) + 1
+						if #commands == 1 then
+							self.raggedJsonStore[#self.raggedJsonStore + 1] = commands[1]
+						end
 					end
 				else
 					self.allFailRepeats = 0
