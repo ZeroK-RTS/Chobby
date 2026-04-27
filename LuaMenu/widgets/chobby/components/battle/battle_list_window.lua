@@ -637,6 +637,9 @@ end
 
 function BattleListWindow:ItemInFilter(id)
 	local battle = lobby:GetBattle(id)
+	if not battle then
+		return false
+	end
 	local filterString = Configuration.gameConfig.battleListOnlyShow
 	if filterString ~= nil then
 		local filterToGame = string.find(battle.gameName, filterString)

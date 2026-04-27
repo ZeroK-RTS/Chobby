@@ -1338,7 +1338,7 @@ function Lobby:_OnPwFactionUpdate(factionData)
 	self.planetwarsData.factionMap = {}
 	self.planetwarsData.factionList = factionData
 	for i = 1, #factionData do
-		self.planetwarsData.factionMap[factionData[i].Shortcut] = true
+		self.planetwarsData.factionMap[factionData[i].Shortcut] = factionData[i]
 	end
 end
 

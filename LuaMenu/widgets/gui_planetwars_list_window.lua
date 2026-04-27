@@ -24,7 +24,7 @@ local planetwarsLevelRequired = false
 local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
-local PLANET_NAME_LENGTH = 350
+local PLANET_NAME_LENGTH = 450
 local FACTION_SPACING = 134
 local LIST_PHASE_FRACTIONS = false
 
@@ -48,6 +48,14 @@ local DoUnMatchedActivityUpdate -- Activity update function
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
+
+local function HexToColorString(hex)
+	local r = string.format("%03d", tonumber(string.sub(hex, 2, 3) or "ff", 16))
+	local g = string.format("%03d", tonumber(string.sub(hex, 4, 5) or "ff", 16))
+	local b = string.format("%03d", tonumber(string.sub(hex, 6, 7) or "ff", 16))
+	local postfunc, err = loadstring([[return "\255\]] .. r .. [[\]] .. g .. [[\]] .. b .. [["]])
+	return postfunc()
+end
 
 local function HaveRightEngineVersion()
 	local configuration = WG.Chobby.Configuration
@@ -99,7 +107,7 @@ local function GetAttackingOrDefending(lobby, attackerFactions, defenderFactions
 	local myFaction = lobby:GetMyFaction()
 	if defenderFactions and #defenderFactions > 0 then
 		return false, true
-	else
+	elseif attackerFactions and #attackerFactions > 0 then
 		return true, false
 	end
 	--local attackPhase = false
@@ -121,6 +129,7 @@ local function GetAttackingOrDefending(lobby, attackerFactions, defenderFactions
 	--	end
 	--end
 	--return attackPhase, defendPhase
+	return false, false
 end
 
 local function IsPhaseUrgent()
@@ -681,11 +690,16 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 		parent = holder,
 	}
 
-	local function SetPlanetName(newPlanetName, faction)
-		local factionData = faction lobby:GetFactionData(faction)
+	local function SetPlanetName(planet)
+		local newPlanetName = planet.PlanetName
 		newPlanetName = StringUtilities.GetTruncatedStringWithDotDot(newPlanetName, tbPlanetName.font, PLANET_NAME_LENGTH - 24)
-		if factionData and factionData.Name then
-			newPlanetName = newPlanetName .. " (" .. factionData.Name .. ")"
+		if defendPhase and planet.AttackerAvgWhr then
+			local skill = math.floor((planet.AttackerAvgWhr + 50)/100)*100
+			newPlanetName = newPlanetName .. string.format(" (skill %d)", skill)
+		end
+		local factionData = planet.OwnerFaction and lobby:GetFactionData(planet.OwnerFaction)
+		if factionData and factionData.Color then
+			newPlanetName = HexToColorString(factionData.Color) .. newPlanetName
 		end
 		tbPlanetName:SetText(newPlanetName)
 		local length = tbPlanetName.font:GetTextWidth(newPlanetName)
@@ -791,7 +805,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 	}
 
 	-- Initialization
-	SetPlanetName(planetData.PlanetName, planetData.OwnerFaction)
+	SetPlanetName(planetData)
 	UpdateJoinButton()
 
 	local externalFunctions = {}
@@ -820,7 +834,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 			imMinimap:ResetImageLoadTimer()
 			imMinimap:Invalidate()
 
-			SetPlanetName(newPlanetData.PlanetName, newPlanetData.OwnerFaction)
+			SetPlanetName(newPlanetData)
 		end
 		planetID = newPlanetData.PlanetID
 
@@ -1254,7 +1268,7 @@ local function InitializeControls(window)
 			y = 134,
 			height = 50,
 			objectOverrideFont = Configuration:GetFont(2),
-			text = "asdf",
+			text = "",
 			parent = window
 		}
 	end
@@ -1327,12 +1341,12 @@ local function InitializeControls(window)
 		if rechargeTime then
 			local difference, inTheFuture, isNow = Spring.Utilities.GetTimeDifference(rechargeTime, false, true)
 			if inTheFuture then
-				text = text.. "   - Regain by defending or passively in " .. difference
+				text = text.. "  - Gain more by defending or waiting for " .. difference
 			else
-				text = text .. "   - Regain by defending or passively in 0 seconds"
+				text = text .. "  - Gain more by defending or waiting for 0 seconds"
 			end
 		elseif charges < pwData.maxCharges then
-				text = text .. "   - Regain by defending"
+				text = text .. "   - Gain more by defending"
 		end
 		chargesText:SetText(text)
 	end
@@ -1355,7 +1369,7 @@ local function InitializeControls(window)
 		end
 	end
 	
-	local function UpdateStatusText(attackPhase, defending, currentMode, planets)
+	local function UpdateStatusText(attackPhase, defendPhase, currentMode, planets)
 		if not CheckPlanetwarsRequirements() or missingResources then
 			return
 		end
@@ -1364,7 +1378,7 @@ local function InitializeControls(window)
 			if charges == 0 then
 				statusText:SetText("You are out of attack charges. Regain charges by defending or waiting for the recharge timer.")
 			else
-				statusText:SetText("Select a planet to attack, it will launch when the timer runs out if enough allies join you. This costs an attack charge.")
+				statusText:SetText("Select a planet to attack, it will launch when the timer runs out if enough allies join you.")
 			end
 			if planets then
 				UpdatePlanetStatusData(attackPhase, planets)
@@ -1375,58 +1389,23 @@ local function InitializeControls(window)
 					planetStatusText[planetStatusNames[i]]:SetVisibility(true)
 				end
 			end
-			
-			--else
-			--	local planets = lobby.planetwarsData.planets
-			--	local noPlanets = not (planets and planets[1])
-			--	local planetName = planets and (FindMyattackPhasePlanet(planets) or (planets[1] and not planets[2] and planets[1].PlanetName))
-			--	if lobby.planetwarsData.attackPhasePlanet then
-			--		if planetName then
-			--			statusText:SetText("You are attacking " .. planetName .. ". The defenders have limited time to respond.")
-			--		else
-			--			statusText:SetText("You are attacking a planet. Wait for the defenders have limited time to respond.")
-			--		end
-			--	elseif noPlanets then
-			--		statusText:SetText("Your faction has launched an attack. The defenders have limited time to respond")
-			--
-			--	elseif planetName then
-			--		statusText:SetText("Your faction is attacking " .. planetName .. ". The defenders have limited time to respond")
-			--	else
-			--		statusText:SetText("Your faction is attacking multiple planets. The defenders have limited time to respond")
-			--	end
-			--end
-		else
+		elseif defendPhase then
 			local myAttack, myFactionAttack = GetAttackingPlanet()
 			if myAttack then
-				statusText:SetText("You are attacking " .. myAttack .. ", the battle will start at the end of the phase.")
-			elseif myFactionAttack then
-				statusText:SetText("Your faction is attacking but may also be under attack. Join planets that need defenders. Participating in defense generates an attack charge charge.")
+				statusText:SetText("You are attacking " .. myAttack .. ", the battle will start if there are any defenders at the end of the phase (or they forfeit).")
 			else
-				statusText:SetText("Join any planets that need defenders. Participating in defense generates an attack charge")
+				statusText:SetText("Join planets that need defenders. Participating in defense generates an attack charge charge.")
 			end
 			
 			for i = 1, #planetStatusNames do
 				planetStatusText[planetStatusNames[i]]:SetVisibility(false)
 			end
+		else
+			statusText:SetText("Error fetching Planetwars state. Try logging out then in again.")
 			
-			--if currentMode == lobby.PW_ATTACK then
-			--	statusText:SetText("Waiting for another faction to launch an attack.")
-			--elseif defending then
-			--	local planets = lobby.planetwarsData.planets
-			--	local planetName = planets and planets[1] and not planets[2] and planets[1].PlanetName
-			--	if planetName then
-			--		planetName = " " .. planetName
-			--	end
-			--	if planetName then
-			--		statusText:SetText("Your planet " .. planetName .. " is under attack. Join the defence before it is too late!")
-			--	else
-			--		statusText:SetText("Your planets are under attack. Join the defence before it is too late!")
-			--	end
-			--elseif currentMode == lobby.PW_DEFEND then
-			--	statusText:SetText("Another faction is preparing their response to an invasion.")
-			--else
-			--	statusText:SetText("Planetwars is either offline or loading.")
-			--end
+			for i = 1, #planetStatusNames do
+				planetStatusText[planetStatusNames[i]]:SetVisibility(false)
+			end
 		end
 	end
 
@@ -1473,6 +1452,7 @@ local function InitializeControls(window)
 	lobby:AddListener("OnUpdateUserStatus", OnUpdateUserStatus)
 
 	local function OnPwAttackCharges(listener, newCharges, newRechargeTime)
+		local attackPhase, defendPhase = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions, oldMode)
 		charges, rechargeTime = newCharges, newRechargeTime
 		UpdateChargesText()
 		UpdateStatusText(attackPhase, defendPhase, oldMode)
