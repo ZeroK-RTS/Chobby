@@ -24,7 +24,7 @@ local planetwarsLevelRequired = false
 local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
-local PLANET_NAME_LENGTH = 210
+local PLANET_NAME_LENGTH = 350
 local FACTION_SPACING = 134
 local LIST_PHASE_FRACTIONS = false
 
@@ -128,7 +128,7 @@ local function IsPhaseUrgent()
 	return timeRemaining and timeRemaining < URGENT_ATTACK_TIME
 end
 
-local function FindMyAttackPhasePlanet(planets)
+local function FindMyAttackPhasePlanet(lobby, planets)
 	local planetID = lobby.planetwarsData.attackPhasePlanet
 	if not planetID then
 		return false
@@ -148,13 +148,12 @@ local function GetActivityToPrompt(lobby, attackerFactions, defenderFactions, cu
 	end
 
 	if lobby.planetwarsData.attackingPlanet and planets then
-		local myPlanet = FindMyAttackPhasePlanet(planets)
+		local myPlanet = FindMyAttackPhasePlanet(lobby, planets)
 		if myPlanet then
 			return myPlanet, true, true, false
 		end
 		return false
 	end
-
 	local attackPhase, defendPhase = GetAttackingOrDefending(lobby, attackerFactions, defenderFactions)
 	if lobby.planetwarsData.joinPlanet and planets then
 		local planetID = lobby.planetwarsData.joinPlanet
@@ -513,7 +512,7 @@ local function InitializeActivityPromptHandler()
 		PossiblyPlayWarning(isAttacker)
 		if alreadyJoined then
 			if isAttacker then
-				planetStatusTextBox:SetText("Attack: " .. planetData.PlanetName)
+				planetStatusTextBox:SetText("Attacking: " .. planetData.PlanetName)
 				if waitingForAllies then
 					battleStatusText = "Attackers " .. newPlanetData.Count .. "/" .. newPlanetData.Needed .. ", "
 				else
@@ -682,8 +681,12 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 		parent = holder,
 	}
 
-	local function SetPlanetName(newPlanetName)
+	local function SetPlanetName(newPlanetName, faction)
+		local factionData = faction lobby:GetFactionData(faction)
 		newPlanetName = StringUtilities.GetTruncatedStringWithDotDot(newPlanetName, tbPlanetName.font, PLANET_NAME_LENGTH - 24)
+		if factionData and factionData.Name then
+			newPlanetName = newPlanetName .. " (" .. factionData.Name .. ")"
+		end
 		tbPlanetName:SetText(newPlanetName)
 		local length = tbPlanetName.font:GetTextWidth(newPlanetName)
 		imgPlanetLink:SetPos(length + 7)
@@ -788,7 +791,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 	}
 
 	-- Initialization
-	SetPlanetName(planetData.PlanetName)
+	SetPlanetName(planetData.PlanetName, planetData.OwnerFaction)
 	UpdateJoinButton()
 
 	local externalFunctions = {}
@@ -817,7 +820,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 			imMinimap:ResetImageLoadTimer()
 			imMinimap:Invalidate()
 
-			SetPlanetName(newPlanetData.PlanetName)
+			SetPlanetName(newPlanetData.PlanetName, newPlanetData.OwnerFaction)
 		end
 		planetID = newPlanetData.PlanetID
 
@@ -1176,9 +1179,9 @@ local function InitializeControls(window)
 	}
 
 	local listHolder = Control:New {
-		x = 5,
-		right = 5,
-		y = 170,
+		x = 12,
+		right = 12,
+		y = 152,
 		bottom = 46,
 		padding = {5, 5, 5, 5},
 		parent = window,
@@ -1235,12 +1238,26 @@ local function InitializeControls(window)
 	local chargesText = TextBox:New {
 		x = 20,
 		right = 16,
-		y = 116,
+		y = 112,
 		height = 50,
 		objectOverrideFont = Configuration:GetFont(2),
 		text = "",
 		parent = window
 	}
+
+	local planetStatusText = {}
+	local planetStatusNames = {"attackers", "incoming", "neutral"}
+	for i = 1, #planetStatusNames do
+		planetStatusText[planetStatusNames[i]] = TextBox:New {
+			x = 20 + (i - 1) * 180 + math.max(0, i - 2)*25,
+			right = 16,
+			y = 134,
+			height = 50,
+			objectOverrideFont = Configuration:GetFont(2),
+			text = "asdf",
+			parent = window
+		}
+	end
 
 	local function CheckPlanetwarsRequirements()
 		local myUserInfo = lobby:GetMyInfo()
@@ -1310,26 +1327,55 @@ local function InitializeControls(window)
 		if rechargeTime then
 			local difference, inTheFuture, isNow = Spring.Utilities.GetTimeDifference(rechargeTime, false, true)
 			if inTheFuture then
-				text = text.. "   - Passive recharge in " .. difference 
+				text = text.. "   - Regain by defending or passively in " .. difference
 			else
-				text = text .. "   - Passive recharge in 0 seconds"
+				text = text .. "   - Regain by defending or passively in 0 seconds"
 			end
+		elseif charges < pwData.maxCharges then
+				text = text .. "   - Regain by defending"
 		end
-		text = text .. "\nSpend charges to attack and regain them by defending."
 		chargesText:SetText(text)
 	end
 
-	local function UpdateStatusText(attackPhase, defending, currentMode)
+	local planetStatusData = {}
+	local function UpdatePlanetStatusData(attackPhase, planets)
+		local myFaction = lobby:GetMyFaction()
+		planetStatusData.myAttackers = 0
+		planetStatusData.myIncoming = 0
+		planetStatusData.neutralDefense = 0
+		for i = 1, #planets do
+			local planet = planets[i]
+			if planet.AttackerFaction == myFaction then
+				planetStatusData.myAttackers = planetStatusData.myAttackers + planet.Count
+			elseif planet.OwnerFaction == myFaction then
+				planetStatusData.myIncoming = planetStatusData.myIncoming + planet.Count
+			elseif not planet.OwnerFaction then
+				planetStatusData.neutralDefense = planetStatusData.neutralDefense + planet.Count
+			end
+		end
+	end
+	
+	local function UpdateStatusText(attackPhase, defending, currentMode, planets)
 		if not CheckPlanetwarsRequirements() or missingResources then
 			return
 		end
 
 		if attackPhase then
 			if charges == 0 then
-				statusText:SetText("You are out of attack charges. You need to defend a planet or wait for passive recharge.")
+				statusText:SetText("You are out of attack charges. Regain charges by defending or waiting for the recharge timer.")
 			else
-				statusText:SetText("Choose a planet to attack. All attacks that reach the player threshold are launched when the timer reaches zero.")
+				statusText:SetText("Select a planet to attack, it will launch when the timer runs out if enough allies join you. This costs an attack charge.")
 			end
+			if planets then
+				UpdatePlanetStatusData(attackPhase, planets)
+				planetStatusText.attackers:SetText("Fellow attackers: " .. planetStatusData.myAttackers)
+				planetStatusText.incoming:SetText("Incoming attackers: " .. planetStatusData.myIncoming)
+				planetStatusText.neutral:SetText("Neutrals to defend: " .. planetStatusData.neutralDefense)
+				for i = 1, #planetStatusNames do
+					planetStatusText[planetStatusNames[i]]:SetVisibility(true)
+				end
+			end
+			
 			--else
 			--	local planets = lobby.planetwarsData.planets
 			--	local noPlanets = not (planets and planets[1])
@@ -1354,9 +1400,13 @@ local function InitializeControls(window)
 			if myAttack then
 				statusText:SetText("You are attacking " .. myAttack .. ", the battle will start at the end of the phase.")
 			elseif myFactionAttack then
-				statusText:SetText("Your faction is attacking but may also be under attack. Join planets that need defenders.")
+				statusText:SetText("Your faction is attacking but may also be under attack. Join planets that need defenders. Participating in defense generates an attack charge charge.")
 			else
-				statusText:SetText("Join any planets that need defenders.")
+				statusText:SetText("Join any planets that need defenders. Participating in defense generates an attack charge")
+			end
+			
+			for i = 1, #planetStatusNames do
+				planetStatusText[planetStatusNames[i]]:SetVisibility(false)
 			end
 			
 			--if currentMode == lobby.PW_ATTACK then
@@ -1399,7 +1449,7 @@ local function InitializeControls(window)
 
 		local attackPhase, defendPhase = GetAttackingOrDefending(lobby, attackerFactions, defenderFactions, currentMode)
 		UpdateChargesText()
-		UpdateStatusText(attackPhase, defendPhase, currentMode)
+		UpdateStatusText(attackPhase, defendPhase, currentMode, planets)
 
 		planetList.SetPlanetList(planets, attackPhase, defendPhase, modeSwitched)
 	end
