@@ -50,11 +50,11 @@ local DoUnMatchedActivityUpdate -- Activity update function
 -- Utilities
 
 local function HexToColorString(hex)
-	local r = string.format("%03d", tonumber(string.sub(hex, 2, 3) or "ff", 16))
-	local g = string.format("%03d", tonumber(string.sub(hex, 4, 5) or "ff", 16))
-	local b = string.format("%03d", tonumber(string.sub(hex, 6, 7) or "ff", 16))
-	local postfunc, err = loadstring([[return "\255\]] .. r .. [[\]] .. g .. [[\]] .. b .. [["]])
-	return postfunc()
+	return Engine.textColorCodes.Color .. string.char(
+		tonumber(hex:sub(2, 3), 16) or 255,
+		tonumber(hex:sub(4, 5), 16) or 255,
+		tonumber(hex:sub(6, 7), 16) or 255
+	)
 end
 
 local function HaveRightEngineVersion()
