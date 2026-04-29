@@ -1263,7 +1263,7 @@ local function InitializeControls(window)
 	local planetStatusNames = {"attackers", "incoming", "neutral"}
 	for i = 1, #planetStatusNames do
 		planetStatusText[planetStatusNames[i]] = TextBox:New {
-			x = 20 + (i - 1) * 180 + math.max(0, i - 2)*25,
+			x = 20 + (i - 1) * 180 - math.max(0, i - 2)*35,
 			right = 16,
 			y = 134,
 			height = 50,
@@ -1383,7 +1383,7 @@ local function InitializeControls(window)
 			if planets then
 				UpdatePlanetStatusData(attackPhase, planets)
 				planetStatusText.attackers:SetText("Fellow attackers: " .. planetStatusData.myAttackers)
-				planetStatusText.incoming:SetText("Incoming attackers: " .. planetStatusData.myIncoming)
+				planetStatusText.incoming:SetText("To defend: " .. planetStatusData.myIncoming)
 				planetStatusText.neutral:SetText("Neutrals to defend: " .. planetStatusData.neutralDefense)
 				for i = 1, #planetStatusNames do
 					planetStatusText[planetStatusNames[i]]:SetVisibility(true)
