@@ -168,7 +168,7 @@ local function GetActivityToPrompt(lobby, attackerFactions, defenderFactions, cu
 	if currentMode == lobby.PW_DEFEND and activePlanet then
 		local myPlanet = FindMatchingPlanet(activePlanet, activePlanetAttacker, planets)
 		if myPlanet then
-			return myPlanet, attackPhase, true, true
+			return myPlanet, attackPhase, true, not attackPhase
 		end
 	end
 
@@ -582,6 +582,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 	local planetID = planetData.PlanetID
 	local planetAttacker = planetData.AttackerFaction
 	local canSelectPlanet = planetData.CanSelectForBattle
+	local owner = (planetData.OwnerFaction == lobby:GetMyFaction())
 	local myAttacking = planetData.PlayerIsAttacker
 	local myDefending = planetData.PlayerIsDefender
 
@@ -818,6 +819,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 
 		planetAttacker = newPlanetData.AttackerFaction
 		canSelectPlanet = newPlanetData.CanSelectForBattle
+		owner = (newPlanetData.OwnerFaction == lobby:GetMyFaction())
 		attackPhase, defendPhase = newAttackPhase, newDefendPhase
 		myAttacking = newPlanetData.PlayerIsAttacker
 		myDefending = newPlanetData.PlayerIsDefender
@@ -866,7 +868,11 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 		if canSelectPlanet then
 			return {string.format("%03d", defaultOrder), planetName}
 		end
-		return {"a" .. planetName, planetName}
+		if owner then
+			return {"a" .. planetName, planetName}
+		end
+		
+		return {"b" .. planetName, planetName}
 	end
 
 	function externalFunctions.SetPlanetJoinedIfIDMatches(checkPlanetID, checkPlanetAttacker)
@@ -1400,7 +1406,7 @@ local function InitializeControls(window)
 		elseif defendPhase then
 			local myAttack, myFactionAttack = GetAttackingPlanet()
 			if myAttack then
-				statusText:SetText("You are attacking " .. myAttack .. ", the battle will start if there are any defenders at the end of the phase (or they forfeit).")
+				statusText:SetText("You are attacking " .. myAttack .. ", the battle will start at the end of the phase.")
 			else
 				statusText:SetText("Join planets that need defenders. Participating in defense generates an attack charge charge.")
 			end

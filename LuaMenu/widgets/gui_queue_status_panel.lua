@@ -358,7 +358,7 @@ local function InitializeInstantQueueHandler()
 	end
 
 	function externalFunctions.ProcessInstantStartQueue(instantStartQueues)
-		if lobby.planetwarsData.attackingPlanet then
+		if lobby.planetwarsData.attackingPlanet or lobby.planetwarsData.defendingPlanet then
 			-- Don't show instant start when player is actively invading a planet and waiting for defenders.
 			return false
 		end
