@@ -155,12 +155,10 @@ local function GetActivityToPrompt(lobby, attackerFactions, defenderFactions, cu
 	end
 	local activePlanet = lobby.planetwarsData.attackingPlanet or lobby.planetwarsData.defendingPlanet
 	local activePlanetAttacker = lobby.planetwarsData.attackingPlanetAttacker or lobby.planetwarsData.defendingPlanetAttacker
-	Spring.Echo("MODEMODEMODE", activePlanet, activePlanetAttacker, currentMode, lobby.PW_ATTACK)
 	if currentMode == lobby.PW_ATTACK and activePlanet then
 		local myPlanet = FindMatchingPlanet(activePlanet, activePlanetAttacker, planets)
-		Spring.Echo("myPlanetmyPlanetmyPlanet", myPlanet)
 		if myPlanet then
-			return myPlanet, true, true, false
+			return myPlanet, true, true, true
 		end
 		return false
 	end
@@ -1344,12 +1342,12 @@ local function InitializeControls(window)
 		if rechargeTime then
 			local difference, inTheFuture, isNow = Spring.Utilities.GetTimeDifference(rechargeTime, false, true)
 			if inTheFuture then
-				text = text.. "  - Gain more by defending or waiting for " .. difference
+				text = text.. "  - Gain more by defending or wait for " .. difference
 			else
-				text = text .. "  - Gain more by defending or waiting for 0 seconds"
+				text = text .. "  - Gain more by defending or wait for 0 seconds"
 			end
 		elseif charges < pwData.maxCharges then
-				text = text .. "   - Gain more by defending"
+				text = text .. "  - Gain more by defending"
 		end
 		chargesText:SetText(text)
 	end
@@ -1376,7 +1374,7 @@ local function InitializeControls(window)
 			if planet.DefenderFaction == myFaction then
 				planetStatusData.myDefend = planetStatusData.myDefend + planet.Count
 				planetStatusData.myDefendMax = planetStatusData.myDefendMax + planet.Needed
-			elseif not planet.OwnerFaction then
+			elseif not planet.OwnerFaction and planet.AttackerFaction ~= myFaction then
 				planetStatusData.neutralDefend = planetStatusData.neutralDefend + planet.Count
 				planetStatusData.neutralDefendMax = planetStatusData.neutralDefendMax + planet.Needed
 			end
@@ -1392,7 +1390,7 @@ local function InitializeControls(window)
 			if charges == 0 then
 				statusText:SetText("You are out of attack charges. Regain charges by defending or waiting for the recharge timer.")
 			else
-				statusText:SetText("Select a planet to attack, it will launch when the timer runs out if enough allies join.")
+				statusText:SetText("Select a planet to attack and wait for allies to join you. Attacks lock at the end of the phase and request defenders.")
 			end
 			if planets then
 				UpdatePlanetStatusData(attackPhase, planets)
@@ -1408,13 +1406,21 @@ local function InitializeControls(window)
 			if myAttack then
 				statusText:SetText("You are attacking " .. myAttack .. ", the battle will start at the end of the phase.")
 			else
-				statusText:SetText("Join planets that need defenders. Participating in defense generates an attack charge charge.")
+				statusText:SetText("Join planets that need defending. Doing so gives you an attack charge.")
 			end
 			
 			if planets then
 				UpdatePlanetStatusData(attackPhase, planets)
-				planetStatusText.attackers:SetText("Defenders: " .. planetStatusData.myDefend .. " / " .. planetStatusData.myDefendMax)
-				planetStatusText.incoming:SetText("Neutral Defenders: " .. planetStatusData.neutralDefend .. " / " .. planetStatusData.neutralDefendMax)
+				if planetStatusData.myDefendMax and planetStatusData.myDefendMax > 0 then
+					planetStatusText.attackers:SetText("Defenders: " .. planetStatusData.myDefend .. " / " .. planetStatusData.myDefendMax)
+				else
+					planetStatusText.attackers:SetText("Defenders: -")
+				end
+				if planetStatusData.neutralDefendMax and planetStatusData.neutralDefendMax > 0 then
+					planetStatusText.incoming:SetText("Neutral Defenders: " .. planetStatusData.neutralDefend .. " / " .. planetStatusData.neutralDefendMax)
+				else
+					planetStatusText.incoming:SetText("Neutral Defenders: -")
+				end
 				planetStatusText.attackers:SetVisibility(true)
 				planetStatusText.incoming:SetVisibility(true)
 				planetStatusText.neutral:SetVisibility(false)
