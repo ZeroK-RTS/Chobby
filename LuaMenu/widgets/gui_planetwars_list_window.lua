@@ -169,6 +169,10 @@ local function GetActivityToPrompt(lobby, attackerFactions, defenderFactions, cu
 			return myPlanet, attackPhase, true, not attackPhase
 		end
 	end
+	
+	if attackPhase and lobby.planetwarsData.charges == 0 then
+		return false -- Cannot attack with no charges
+	end
 
 	if IsPhaseUrgent() then
 		local targetPlanet, minMissing
@@ -469,7 +473,7 @@ local function InitializeActivityPromptHandler()
 		end
 		newNotification = false
 		oldIsAttacker = isAttacker
-		if not Configuration.planetwarsNotifications then
+		if not Configuration.planetwarsNotifications2 then
 			return
 		end
 		if WG.WrapperLoopback then
@@ -492,7 +496,6 @@ local function InitializeActivityPromptHandler()
 			Spring.SetConfigString("snd_volui", snd_volui)
 			Spring.SetConfigString("snd_volmaster", snd_volmaster)
 		end, 10)
-
 	end
 
 	holder.OnResize = {Resize}
@@ -1388,9 +1391,9 @@ local function InitializeControls(window)
 
 		if attackPhase then
 			if charges == 0 then
-				statusText:SetText("You are out of attack charges. Regain charges by defending or waiting for the recharge timer.")
+				statusText:SetText("You are out of attack charges. Gain charges by defending or over time.")
 			else
-				statusText:SetText("Select a planet to attack and wait for allies to join you. Attacks lock at the end of the phase and request defenders.")
+				statusText:SetText("Select a planet to attack. Invasions with enough players are locked at the end of the phase and sent to the defenders.")
 			end
 			if planets then
 				UpdatePlanetStatusData(attackPhase, planets)

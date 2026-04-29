@@ -980,7 +980,7 @@ local function GetLobbyTabControls()
 	end
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Multiplayer in new window", "multiplayerLaunchNewSpring", true)
 	if not Configuration.gameConfig.disablePlanetwars then
-		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)
+		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications2", false)
 	end
 	
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Autosave SP on matchmaker", "autosaveOnMatchmaker", true)

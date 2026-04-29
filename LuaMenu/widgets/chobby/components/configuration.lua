@@ -210,7 +210,7 @@ function Configuration:init()
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
 	self.autosaveOnMatchmaker = true
-	self.planetwarsNotifications = false -- Possibly too intrusive? See how it goes.
+	self.planetwarsNotifications2 = false -- Possibly too intrusive? See how it goes.
 	self.ingameNotifcations = true -- Party, chat
 	self.nonFriendNotifications = true -- Party, chat
 	self.friendNotifyIngame = true
@@ -583,7 +583,7 @@ function Configuration:GetConfigData()
 		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
 		notifyForAllChat = self.notifyForAllChat,
-		planetwarsNotifications = self.planetwarsNotifications,
+		planetwarsNotifications2 = self.planetwarsNotifications2,
 		ingameNotifcations = self.ingameNotifcations,
 		nonFriendNotifications = self.nonFriendNotifications,
 		friendNotifyIngame = self.friendNotifyIngame,
