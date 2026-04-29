@@ -137,14 +137,12 @@ local function IsPhaseUrgent()
 	return timeRemaining and timeRemaining < URGENT_ATTACK_TIME
 end
 
-local function FindMyAttackPhasePlanet(lobby, planets)
-	local planetID = lobby.planetwarsData.attackPhasePlanet
+local function FindMatchingPlanet(planetID, planetAttacker, planets)
 	if not planetID then
 		return false
 	end
-	local faction = lobby:GetMyFaction()
 	for i = 1, #planets do
-		if planets[i].PlanetID == planetID and planets[i].AttackerFaction == faction then
+		if planets[i].PlanetID == planetID and planets[i].AttackerFaction == planetAttacker then
 			return planets[i]
 		end
 	end
@@ -155,24 +153,23 @@ local function GetActivityToPrompt(lobby, attackerFactions, defenderFactions, cu
 	if not (planets and planets[1]) then
 		return false
 	end
-
-	if lobby.planetwarsData.attackingPlanet and planets then
-		local myPlanet = FindMyAttackPhasePlanet(lobby, planets)
+	local activePlanet = lobby.planetwarsData.attackingPlanet or lobby.planetwarsData.defendingPlanet
+	local activePlanetAttacker = lobby.planetwarsData.attackingPlanetAttacker or lobby.planetwarsData.defendingPlanetAttacker
+	Spring.Echo("MODEMODEMODE", activePlanet, activePlanetAttacker, currentMode, lobby.PW_ATTACK)
+	if currentMode == lobby.PW_ATTACK and activePlanet then
+		local myPlanet = FindMatchingPlanet(activePlanet, activePlanetAttacker, planets)
+		Spring.Echo("myPlanetmyPlanetmyPlanet", myPlanet)
 		if myPlanet then
 			return myPlanet, true, true, false
 		end
 		return false
 	end
-	local attackPhase, defendPhase = GetAttackingOrDefending(lobby, attackerFactions, defenderFactions)
-	if lobby.planetwarsData.joinPlanet and planets then
-		local planetID = lobby.planetwarsData.joinPlanet
-		local attacker = lobby.planetwarsData.joinPlanetAttacker
-		for i = 1, #planets do
-			if planets[i].PlanetID == planetID and planets[i].AttackerFaction == attacker then
-				return planets[i], attackPhase, true, true
-			end
+	local attackPhase = (currentMode == lobby.PW_ATTACK)
+	if currentMode == lobby.PW_DEFEND and activePlanet then
+		local myPlanet = FindMatchingPlanet(activePlanet, activePlanetAttacker, planets)
+		if myPlanet then
+			return myPlanet, attackPhase, true, true
 		end
-		return false
 	end
 
 	if IsPhaseUrgent() then
@@ -1356,7 +1353,11 @@ local function InitializeControls(window)
 		local myFaction = lobby:GetMyFaction()
 		planetStatusData.myAttackers = 0
 		planetStatusData.myIncoming = 0
-		planetStatusData.neutralDefense = 0
+		planetStatusData.neutralIncoming = 0
+		planetStatusData.myDefend = 0
+		planetStatusData.myDefendMax = 0
+		planetStatusData.neutralDefend = 0
+		planetStatusData.neutralDefendMax = 0
 		for i = 1, #planets do
 			local planet = planets[i]
 			if planet.AttackerFaction == myFaction then
@@ -1364,7 +1365,14 @@ local function InitializeControls(window)
 			elseif planet.OwnerFaction == myFaction then
 				planetStatusData.myIncoming = planetStatusData.myIncoming + planet.Count
 			elseif not planet.OwnerFaction then
-				planetStatusData.neutralDefense = planetStatusData.neutralDefense + planet.Count
+				planetStatusData.neutralIncoming = planetStatusData.neutralIncoming + planet.Count
+			end
+			if planet.DefenderFaction == myFaction then
+				planetStatusData.myDefend = planetStatusData.myDefend + planet.Count
+				planetStatusData.myDefendMax = planetStatusData.myDefendMax + planet.Needed
+			elseif not planet.OwnerFaction then
+				planetStatusData.neutralDefend = planetStatusData.neutralDefend + planet.Count
+				planetStatusData.neutralDefendMax = planetStatusData.neutralDefendMax + planet.Needed
 			end
 		end
 	end
@@ -1378,13 +1386,13 @@ local function InitializeControls(window)
 			if charges == 0 then
 				statusText:SetText("You are out of attack charges. Regain charges by defending or waiting for the recharge timer.")
 			else
-				statusText:SetText("Select a planet to attack, it will launch when the timer runs out if enough allies join you.")
+				statusText:SetText("Select a planet to attack, it will launch when the timer runs out if enough allies join.")
 			end
 			if planets then
 				UpdatePlanetStatusData(attackPhase, planets)
 				planetStatusText.attackers:SetText("Fellow attackers: " .. planetStatusData.myAttackers)
 				planetStatusText.incoming:SetText("To defend: " .. planetStatusData.myIncoming)
-				planetStatusText.neutral:SetText("Neutrals to defend: " .. planetStatusData.neutralDefense)
+				planetStatusText.neutral:SetText("Neutrals to defend: " .. planetStatusData.neutralIncoming)
 				for i = 1, #planetStatusNames do
 					planetStatusText[planetStatusNames[i]]:SetVisibility(true)
 				end
@@ -1397,8 +1405,13 @@ local function InitializeControls(window)
 				statusText:SetText("Join planets that need defenders. Participating in defense generates an attack charge charge.")
 			end
 			
-			for i = 1, #planetStatusNames do
-				planetStatusText[planetStatusNames[i]]:SetVisibility(false)
+			if planets then
+				UpdatePlanetStatusData(attackPhase, planets)
+				planetStatusText.attackers:SetText("Defenders: " .. planetStatusData.myDefend .. " / " .. planetStatusData.myDefendMax)
+				planetStatusText.incoming:SetText("Neutral Defenders: " .. planetStatusData.neutralDefend .. " / " .. planetStatusData.neutralDefendMax)
+				planetStatusText.attackers:SetVisibility(true)
+				planetStatusText.incoming:SetVisibility(true)
+				planetStatusText.neutral:SetVisibility(false)
 			end
 		else
 			statusText:SetText("Error fetching Planetwars state. Try logging out then in again.")

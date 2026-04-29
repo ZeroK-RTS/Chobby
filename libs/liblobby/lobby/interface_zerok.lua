@@ -1040,9 +1040,9 @@ end
 
 function Interface:PwCancel() -- Leave attack or defend queue
 	self.planetwarsData.attackingPlanet = nil
-	self.planetwarsData.attackingPlanetFaction = nil
-	self.planetwarsData.joinPlanet = nil
-	self.planetwarsData.joinPlanetAttacker = nil
+	self.planetwarsData.attackingPlanetAttacker = nil
+	self.planetwarsData.defendingPlanet = nil
+	self.planetwarsData.defendingPlanetAttacker = nil
 	self:_SendCommand("PwCancel {}")
 	return self
 end

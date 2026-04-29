@@ -1295,18 +1295,27 @@ function Lobby:_OnPwStatus(planetWarsMode, minLevel, attackerMinutes, defenderMi
 end
 
 function Lobby:_OnPwMatchCommand(attackerFactions, defenderFactions, currentMode, planets, deadlineSeconds)
+	local modeSwitched = (self.planetwarsData.currentMode ~= currentMode) or ((deadlineSeconds or 0) > (self.planetwarsData.deadlineSeconds or 0) + 10)
 	self.planetwarsData.attackerFactions = attackerFactions
 	self.planetwarsData.defenderFactions = defenderFactions
 	self.planetwarsData.currentMode      = currentMode
 	self.planetwarsData.planets          = planets
-	
-	local modeSwitched = (deadlineSeconds or 0) > (self.planetwarsData.deadlineSeconds or 0) + 10
 	self.planetwarsData.deadlineSeconds = deadlineSeconds
-	if modeSwitched then
-		self.planetwarsData.joinPlanet = nil
-		self.planetwarsData.joinPlanetAttacker = nil
-		self.planetwarsData.attackingPlanet = nil
-		self.planetwarsData.attackingPlanetFaction = nil
+	
+	local attackPhase = self.planetwarsData.attackerFactions and #self.planetwarsData.attackerFactions > 0
+	self.planetwarsData.attackingPlanet = nil
+	self.planetwarsData.attackingPlanetAttacker = nil
+	self.planetwarsData.defendingPlanet = nil
+	self.planetwarsData.defendingPlanetAttacker = nil
+	for i = 1, #planets do
+		local planet = planets[i]
+		if planet.PlayerIsAttacker then
+			self.planetwarsData.attackingPlanet = planet.PlanetID
+			self.planetwarsData.attackingPlanetAttacker = planet.AttackerFaction
+		elseif planet.PlayerIsDefender then
+			self.planetwarsData.defendingPlanet = planet.PlanetID
+			self.planetwarsData.defendingPlanetAttacker = planet.AttackerFaction
+		end
 	end
 
 	self:_CallListeners("OnPwMatchCommand", attackerFactions, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
@@ -1323,14 +1332,10 @@ function Lobby:_OnPwRequestJoinPlanet(planetID, attacker)
 end
 
 function Lobby:_OnPwJoinPlanetSuccess(planetID, attackerFaction)
-	self.planetwarsData.joinPlanet = planetID
-	self.planetwarsData.joinPlanetAttacker = attackerFaction
 	self:_CallListeners("OnPwJoinPlanetSuccess", planetID, attackerFaction)
 end
 
 function Lobby:_OnPwAttackingPlanet(planetID, attacker)
-	self.planetwarsData.attackingPlanet = planetID
-	self.planetwarsData.attackingPlanetFaction = attacker
 	self:_CallListeners("OnPwAttackingPlanet", planetID, attacker)
 end
 
