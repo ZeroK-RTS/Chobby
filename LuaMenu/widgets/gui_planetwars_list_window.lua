@@ -1374,7 +1374,7 @@ local function InitializeControls(window)
 			elseif not planet.OwnerFaction then
 				planetStatusData.neutralIncoming = planetStatusData.neutralIncoming + planet.Count
 			end
-			if planet.DefenderFaction == myFaction then
+			if planet.OwnerFaction == myFaction then
 				planetStatusData.myDefend = planetStatusData.myDefend + planet.Count
 				planetStatusData.myDefendMax = planetStatusData.myDefendMax + planet.Needed
 			elseif not planet.OwnerFaction and planet.AttackerFaction ~= myFaction then
