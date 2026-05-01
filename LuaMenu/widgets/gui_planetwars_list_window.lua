@@ -1341,7 +1341,7 @@ local function InitializeControls(window)
 		if not (pwData.maxCharges and charges) then
 			return
 		end
-		local text = "Attack charges: " .. charges .. " / " .. pwData.maxCharges
+		local text = "Attack charges: " .. charges .. "/" .. pwData.maxCharges
 		if rechargeTime then
 			local difference, inTheFuture, isNow = Spring.Utilities.GetTimeDifference(rechargeTime, false, true)
 			if inTheFuture then
@@ -1415,12 +1415,12 @@ local function InitializeControls(window)
 			if planets then
 				UpdatePlanetStatusData(attackPhase, planets)
 				if planetStatusData.myDefendMax and planetStatusData.myDefendMax > 0 then
-					planetStatusText.attackers:SetText("Defenders: " .. planetStatusData.myDefend .. " / " .. planetStatusData.myDefendMax)
+					planetStatusText.attackers:SetText("Defenders: " .. planetStatusData.myDefend .. "/" .. planetStatusData.myDefendMax)
 				else
 					planetStatusText.attackers:SetText("Defenders: -")
 				end
 				if planetStatusData.neutralDefendMax and planetStatusData.neutralDefendMax > 0 then
-					planetStatusText.incoming:SetText("Neutral Defenders: " .. planetStatusData.neutralDefend .. " / " .. planetStatusData.neutralDefendMax)
+					planetStatusText.incoming:SetText("Neutral Defenders: " .. planetStatusData.neutralDefend .. "/" .. planetStatusData.neutralDefendMax)
 				else
 					planetStatusText.incoming:SetText("Neutral Defenders: -")
 				end
