@@ -155,7 +155,7 @@ local function GetActivityToPrompt(lobby, attackerFactions, defenderFactions, cu
 	end
 	local activePlanet = lobby.planetwarsData.attackingPlanet or lobby.planetwarsData.defendingPlanet
 	local activePlanetAttacker = lobby.planetwarsData.attackingPlanetAttacker or lobby.planetwarsData.defendingPlanetAttacker
-	if currentMode == lobby.PW_ATTACK and activePlanet then
+	if currentMode == lobby.PW_DEFEND and activePlanet then
 		local myPlanet = FindMatchingPlanet(activePlanet, activePlanetAttacker, planets)
 		if myPlanet then
 			return myPlanet, true, true, true
@@ -728,7 +728,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 				else
 					btnJoin:SetCaption(i18n("download_map"))
 				end
-			elseif HasAttackCharges() then
+			elseif HasAttackCharges() or defendPhase then
 				showButton = true
 				if attackPhase then
 					btnJoin:SetCaption(i18n("attack_planet"))
@@ -1674,6 +1674,7 @@ function DelayedInitialize()
 	end
 	lobby:AddListener("OnPwJoinPlanetSuccess", UnMatchedActivityUpdate)
 	lobby:AddListener("OnPwattackPhasePlanet", UnMatchedActivityUpdate)
+	lobby:AddListener("OnPwAttackCharges", UnMatchedActivityUpdate)
 	lobby:AddListener("OnLoginInfoEnd", UnMatchedActivityUpdate)
 
 	local function OnDisconnected()
