@@ -154,19 +154,20 @@ local function GetActivityToPrompt(lobby, attackerFactions, defenderFactions, cu
 		return false
 	end
 	local activePlanet = lobby.planetwarsData.attackingPlanet or lobby.planetwarsData.defendingPlanet
+	local attackPhase = (currentMode == lobby.PW_ATTACK)
+	local isAttacking = (lobby.planetwarsData.attackingPlanet) and true or false
 	local activePlanetAttacker = lobby.planetwarsData.attackingPlanetAttacker or lobby.planetwarsData.defendingPlanetAttacker
-	if currentMode == lobby.PW_DEFEND and activePlanet then
+	if currentMode == lobby.PW_ATTACK and activePlanet then
 		local myPlanet = FindMatchingPlanet(activePlanet, activePlanetAttacker, planets)
 		if myPlanet then
 			return myPlanet, true, true, true
 		end
 		return false
 	end
-	local attackPhase = (currentMode == lobby.PW_ATTACK)
 	if currentMode == lobby.PW_DEFEND and activePlanet then
 		local myPlanet = FindMatchingPlanet(activePlanet, activePlanetAttacker, planets)
 		if myPlanet then
-			return myPlanet, attackPhase, true, not attackPhase
+			return myPlanet, isAttacking, true, not isAttacking
 		end
 	end
 	
