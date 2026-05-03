@@ -258,10 +258,6 @@ function Interface:_SocketUpdate()
 		if (status == "timeout" or status == nil) and commandsStr ~= nil and commandsStr ~= "" then
 			Spring.Log(LOG_SECTION, LOG.DEBUG, commandsStr)
 			
-			if config and config.debugRawMessages then
-				Spring.Utilities.TableEcho(self.raggedJsonStore, "self.raggedJsonStore")
-				Spring.Echo("commandsStr", commandsStr)
-			end
 			local commands = explode("\n", commandsStr)
 			
 			if #commands > 0 then
@@ -269,33 +265,29 @@ function Interface:_SocketUpdate()
 				local newRagged = {}
 				for i = 1, #self.raggedJsonStore do
 					local internalSuccess
-					local success = pcall(function () internalSuccess = self:CommandReceived(self.raggedJsonStore[i] .. commands[1]) end)
+					local success = pcall(function () internalSuccess = self:CommandReceived(self.raggedJsonStore[i].command .. commands[1]) end)
 					if (success and internalSuccess) then
 						allFail = false
-					else
+					elseif self.raggedJsonStore[i].tries < 10 then
+						self.raggedJsonStore[i].tries = self.raggedJsonStore[i].tries + 1
 						newRagged[#newRagged + 1] = self.raggedJsonStore[i]
 					end
 				end
 				self.raggedJsonStore = newRagged
-				if (self.allFailRepeats or 0) > 20 then
-					if config and config.debugRawMessages then
-						Spring.Utilities.TableEcho(self.raggedJsonStore, "DISCARDING RAGGED JSON STORE")
-					end
-					self.allFailRepeats = 0
-					self.raggedJsonStore = {}
+				if #self.raggedJsonStore > 0 and config and config.debugRawMessages then
+					Spring.Echo("allFail", allFail)
+					Spring.Utilities.TableEcho(self.raggedJsonStore, "raggedJsonStore")
+					Spring.Utilities.TableEcho(commands, "commands")
 				end
 				if allFail then
 					local internalSuccess
 					local success = pcall(function () internalSuccess = self:CommandReceived(commands[1]) end)
 					if not (success and internalSuccess) then
 						Spring.Echo("Processing failed for", commands[1])
-						self.allFailRepeats = (self.allFailRepeats or 0) + 1
 						if #commands == 1 then
-							self.raggedJsonStore[#self.raggedJsonStore + 1] = commands[1]
+							self.raggedJsonStore[#self.raggedJsonStore + 1] = {tries = 0, command = commands[1]}
 						end
 					end
-				else
-					self.allFailRepeats = 0
 				end
 				for i = 2, #commands-1 do
 					local command = commands[i]
@@ -307,7 +299,7 @@ function Interface:_SocketUpdate()
 					local internalSuccess
 					local success = pcall(function () internalSuccess = self:CommandReceived(commands[#commands]) end)
 					if not (success and internalSuccess) then
-						self.raggedJsonStore[#self.raggedJsonStore + 1] = commands[#commands]
+						self.raggedJsonStore[#self.raggedJsonStore + 1] = {tries = 0, command = commands[#commands]}
 					end
 				end
 			end
