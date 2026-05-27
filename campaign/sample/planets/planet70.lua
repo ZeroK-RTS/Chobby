@@ -37,7 +37,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "luaui/images/commands/bold/attack.png",
-				text = [[A Pheonix strike is most effective when spread over a large area. Hold Ctrl then click and drag Force Fire to give each Pheonix a distinct target in the area. Hold Alt then click and drag Force Fire to draw a line of positions to target.]]
+				text = [[A Phoenix strike is most effective when spread over a large area. Hold Ctrl then click and drag Force Fire to give each Phoenix a distinct target in the area. Hold Alt then click and drag Force Fire to draw a line of positions to target.]]
 			},
 			{
 				image = "unitpics/planeheavyfighter.png",
