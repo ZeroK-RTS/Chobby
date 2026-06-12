@@ -46,7 +46,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Craterv01",
+			mapName = "Craterv02",
 			playerConfig = {
 				startX = 1411,
 				startZ = 4100,
