@@ -521,11 +521,10 @@ local function InitializeControls(parentControl)
 	local btnClose = Button:New {
 		right = 11,
 		y = WG.TOP_BUTTON_Y,
-		width = 80,
+		width = WG.BUTTON_HEIGHT,
 		height = WG.BUTTON_HEIGHT,
-		caption = i18n("close"),
-		objectOverrideFont = Configuration:GetButtonFont(3),
-		classname = "negative_button",
+		caption = "",
+		classname = "close_button",
 		OnClick = {
 			function()
 				parentControl:Hide()

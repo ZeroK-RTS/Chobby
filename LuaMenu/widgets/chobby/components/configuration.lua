@@ -87,14 +87,14 @@ function Configuration:init()
 
 	self.ignoreLevel = false
 
-	self.errorColor = "\255\255\0\0"
-	self.warningColor = "\255\255\255\0"
+	self.errorColor = "\255\255\40\40"
+	self.warningColor = "\255\255\255\60"
 	self.normalColor = "\255\255\255\255"
-	self.successColor = "\255\0\255\0"
+	self.successColor = "\255\40\255\40"
 	self.partialColor = "\255\190\210\50"
-	self.selectedColor = "\255\99\184\255"
+	self.selectedColor = "\255\255\255\255"
 	self.highlightedColor = "\255\125\255\0"
-	self.meColor = "\255\0\190\190"
+	self.meColor = "\255\60\190\240"
 
 	self.moderatorColor = {0.68, 0.78, 1, 1}
 	self.founderColor = {0.7, 1, 0.65, 1}
@@ -102,7 +102,8 @@ function Configuration:init()
 	self.userNameColor = {1, 1, 1, 1}
 
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
-	self.buttonSelectedColor = {0.54,0.72,1,0.95}--{1.0, 1.0, 1.0, 1.0}
+	--self.buttonSelectedColor = {59/255, 109/255, 179/255, 1} --{1.0, 1.0, 1.0, 1.0}
+	self.buttonSelectedColor = {44/255, 82/255, 134/255, 1} --{1.0, 1.0, 1.0, 1.0}
 
 	self.loadLocalWidgets = false
 	self.displayBots = false
@@ -235,7 +236,7 @@ function Configuration:init()
 	self.menuMusicVolume = 0.5
 	self.menuNotificationVolume = 0.8
 	self.menuBackgroundBrightness = 1
-	self.gameOverlayOpacity = 0.5
+	self.gameOverlayOpacity = 0.3
 	self.coopConnectDelay = 5
 	self.showMatchMakerBattles = false
 	self.hideInterface = false
@@ -264,14 +265,19 @@ function Configuration:init()
 
 	self.chatFontSize = 18
 
-	self.fontName = "LuaMenu/widgets/chili/skins/Evolved/fonts/n019003l.pfb"
+	self.fontName = "LuaMenu/widgets/chili/skins/Evolved/fonts/Geist-Regular.ttf"
 	self.fontRaw = {
-		[0] = {size = 10, shadow = false},
-		[1] = {size = 14, shadow = false},
-		[2] = {size = 18, shadow = false},
-		[3] = {size = 22, shadow = false},
-		[4] = {size = 32, shadow = false},
-		[5] = {size = 48, shadow = false},
+		[0] = {size = 11, shadow = true},
+		[1] = {size = 14, shadow = true},
+		[2] = {size = 18, shadow = true},
+		[3] = {size = 22, shadow = true},
+		[4] = {size = 30, shadow = true},
+		[5] = {size = 48, shadow = true},
+		
+		[6] = {size = 18, shadow = false},
+		[7] = {size = 22, shadow = false},
+		
+		[8] = {size = 14, shadow = false},
 	}
 	
 	self.fontSpecial = {}
@@ -280,10 +286,9 @@ function Configuration:init()
 		self.font[i] = WG.Chili.Font:New {
 			size         = self.fontRaw[i].size,
 			font         = self.fontName,
-			color        = {1,1,1,1},
-			outlineColor = {0.05,0.05,0.05,0.9},
-			outline      = false,
-			shadow       = false,
+			outlineColor = self.fontRaw[i].outlineColor or {0.05,0.05,0.05,0.7},
+			outline      = self.fontRaw[i].outline,
+			shadow       = self.fontRaw[i].shadow,
 		}
 	end
 
@@ -800,7 +805,12 @@ end
 function Configuration:GetButtonFont(sizeScale, specialName, specialData, rawSize)
 	specialName = (specialName or "") .. "_button_" .. sizeScale
 	specialData = specialData or {}
-	specialData.outline = true
+	-- specialData.outline = true
+	-- specialData.outline = false
+	-- specialData.outlineColor = {1,1,1,.025}
+	-- specialData.outlineWidth = 10
+	-- specialData.outlineHeight = 10
+	specialData.shadow = true
 	specialData.outlineWidth = 2
 	specialData.outlineHeight = 3
 	return self:GetFont(sizeScale, specialName, specialData, rawSize)
@@ -932,9 +942,11 @@ end
 function Configuration:GetHeadingImage(fullscreenMode, title)
 	local subheadings = self.gameConfig.subheadings
 	if fullscreenMode then
-		return (subheadings and subheadings.large and subheadings.large[title]) or self.gameConfig.headingLarge
+		-- return (subheadings and subheadings.large and subheadings.large[title]) or self.gameConfig.headingLarge
+		return self.gameConfig.headingLarge
 	else
-		return (subheadings and subheadings.small and subheadings.small[title]) or self.gameConfig.headingSmall
+		-- return (subheadings and subheadings.small and subheadings.small[title]) or self.gameConfig.headingSmall
+		return self.gameConfig.headingSmall
 	end
 end
 
