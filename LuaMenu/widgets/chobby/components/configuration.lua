@@ -257,6 +257,7 @@ function Configuration:init()
 		["en"] = {locale = "en", name="English"},
 		["de"] = {locale = "de", name="Deutsch (unvollständig)"},
 		["it"] = {locale = "it", name="Italiano"},
+		["ru"] = {locale = "ru", name="Russian (Русский)"},
 	}
 
 	self.lobby_fullscreen = 1
