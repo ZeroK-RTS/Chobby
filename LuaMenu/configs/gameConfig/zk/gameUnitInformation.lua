@@ -154,7 +154,7 @@ local nameList = {
 	"bomberriot",
 	"bomberdisarm",
 	"bomberheavy",
-	"bomberstrike",
+	"planesupport",
 	"bomberassault",
 	"planescout",
 	"vehscout",
@@ -893,10 +893,10 @@ local humanNames = {
 		description = "Air Superiority Fighter",
 		humanName = "Raptor",
 	},
-	bomberstrike = {
+	planesupport = {
 		category = "plane",
 		order = 5,
-		description = "Tactical Strike Bomber",
+		description = "Strafing Disruption Fighter-Bomber",
 		humanName = "Magpie",
 	},
 	bomberprec = {

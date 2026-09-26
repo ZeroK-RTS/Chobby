@@ -41,8 +41,8 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The Thunderbird can disarm a large army along its bombing path. Line up the run to disable whole lines of turrets. Use the manual fire (default hotkey D) to fire immediately.]]
 			},
 			{
-				image = "unitpics/bomberstrike.png",
-				text = [[Magpies fire a pair of missiles at a ground or air target, then have to reload. They are suited to surgical strikes on weak targets, such as enemy artillery, as their damage output is rather low.]]
+				image = "unitpics/planesupport.png",
+				text = [[Magpies fire bursts of slowing EMG. While they can hit both ground and air units  their low direct damage makes them best used to support other forces. They have limited ammunition so need to regularly return to base to rearm.]]
 			},
 			{
 				image = "unitpics/planefighter.png",
@@ -65,7 +65,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"planecon",
 					"planefighter",
 					"bomberriot",
-					"bomberstrike",
+					"planesupport",
 					"bomberdisarm",
 					"staticrearm",
 				},
@@ -95,7 +95,7 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 1,
 					},
 					{
-						name = "bomberstrike",
+						name = "planesupport",
 						x = 750,
 						z = 5104,
 						facing = 1,
@@ -104,7 +104,7 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 					},
 					{
-						name = "bomberstrike",
+						name = "planesupport",
 						x = 750,
 						z = 5280,
 						facing = 1,
@@ -113,7 +113,7 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 					},
 					{
-						name = "bomberstrike",
+						name = "planesupport",
 						x = 750,
 						z = 5456,
 						facing = 1,
@@ -2112,7 +2112,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"factoryplane",
 				"planecon",
 				"planefighter",
-				"bomberstrike",
+				"planesupport",
 				"bomberdisarm",
 			},
 			modules = {

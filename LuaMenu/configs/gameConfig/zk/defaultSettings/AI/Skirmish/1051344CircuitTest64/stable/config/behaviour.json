@@ -656,7 +656,7 @@
 		"pwr_mod": 0.10,
 		"thr_mod": 0.01
 	},
-	"bomberstrike": {
+	"planesupport": {
 		"role": ["bomber", "air"],  // FIXME: should act as anti_heavy?
 		"fire_state": "return",
 		"limit": 8,

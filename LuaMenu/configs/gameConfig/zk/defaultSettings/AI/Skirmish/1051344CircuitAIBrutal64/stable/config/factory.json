@@ -262,7 +262,7 @@
 
 		"income_tier": [30, 60],
 		//             crane,      swift,          hawk,                raven,        magpie          phoenix,      thunderbird,    wyvern,      odin  vulture
-		"unit":      ["planecon", "planefighter", "planeheavyfighter", "bomberprec", "bomberstrike", "bomberriot", "bomberdisarm", "bomberheavy", "bomberassault", "planescout"],
+		"unit":      ["planecon", "planefighter", "planeheavyfighter", "bomberprec", "planesupport", "bomberriot", "bomberdisarm", "bomberheavy", "bomberassault", "planescout"],
 		"air": {
 			// 0-10m Early Game
 			"tier0": [ 0.00,       0.00,           0.50,                0.10,         0.25,               0.10,         0.00,           0.00,         0.00,            0.05],
