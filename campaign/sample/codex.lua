@@ -1,3 +1,4 @@
+-- Prose is CC-BY-NC-SA by ThornEel
 local entries = {
 	-- Factions
 	faction_union = { -- planet6, planet8, planet10, planet13, planet19
