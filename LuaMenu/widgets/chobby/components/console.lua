@@ -87,6 +87,7 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 			self.tbHistory:UpdateLayout()
 		end
 	end
+	self.onConfigurationChange = onConfigurationChange
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 
 	self.ebInputText.KeyPress = function(something, key, ...)
@@ -362,5 +363,9 @@ function Console:ClearHistory()
 end
 
 function Console:Delete()
-	self = nil
+	-- The configuration listener references this console, so remove it or the console is never freed.
+	if self.onConfigurationChange then
+		Configuration:RemoveListener("OnConfigurationChange", self.onConfigurationChange)
+		self.onConfigurationChange = nil
+	end
 end
