@@ -106,7 +106,7 @@ function BrowserHandler.OpenUrl(rawUrlString, requireLogin, applyUserIDandName)
 				WG.LoginWindowHandler.TryLogin(DelayedTryClickAgain)
 			end
 			local function GoAnywayFunc()
-				WG.SteamHandler.OpenUrlIfActive(urlString)
+				WG.SteamHandler.OpenUrlIfActive(rawUrlString)
 			end
 			if requireLogin then
 				WG.Chobby.ConfirmationPopup(LoginFunc, "You must log in to view this page.", nil, 315, 200, "Log In", "Cancel")
@@ -120,8 +120,8 @@ function BrowserHandler.OpenUrl(rawUrlString, requireLogin, applyUserIDandName)
 			end
 		end
 	else
-		Spring.SetClipboard(urlString)
-		WG.TooltipHandler.TooltipOverride("URL copied " .. urlString, 1)
+		Spring.SetClipboard(rawUrlString)
+		WG.TooltipHandler.TooltipOverride("URL copied " .. rawUrlString, 1)
 	end
 end
 
