@@ -22,6 +22,7 @@ local downloadQueue = {} -- {name, fileType, priority, id}
 local downloadCount = 0
 local topPriority = 0
 local removedDownloads = {}
+local MAX_REMOVED_DOWNLOADS = 100 -- Keep download history bounded, oldest entries are dropped.
 
 local requestUpdate = false
 
@@ -173,6 +174,13 @@ local function RetryDownload(name, fileType)
 	return true
 end
 
+local function AddRemovedDownload(download)
+	removedDownloads[#removedDownloads + 1] = download
+	while #removedDownloads > MAX_REMOVED_DOWNLOADS do
+		table.remove(removedDownloads, 1)
+	end
+end
+
 local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	local index = GetDownloadIndex(downloadQueue, name, fileType)
 	if not index then
@@ -189,7 +197,7 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 
 	if putInRemoveList then
 		downloadQueue[index].removalType = removalType
-		removedDownloads[#removedDownloads + 1] = downloadQueue[index]
+		AddRemovedDownload(downloadQueue[index])
 	end
 	downloadQueue[index] = downloadQueue[#downloadQueue]
 	downloadQueue[#downloadQueue] = nil
@@ -272,7 +280,7 @@ function externalFunctions.CancelDownload(name, fileType)
 	end
 
 	downloadQueue[index].removalType = "cancel"
-	removedDownloads[#removedDownloads + 1] = downloadQueue[index]
+	AddRemovedDownload(downloadQueue[index])
 
 	downloadQueue[index] = downloadQueue[#downloadQueue]
 	downloadQueue[#downloadQueue] = nil
