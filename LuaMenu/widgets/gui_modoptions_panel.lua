@@ -531,7 +531,7 @@ local function CreateModoptionWindow()
 		for key, value in pairs(modoptionDefaults) do
 			UpdateControlValue(key, value)
 		end
-		localModoptions = {}
+		localModoptions = Spring.Utilities.CopyTable(modoptionDefaults)
 		
 		mapSelection = false
 		modSelection = false
