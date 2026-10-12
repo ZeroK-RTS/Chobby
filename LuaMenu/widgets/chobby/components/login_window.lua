@@ -383,6 +383,10 @@ function LoginWindow:RemoveListeners()
 		lobby:RemoveListener("OnConnect", self.onConnect)
 		self.onConnect = nil
 	end
+	if self.onConnectRegister then
+		lobby:RemoveListener("OnConnect", self.onConnectRegister)
+		self.onConnectRegister = nil
+	end
 	if self.onDisconnected then
 		lobby:RemoveListener("OnDisconnected", self.onDisconnected)
 		self.onDisconnected = nil
