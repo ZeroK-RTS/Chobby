@@ -2012,6 +2012,10 @@ local LOAD_CAMPAIGN_STRING = "Campaign_LoadCampaign"
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+local function IsValidBattleFrames(battleFrames)
+	return battleFrames and battleFrames >= 0 and battleFrames < math.huge
+end
+
 function widget:RecvLuaMsg(msg)
 	if not msg then
 		Spring.Echo("LUA_ERR", "Bad campaign message", msg)
@@ -2031,7 +2035,7 @@ function widget:RecvLuaMsg(msg)
 		local bonusObjectives = data[4]
 		local difficulty = tonumber(data[5]) or 0
 		local losses = tonumber(data[6]) or 10000000
-		if planetID and planetConfig and planetConfig[planetID] then
+		if planetID and IsValidBattleFrames(battleFrames) and planetConfig and planetConfig[planetID] then
 			ProcessPlanetVictory(planetID, battleFrames, MakeBonusObjectivesList(bonusObjectives), bonusObjectives, difficulty, losses)
 		end
 	elseif string.find(msg, BATTLE_LOST_STRING) then
@@ -2040,7 +2044,7 @@ function widget:RecvLuaMsg(msg)
 		Spring.Utilities.TableEcho(data, "data")
 		local planetID = tonumber(data[2])
 		local battleFrames = tonumber(data[3])
-		if planetID and planetConfig and planetConfig[planetID] then
+		if planetID and IsValidBattleFrames(battleFrames) and planetConfig and planetConfig[planetID] then
 			ProcessPlanetDefeat(planetID, battleFrames)
 		end
 	elseif string.find(msg, BATTLE_RESIGN_STRING) then
@@ -2049,7 +2053,7 @@ function widget:RecvLuaMsg(msg)
 		Spring.Utilities.TableEcho(data, "data")
 		local planetID = tonumber(data[2])
 		local battleFrames = tonumber(data[3])
-		if planetID and planetConfig and planetConfig[planetID] then
+		if planetID and IsValidBattleFrames(battleFrames) and planetConfig and planetConfig[planetID] then
 			ProcessPlanetResign(planetID, battleFrames)
 		end
 	end
