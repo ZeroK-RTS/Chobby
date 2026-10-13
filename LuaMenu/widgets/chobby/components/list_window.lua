@@ -25,6 +25,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 		OnDispose = {
 			function()
 				self:RemoveListeners()
+				self:unregister()
 			end
 		},
 	}
