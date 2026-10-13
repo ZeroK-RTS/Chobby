@@ -131,7 +131,8 @@ local function InitializeListeners()
 		end
 
 		if currentLoginWindow then
-			if accountAlreadyExists and currentLoginWindow.ShowPassword then
+			-- A cancelled dialog has no window, so it cannot show the password field.
+			if accountAlreadyExists and currentLoginWindow.ShowPassword and currentLoginWindow.window then
 				currentLoginWindow:ShowPassword()
 			end
 			registerRecieved = true

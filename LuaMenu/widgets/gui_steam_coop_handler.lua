@@ -29,7 +29,6 @@ local currentStart = {}
 local attemptGameType, attemptScriptTable, startReplayFile, startEngineVersion, DownloadUpdateFunction
 local coopClient = false
 local friendsReplaceAI = false
-local doDelayedConnection = true
 local downloadPopup = false
 
 local coopPanel, coopHostPanel, replacablePopup
@@ -357,20 +356,26 @@ function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myNam
 
 	local connectionDelay = WG.Chobby.Configuration.coopConnectDelay or 0
 	local function DownloadsComplete()
-		doDelayedConnection = true
+		local connectionPending = true
 		local function Start()
-			if doDelayedConnection then
-				doDelayedConnection = false
+			if connectionPending then
+				connectionPending = false
 				WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
 			end
 		end
+		local function CancelFunc()
+			connectionPending = false
+		end
 		local function StartAndClose()
+			if not connectionPending then
+				return
+			end
 			WG.Analytics.SendOnetimeEvent("lobby:steamcoop:starting")
 			WG.Analytics.SendRepeatEvent("game_start:singleplayer:coop_connecting", 1)
-			CloseExclusivePopup()
 			Start()
+			CloseExclusivePopup() -- Calls CancelFunc, which does nothing after Start.
 		end
-		MakeExclusivePopup("Starting coop game.", "Cancel", Start)
+		MakeExclusivePopup("Starting coop game.", "Cancel", CancelFunc)
 		if connectionDelay > 0 then
 			WG.Delay(StartAndClose, WG.Chobby.Configuration.coopConnectDelay)
 		else

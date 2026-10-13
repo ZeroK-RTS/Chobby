@@ -190,6 +190,7 @@ function ChiliFX:SetEffect(opts)
     if not effectObj then
         Spring.Log(LOG_SECTION, LOG.ERROR, "No such effect: " .. tostring(effectName))
         Spring.Log(LOG_SECTION, LOG.ERROR, debug.traceback())
+        return
     end
     self.activeEffects[obj] = opts
     opts.DrawControl = obj.DrawControl

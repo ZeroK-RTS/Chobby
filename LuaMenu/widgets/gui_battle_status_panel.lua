@@ -241,6 +241,17 @@ local function GetBattleInfoHolder(parent, battleID)
 		end
 	end
 	lobby:AddListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatus)
+	local teamStatusListener = onUpdateUserTeamStatus
+
+	function externalFunctions.RemoveListeners()
+		lobby:RemoveListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
+		lobby:RemoveListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
+		lobby:RemoveListener("OnLeftBattle", PlayersUpdate)
+		lobby:RemoveListener("OnJoinedBattle", PlayersUpdate)
+		lobby:RemoveListener("OnUpdateBattleInfo", PlayersUpdate)
+		lobby:RemoveListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
+		lobby:RemoveListener("OnUpdateUserTeamStatus", teamStatusListener)
+	end
 
 	return externalFunctions
 end
@@ -359,6 +370,17 @@ local function InitializeControls(parentControl)
 		battleInfoHolder.Update(battleID)
 	end
 	lobby:AddListener("OnJoinBattle", onJoinBattle)
+
+	-- A new status panel is made for every battle joined, so remove its listeners when the battle tab is removed.
+	parentControl.OnDispose = parentControl.OnDispose or {}
+	parentControl.OnDispose[#parentControl.OnDispose + 1] = function ()
+		lobby:RemoveListener("OnSaidBattle", OnSaidBattle)
+		lobby:RemoveListener("OnSaidBattleEx", OnSaidBattle)
+		lobby:RemoveListener("OnVoteUpdate", OnVoteUpdate)
+		lobby:RemoveListener("OnVoteEnd", OnVoteEnd)
+		lobby:RemoveListener("OnJoinBattle", onJoinBattle)
+		battleInfoHolder.RemoveListeners()
+	end
 end
 
 --------------------------------------------------------------------------------
