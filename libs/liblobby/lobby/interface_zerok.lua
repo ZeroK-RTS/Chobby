@@ -17,6 +17,7 @@ Interface.commandPattern = {}
 
 function Interface:InheritanceIsBrokenWorkaroundInit()
 	self.duplicateMessageTimes = {}
+	self.duplicateMessageOrder = {}
 	self.commonChannels = {"zk"}
 end
 
@@ -911,12 +912,7 @@ function Interface:LeaveMatchMaking(queueNamePossiblyList)
 end
 
 function Interface:LeaveMatchMakingAll()
-	local sendData = {
-		Queues = {}
-	}
-	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
-
-	return self
+	return self:LeaveMatchMaking(ShallowCopy(self.joinedQueueList) or {})
 end
 
 function Interface:AcceptMatchMakingMatch()
@@ -1420,7 +1416,7 @@ function Interface:_JoinBattleSuccess(data)
 	end
 
 	local newAis = data.Bots
-	battle.battleAis = {}
+	self.battleAis = {}
 	for i = 1, #newAis do
 		self:_UpdateBotStatus(newAis[i])
 	end
@@ -1507,6 +1503,12 @@ function Interface:_UpdateBotStatus(data)
 		Spring.Log(LOG_SECTION, LOG.ERROR, "_UpdateBotStatus missing data.Name field")
 		return
 	end
+	for i = 1, #self.battleAis do
+		if self.battleAis[i] == data.Name then
+			self:_OnUpdateUserBattleStatus(data.Name, status)
+			return
+		end
+	end
 	self:_OnAddAi(self:GetMyBattleID(), data.Name, status)
 end
 Interface.jsonCommands["UpdateBotStatus"] = Interface._UpdateBotStatus
@@ -1533,6 +1535,7 @@ function Interface:_JoinChannelResponse(data)
 	if data.Success then
 		local channel = data.Channel
 		self:_OnJoin(data.ChannelName)
+		self:_GetChannel(data.ChannelName).users = nil
 		self:_OnClients(data.ChannelName, channel.Users)
 		if channel and channel.Topic and channel.Topic.Text then
 			self:_OnChannelTopic(data.ChannelName, channel.Topic.SetBy, channel.Topic.SetDate, channel.Topic.Text)
@@ -1729,6 +1732,15 @@ function Interface:_Say(data)
 			if self.duplicateMessageTimes[data.Time] == data.Text then
 				return
 			end
+		end
+		if not self.duplicateMessageTimes[data.Time] then
+			local slot = (self.duplicateMessageIndex or 0) % 4096 + 1
+			local oldTime = self.duplicateMessageOrder[slot]
+			if oldTime then
+				self.duplicateMessageTimes[oldTime] = nil
+			end
+			self.duplicateMessageOrder[slot] = data.Time
+			self.duplicateMessageIndex = slot
 		end
 		self.duplicateMessageTimes[data.Time] = data.Text
 	end
