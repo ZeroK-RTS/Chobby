@@ -99,7 +99,18 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentCo
 
 	screen0:FocusControl(self.background)
 
-	local function HideDisposeFunc()
+	local HideDisposeFunc
+	HideDisposeFunc = function()
+		-- Replace the arrays because Chili may be iterating one of them.
+		for _, event in ipairs({"OnHide", "OnDispose"}) do
+			local remaining = {}
+			for _, listener in ipairs(self.mainWindow[event] or {}) do
+				if listener ~= HideDisposeFunc then
+					remaining[#remaining + 1] = listener
+				end
+			end
+			self.mainWindow[event] = remaining
+		end
 		self:unregister()
 		self.background:Dispose()
 		interfaceRoot.SetGlobalKeyListener()

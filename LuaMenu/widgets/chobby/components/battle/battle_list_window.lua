@@ -1075,7 +1075,6 @@ function BattleListWindow:JoinBattle(battle)
 			height = 80,
 			caption = "",
 			objectOverrideFont = Configuration:GetFont(2, "error_red", {color = { 1, 0, 0, 1 }}),
-			parent = passwordWindow,
 		}
 
 		local function onJoinBattleFailed(listener, reason)
@@ -1104,6 +1103,7 @@ function BattleListWindow:JoinBattle(battle)
 			},
 		}
 
+		passwordWindow:AddChild(lblError)
 
 		local lblPassword = Label:New {
 			x = 25,

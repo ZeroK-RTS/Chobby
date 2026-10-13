@@ -1269,7 +1269,8 @@ function Interface:_FriendList(data)
 			newFriendMap[userName] = true
 		end
 
-		for _, userName in pairs(self.friends) do
+		for i = #self.friends, 1, -1 do
+			local userName = self.friends[i]
 			if not newFriendMap[userName] then
 				self:_OnUnfriend(userName)
 				self:_OnRemoveIgnoreUser(userName)
@@ -1295,7 +1296,8 @@ function Interface:_IgnoreList(data)
 			newIgnoreMap[userName] = true
 		end
 
-		for _, userName in pairs(self.ignored) do
+		for i = #self.ignored, 1, -1 do
+			local userName = self.ignored[i]
 			if not newIgnoreMap[userName] then
 				self:_OnUnfriend(userName)
 				self:_OnRemoveIgnoreUser(userName)
@@ -1405,7 +1407,8 @@ function Interface:_JoinBattleSuccess(data)
 	for i = 1, #newPlayers do
 		newPlayerMap[newPlayers[i].Name] = true
 	end
-	for _, userName in pairs(battle.users) do
+	for i = #battle.users, 1, -1 do
+		local userName = battle.users[i]
 		if not newPlayerMap[userName] then
 			self:_OnLeftBattle(data.BattleID, userName)
 		end
