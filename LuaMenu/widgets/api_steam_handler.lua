@@ -103,16 +103,17 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 		lobby:SetSteamDlc(myDlc)
 	end
 
-	if storedFriendList then
-		for i = 1, #storedFriendList do
-			steamFriendByID[storedFriendList[i]] = true
+	if friendList then
+		for i = 1, #friendList do
+			steamFriendByID[friendList[i]] = true
 		end
 	end
 
 	WG.LoginWindowHandler.TrySimpleSteamLogin()
 
 	if lobby.status == "connected" then
-		AddSteamFriends(storedFriendList)
+		AddSteamFriends(friendList)
+		storedFriendList = nil
 	else
 		storedFriendList = friendList
 	end

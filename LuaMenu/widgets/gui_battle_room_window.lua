@@ -2121,14 +2121,14 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 
 	local function OnSaidBattle(listener, userName, message)
 		local myUserName = battleLobby:GetMyUserName()
-		local iAmMentioned = myUserName and userName ~= myUserName and string.find(message, myUserName)
+		local iAmMentioned = myUserName and userName ~= myUserName and string.find(message, myUserName, 1, true)
 		local chatColour = (iAmMentioned and CHAT_MENTION) or nil
 		battleRoomConsole:AddMessage(message, userName, false, chatColour, false)
 	end
 
 	local function OnSaidBattleEx(listener, userName, message)
 		local myUserName = battleLobby:GetMyUserName()
-		local iAmMentioned = myUserName and userName ~= myUserName and string.find(message, myUserName)
+		local iAmMentioned = myUserName and userName ~= myUserName and string.find(message, myUserName, 1, true)
 		local chatColour = (iAmMentioned and CHAT_MENTION) or CHAT_ME
 		battleRoomConsole:AddMessage(message, userName, false, chatColour, true)
 	end

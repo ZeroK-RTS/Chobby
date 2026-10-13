@@ -291,7 +291,7 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 				if Spring.GetGameName() == "" then
 					self:TryToWatchBattle(battleID, battle)
 				else
-					WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to watch/rejoin this one?", nil, 315, 200)
+					WG.Chobby.ConfirmationPopup(function() self:TryToWatchBattle(battleID, battle) end, "Are you sure you want to leave your current game to watch/rejoin this one?", nil, 315, 200)
 				end
 			end
 		},
