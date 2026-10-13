@@ -294,8 +294,7 @@ function externalFunctions.RetryDownload(name, fileType)
 	end
 
 	externalFunctions.QueueDownload(name, fileType, removedDownloads[index].priority)
-	removedDownloads[index] = removedDownloads[#removedDownloads]
-	removedDownloads[#removedDownloads] = nil
+	table.remove(removedDownloads, index)
 	requestUpdate = true
 	return true
 end
@@ -306,8 +305,7 @@ function externalFunctions.RemoveRemovedDownload(name, fileType)
 		return false
 	end
 
-	removedDownloads[index] = removedDownloads[#removedDownloads]
-	removedDownloads[#removedDownloads] = nil
+	table.remove(removedDownloads, index)
 	requestUpdate = true
 	return true
 end
