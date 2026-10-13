@@ -733,6 +733,10 @@ function BattleListWindow:UpdateTimers()
 		end
 
 		local battle = lobby:GetBattle(battleID)
+		local gameCaption = items.battleButton:GetChildByName("gameCaption")
+		if battle and gameCaption then
+			gameCaption:SetCaption(self:_MakeGameCaption(battle))
+		end
 		local runningTimeCaption = items.battleButton:GetChildByName("runningTimeCaption")
 		if battle and runningTimeCaption then
 			local modeName = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
@@ -900,6 +904,10 @@ function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 		runningImage.file = BATTLE_NOT_RUNNING
 	end
 	runningImage:Invalidate()
+	local gameCaption = items.battleButton:GetChildByName("gameCaption")
+	if gameCaption then
+		gameCaption:SetCaption(self:_MakeGameCaption(battle))
+	end
 	self:RecalculateOrder(battleID)
 end
 
