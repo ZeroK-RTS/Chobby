@@ -233,7 +233,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 					if Spring.GetGameName() == "" then
 						RejoinBattleFunc()
 					else
-						WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to rejoin this one?", nil, 315, 200)
+						WG.Chobby.ConfirmationPopup(RejoinBattleFunc, i18n("leave_game_to_rejoin"), nil, 315, 200)
 					end
 				else
 					if battleLobby.name == "singleplayer" then
@@ -881,7 +881,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 							height = 30,
 							valign = "center",
 							objectOverrideFont = WG.Chobby.Configuration:GetFont(3),
-							caption = "Waiting List",
+							caption = i18n("waiting_list"),
 							parent = teamHolder,
 						}
 						waitingLine = Line:New {
@@ -1457,7 +1457,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 				local mapName = candidates[i].displayName or candidates[i].name
 				multiPollOpt[i].imMinimap.file, multiPollOpt[i].imMinimap.checkFileExists = config:GetMinimapSmallImage(candidates[i].name)
 				multiPollOpt[i].imMinimap:Invalidate()
-				multiPollOpt[i].button.tooltip = "Vote for " .. mapName
+				multiPollOpt[i].button.tooltip = i18n("vote_for") .. mapName
 			end
 		end
 	end

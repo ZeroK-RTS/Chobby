@@ -275,7 +275,7 @@ local function GetProfileHandler()
 					height = 22,
 					align = "right",
 					objectOverrideFont = WG.Chobby.Configuration:GetFont(2),
-					caption = "Awards:",
+					caption = i18n("awards"),
 					parent = awardsHolder,
 				}
 			end
@@ -341,15 +341,15 @@ local function InitializeControls(window)
 	lowerRight:AddChild(friendPanel.window)
 
 	-- Populate link panel
-	AddLinkButton(lowerLeft, "Edit Commander", "Edit custom commanders for use in games on the Zero-K server.",
+	AddLinkButton(lowerLeft, i18n("edit_commander"), i18n("edit_commander_tooltip"),
 		"https://zero-k.info/My/Commanders", true, 0, 0, 0, "80.5%")
-	AddLinkButton(lowerLeft, "Ladder Ratings",  "View detailed ladder statistics and charts.",
+	AddLinkButton(lowerLeft, i18n("ladder_ratings"), i18n("ladder_ratings_tooltip"),
 		"https://zero-k.info/Charts/Ratings?RatingCategory=1&UserId=_USER_ID_", true, 0, 0, "20.5%", "60.5%")
-	AddLinkButton(lowerLeft, "Replay List",     "View and comment on your recent games on the Zero-K server.",
+	AddLinkButton(lowerLeft, i18n("replay_list"), i18n("replay_list_tooltip"),
 		"https://zero-k.info/Battles?Title=&Map=&PlayersFrom=&PlayersTo=&Age=0&Mission=0&Bots=0&Rank=8&Victory=0&UserId=_USER_ID_", true, 0, 0, "40.5%", "40.5%")
-	AddLinkButton(lowerLeft, "Recent Posts",    "View your recently posted in forum threads.",
+	AddLinkButton(lowerLeft, i18n("recent_posts"), i18n("recent_posts_tooltip"),
 		"https://zero-k.info/Forum?CategoryID=&Search=&OnlyUnread=false&User=_USER_NAME_&grorder=&grdesc=False&grpage=1", true, 0, 0, "60.5%", "20.5%")
-	AddLinkButton(lowerLeft, "Contact Admins",       "Send a non-report message to the moderation team. If instead you want to report a player, click on their name and select 'Report' from the dropdown menu.",
+	AddLinkButton(lowerLeft, i18n("contact_admins"), i18n("contact_admins_tooltip"),
 		"https://zero-k.info/Users/ReportToAdmin/_USER_ID_", true, 0, 0, "80.5%", 0)
 end
 

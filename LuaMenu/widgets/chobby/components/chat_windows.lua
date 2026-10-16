@@ -635,7 +635,7 @@ function ChatWindows:CreateDebugConsole()
 		end
 	end
 	self.debugConsole = Console(nil, MessageListener)
-	self.debugConsole.ebInputText.hint = "Type text here to send commands to server. Prefix with ! to simulate receiving commands from server."
+	self.debugConsole.ebInputText.hint = i18n("type_text_here_to_send_commands_to_serve")
 	table.insert(self.debugConsole.ebInputText.OnKeyPress,
 		function(obj, key, ...)
 			-- allow tabs for the debug window

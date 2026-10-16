@@ -229,7 +229,7 @@ local function GetTutorialControl()
 		height = 35,
 		align = "center",
 		objectOverrideFont = Configuration:GetFont(5),
-		caption = "Welcome to Zero-K",
+		caption = i18n("welcome_to_zero_k"),
 		parent = holder,
 	}
 
@@ -240,7 +240,7 @@ local function GetTutorialControl()
 		height = 35,
 		lineSpacing = 1,
 		objectOverrideFont = Configuration:GetFont(2),
-		text = [[The campaign is a great place to begin as it starts with a tutorial that sets you up to conquer the entire galaxy.  Play co-op with friends by inviting them via the Steam friends list before launching a mission.]],
+		text = i18n("welcome_campaign_text"),
 		parent = holder,
 	}
 
@@ -251,7 +251,7 @@ local function GetTutorialControl()
 		height = 35,
 		lineSpacing = 1,
 		objectOverrideFont = Configuration:GetFont(2),
-		text = [[Under 'Multiplayer' you'll find a list of game lobbies and matchmaker populated by our friendly community.  Join the Discord to say 'hi', or for help if you run into trouble.]],
+		text = i18n("welcome_multiplayer_text"),
 		parent = holder,
 	}
 
@@ -269,7 +269,7 @@ local function GetTutorialControl()
 		y = offset,
 		right = "18%",
 		height = 70,
-		caption = "Play the Campaign",
+		caption = i18n("play_the_campaign"),
 		objectOverrideFont = Configuration:GetButtonFont(4),
 		classname = "action_button",
 		padding = {2,4,4,4},
@@ -780,10 +780,10 @@ local function InitializeControls(window)
 	--LeaveIntentionallyBlank(rightLower, "(reserved)")
 
 	-- Populate link panel
-	AddLinkButton(leftCenter, "Website",    "Visit the Zero-K website.", "https://zero-k.info/", 0, 0, "75.5%", 0)
-	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "https://zero-k.info/Forum",   0, 0, "25.5%", "50.5%")
-	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "https://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
-	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
+	AddLinkButton(leftCenter, i18n("website"), i18n("website_tooltip"), "https://zero-k.info/", 0, 0, "75.5%", 0)
+	AddLinkButton(leftCenter, i18n("forum"), i18n("forum_tooltip"), "https://zero-k.info/Forum",   0, 0, "25.5%", "50.5%")
+	AddLinkButton(leftCenter, i18n("manual"), i18n("manual_tooltip"), "https://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
+	AddLinkButton(leftCenter, i18n("discord"), i18n("discord_tooltip"), "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
 
 
 	-- News Handler
@@ -803,7 +803,7 @@ local function InitializeControls(window)
 	lobby:AddListener("OnNewsList", OnNewsList)
 
 	-- Forum Handler
-	local forumHandler = GetNewsHandler(bottomRight, 2, true, "Recent Posts", true)
+	local forumHandler = GetNewsHandler(bottomRight, 2, true, i18n("recent_posts"), true)
 	if staticCommunityData and staticCommunityData.ForumItems then
 		forumHandler.ReplaceNews(staticCommunityData.ForumItems)
 	end

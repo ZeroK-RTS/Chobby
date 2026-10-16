@@ -33,7 +33,7 @@ function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeList
 		align = "left",
 		valign = "center",
 		objectOverrideFont = Configuration:GetFont(queueFont),
-		caption = "Queue:",
+		caption = i18n("queue"),
 	}
 
 	self.queueList = Label:New {
@@ -247,7 +247,7 @@ function Downloader:DownloadFinished(listener, downloadID)
 		if WG.WrapperLoopback and WG.WrapperLoopback.DownloadFile then
 			WG.WrapperLoopback.DownloadFile(self.downloads[downloadID].archiveName, ((self.downloads[downloadID].archiveType == "map") and "MAP") or "RAPID")
 			Chotify:Post({
-				title = "Download Failed",
+				title = i18n("download_failed"),
 				body = "Starting backup download for " .. (self.downloads[downloadID].archiveName or "???"),
 			})
 		end
@@ -279,7 +279,7 @@ function Downloader:DownloadFailed(listener, downloadID, errorID)
 	if self.wrapperAsFallback and WG.WrapperLoopback and WG.WrapperLoopback.DownloadFile then
 		WG.WrapperLoopback.DownloadFile(self.downloads[downloadID].archiveName, ((self.downloads[downloadID].archiveType == "map") and "MAP") or "RAPID")
 		Chotify:Post({
-			title = "Download Failed",
+			title = i18n("download_failed"),
 			body = "Starting backup download for " .. (self.downloads[downloadID].archiveName or "???"),
 		})
 	end

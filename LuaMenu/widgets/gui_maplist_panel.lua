@@ -240,7 +240,7 @@ local function InitializeControls()
 	}
 
 	local headings = {
-		{name = "Name", x = 62, width = 208},
+		{name = i18n("name_column"), x = 62, width = 208},
 		{name = "Size", x = 272, width = 80},
 		{name = "Type", x = 354, width = 80},
 		{name = "Terrain", x = 436, width = 172},

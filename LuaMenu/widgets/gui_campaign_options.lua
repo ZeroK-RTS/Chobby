@@ -460,7 +460,7 @@ local function InitializeScoresWindow(parent)
 		width = 700,
 		height = 30,
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(2),
-		text = "Here are your best attempts at each mission, evaluating each first by",
+		text = i18n("here_are_your_best_attempts_at_each_miss"),
 		parent = parent,
 	}
 	TextBox:New {
@@ -487,7 +487,7 @@ local function InitializeScoresWindow(parent)
 		width = 200,
 		height = 30,
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(2),
-		text = "to break ties.",
+		text = i18n("to_break_ties"),
 		parent = parent,
 	}
 	

@@ -267,7 +267,7 @@ local function InitializeControls(window)
 		height = 30,
 		parent = window,
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(3),
-		caption = "Downloads",
+		caption = i18n("downloads"),
 	}
 
 	-------------------------
@@ -286,9 +286,9 @@ local function InitializeControls(window)
 	}
 
 	local headings = {
-		{name = "Order", x = 5, width = 2*BUTTON_WIDTH + 7},
-		{name = "Name", x = 2*BUTTON_WIDTH + 12, width = STATUS_POSITION - 2*BUTTON_WIDTH - 9},
-		{name = "Status", x = STATUS_POSITION + 3, right = 5},
+		{name = i18n("order"), x = 5, width = 2*BUTTON_WIDTH + 7},
+		{name = i18n("name_column"), x = 2*BUTTON_WIDTH + 12, width = STATUS_POSITION - 2*BUTTON_WIDTH - 9},
+		{name = i18n("status"), x = STATUS_POSITION + 3, right = 5},
 	}
 
 	downloadList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)

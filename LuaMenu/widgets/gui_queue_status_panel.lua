@@ -461,7 +461,7 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 		width = 250,
 		y = 115,
 		height = 35,
-		caption = "Players accepted: 0",
+		caption = i18n("players_accepted_0"),
 		objectOverrideFont = Configuration:GetFont(3),
 		parent = readyCheckWindow,
 	}

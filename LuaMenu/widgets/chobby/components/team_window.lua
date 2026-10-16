@@ -83,7 +83,7 @@ end
 
 function TeamWindow:CreateInvitePlayerWindow()
 	local ebPlayerName = EditBox:New {
-		hint = "Player name",
+		hint = i18n("player_name"),
 		objectOverrideFont = Configuration:GetFont(2),
 		objectOverrideHintFont = Configuration:GetHintFont(2),
 		text = ""

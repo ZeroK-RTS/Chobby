@@ -280,7 +280,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		height = 20,
 		valign = 'center',
 		objectOverrideFont = Configuration:GetFont(2),
-		text = "Level: " .. (saveFile.commanderLevel + 1) .. "\nPlanets: " .. planetsCaptured,
+		text = i18n("level") .. (saveFile.commanderLevel + 1) .. "\nPlanets: " .. planetsCaptured,
 		parent = container,
 	}
 	x = x + 220
@@ -384,7 +384,7 @@ local function InitializeControls(parent, saveMode)
 	}
 
 	local headings = {
-		{name = "Name", x = 85, right = 215},
+		{name = i18n("name_column"), x = 85, right = 215},
 		{name = "Date", right = 100, width = 110},
 	}
 
