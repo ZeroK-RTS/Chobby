@@ -370,7 +370,7 @@ local function InitializeMainDisplay(parent)
 		caption = i18n("start"),
 		objectOverrideFont = Configuration:GetButtonFont(4),
 		classname = "action_button",
-		tooltip = "Starts a new run. Make sure Steam friends have already accepted their invites.",
+		tooltip = i18n("starts_a_new_run_make_sure_steam_friends"),
 		parent = parent,
 		OnClick = {
 			function()

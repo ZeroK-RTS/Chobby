@@ -207,15 +207,15 @@ local function MakeQueueControl(parentControl, pos, queueName, queueDescription,
 	local function ButtonJoinQueue(obj)
 		local banTime = GetBanTime()
 		if banTime then
-			WG.Chobby.InformationPopup("You are currently banned from matchmaking.\n" .. banTime .. " seconds remaining.")
+			WG.Chobby.InformationPopup(i18n("banned_from_matchmaking", {seconds = banTime}))
 			return
 		end
 		if not HaveRightEngineVersion() then
-			WG.Chobby.InformationPopup("Engine update required, restart the game to apply.")
+			WG.Chobby.InformationPopup(i18n("engine_update_required_game"))
 			return
 		end
 		if requiredResourceCount ~= 0 then
-			WG.Chobby.InformationPopup("All required maps and games must be downloaded before you can join matchmaking.")
+			WG.Chobby.InformationPopup(i18n("all_downloads_required_mm"))
 			return
 		end
 
@@ -266,7 +266,7 @@ local function MakeQueueControl(parentControl, pos, queueName, queueDescription,
 		right = 5,
 		align = "bottom",
 		objectOverrideFont = Configuration:GetFont(1),
-		text = "Party too large",
+		text = i18n("party_too_large"),
 		parent = queueHolder
 	}
 	labelDisabled:SetVisibility(false)

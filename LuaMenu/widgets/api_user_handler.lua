@@ -248,7 +248,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 			width = 100,
 			height = 30,
 			objectOverrideFont = Configuration:GetFont(1),
-			caption = "No Actions",
+			caption = i18n("no_actions"),
 		}
 	end
 	return comboOptions

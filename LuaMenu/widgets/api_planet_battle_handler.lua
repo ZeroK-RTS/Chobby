@@ -383,7 +383,7 @@ function PlanetBattleHandler.StartBattle(planetID, planetData)
 	if Spring.GetGameName() == "" then
 		StartBattleFunc()
 	else
-		WG.Chobby.ConfirmationPopup(StartBattleFunc, "Are you sure you want to leave your current game to play this mission?", nil, 315, 200)
+		WG.Chobby.ConfirmationPopup(StartBattleFunc, i18n("leave_game_to_play_mission"), nil, 315, 200)
 	end
 end
 

@@ -375,13 +375,13 @@ local function InitializeControls(parentControl)
 	}
 
 	local headingsCommanders = {
-		{name = "Name", x = 88, width = 240},
+		{name = i18n("name_column"), x = 88, width = 240},
 		{name = "Chassis", x = 88 + 240, width = 140},
 	}
 	local commanderList = WG.Chobby.SortableList(configListHolder, headingsCommanders, 80, 1)
 
 	local headingsModules = {
-		{name = "Name", x = 88, width = 300},
+		{name = i18n("name_column"), x = 88, width = 300},
 		{name = "Type", x = 88 + 300, width = 140},
 		{name = "Cost", x = 88 + 300 + 140, width = 64}
 	}

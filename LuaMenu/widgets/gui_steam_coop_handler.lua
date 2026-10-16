@@ -299,7 +299,7 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 		alreadyIn[steamID] = true
 	end
 
-	MakeExclusiveInformationPopup((userName or "???") .. " has joined your P2P party. Play a coop game by starting any game via the Singleplayer menu.")
+	MakeExclusiveInformationPopup(i18n("p2p_party_joined", {name = userName or "???"}))
 
 	coopClient = false
 	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
@@ -393,7 +393,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 	if coopClient then
 		local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 		if statusAndInvitesPanel and statusAndInvitesPanel.GetChildByName("coopPanel") then
-			WG.Chobby.InformationPopup("Only the host of the coop party can launch games.")
+			WG.Chobby.InformationPopup(i18n("coop_only_host_launch"))
 			return
 		end
 		Spring.Echo("LUA_ERRRUN", "coopClient set without visible coop panel.")
