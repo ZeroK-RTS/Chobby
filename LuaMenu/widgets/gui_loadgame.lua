@@ -192,7 +192,11 @@ local function LoadGameByFilename(filename)
 		MyPlayerName=__PLAYERNAME__;
 	}
 	]]
-			script = script:gsub("__FILE__", filename .. ext)
+			local saveFile = filename .. ext
+			if string.find(saveFile, ";", 1, true) then
+				saveFile = '"' .. saveFile .. '"'
+			end
+			script = script:gsub("__FILE__", function() return saveFile end)
 			script = script:gsub("__PLAYERNAME__", saveData.playerName)
 			WG.Chobby.localLobby:StartGameFromString(script)
 		end
