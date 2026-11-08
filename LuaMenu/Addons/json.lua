@@ -191,6 +191,10 @@ function decode_scanArray(s,startPos)
 		end
 		if (curChar==',') then
 			startPos = decode_scanWhitespace(s,startPos+1)
+			-- a trailing comma before the closing bracket is accepted, as Lua tables allow
+			if string.sub(s,startPos,startPos)==']' then
+				return array, startPos+1
+			end
 		end
 		assert(startPos<=stringLen, 'JSON String ended unexpectedly scanning array.')
 		object, startPos = json.decode(s,startPos)
@@ -282,6 +286,10 @@ function decode_scanObject(s,startPos)
 		end
 		if (curChar==',') then
 			startPos = decode_scanWhitespace(s,startPos+1)
+			-- a trailing comma before the closing brace is accepted, as Lua tables allow
+			if string.sub(s,startPos,startPos)=='}' then
+				return object,startPos+1
+			end
 		end
 		assert(startPos<=stringLen, 'JSON string ended unexpectedly scanning object.')
 		-- Scan the key
