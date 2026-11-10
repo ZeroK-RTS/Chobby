@@ -26,6 +26,10 @@ local function UpdateAiListWindow(gameName, engineName)
 	if aiPopup then
 		aiPopup:ClosePopup()
 	end
+	if aiListWindow then
+		aiListWindow.window:Dispose()
+		aiListWindow:unregister()
+	end
 	aiListWindow = WG.Chobby.AiListWindow(gameName, engineName)
 	aiListWindow.window:Hide()
 end

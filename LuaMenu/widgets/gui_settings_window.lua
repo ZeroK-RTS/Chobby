@@ -1587,7 +1587,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		newValue = tonumber(newValue)
 
 		if not newValue then
-			obj:SetText(FormatFunc(Configuration.settingsMenuValues[data.name]))
+			obj:SetText(FormatFunc(Configuration.settingsMenuValues[data.name] or defaults[data.name]))
 			return
 		end
 
