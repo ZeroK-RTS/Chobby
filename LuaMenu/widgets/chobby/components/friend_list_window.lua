@@ -152,8 +152,8 @@ function FriendListWindow:OnFriendRequest(userName)
 			title = i18n("New friend request"),
 			body  = userControl,
 		})
-		self:AddFriendRequest(userName)
 	end
+	self:AddFriendRequest(userName)
 end
 
 function FriendListWindow:OnFriendRequestList(friendRequests)
