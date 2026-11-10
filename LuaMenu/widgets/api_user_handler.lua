@@ -784,8 +784,7 @@ local function GetUserControls(userName, opts)
 	end
 
 	if autoResize then
-		userControls.mainControl.OnResize = userControls.mainControl.OnResize or {}
-		userControls.mainControl.OnResize[#userControls.mainControl.OnResize + 1] = function (obj, sizeX, sizeY)
+		local function ResizeFunc(obj, sizeX, sizeY)
 			local maxWidth = sizeX - userNameStart - 40
 			local truncatedName = StringUtilities.GetTruncatedStringWithDotDot(userName, userControls.tbName.font, maxWidth)
 			userControls.tbName:SetText(truncatedName)
@@ -801,6 +800,19 @@ local function GetUserControls(userName, opts)
 				end
 			end
 		end
+
+		-- A reinitialized control keeps its listeners, so replace the previous resize function instead of adding another.
+		local onResize = userControls.mainControl.OnResize or {}
+		userControls.mainControl.OnResize = onResize
+		local index = #onResize + 1
+		for i = 1, #onResize do
+			if onResize[i] == userControls.resizeFunc then
+				index = i
+				break
+			end
+		end
+		onResize[index] = ResizeFunc
+		userControls.resizeFunc = ResizeFunc
 	end
 
 	-- This is always checked against main lobby.

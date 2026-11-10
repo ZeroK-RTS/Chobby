@@ -2151,6 +2151,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 
 	local function OnDisposeFunction()
 		emptyTeamIndex = 0
+		battleRoomConsole:Delete()
 
 		oldLobby:RemoveListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
 		oldLobby:RemoveListener("OnUpdateUserBattleStatus", OnUpdateUserBattleStatus)

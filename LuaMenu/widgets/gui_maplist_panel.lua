@@ -197,7 +197,7 @@ local function InitializeControls()
 
 		local textToSearch = sortData[6]
 		for i = 1, #filterTerms do
-			if not string.find(textToSearch, filterTerms[i]) then
+			if not string.find(textToSearch, filterTerms[i], 1, true) then
 				return false
 			end
 		end
