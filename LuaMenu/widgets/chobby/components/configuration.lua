@@ -906,7 +906,7 @@ function Configuration:GetModoptions(gameName)
 		end
 	end
 	if alreadyLoaded then
-		return VFS.Include("modoptions.lua", nil, VFS.ZIP)
+		return ReadModoptions()
 	end
 	return VFS.UseArchive(gameName, ReadModoptions)
 end
