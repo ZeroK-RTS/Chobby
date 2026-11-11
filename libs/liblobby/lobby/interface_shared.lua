@@ -26,7 +26,7 @@ function Interface:init()
 	self.connectionTimeout = 50
 
 	-- private
-	self.raggedJsonStore = {}
+	self.receiveBuffer = ""
 
 	self:super("init")
 end
@@ -39,6 +39,8 @@ function Interface:Connect(host, port, user, password, cpu, localIP, lobbyVersio
 		self.client:close()
 	end
 	self.client = socket.tcp()
+	-- Data from an old connection must not join the commands of the new one.
+	self.receiveBuffer = ""
 	self.client:settimeout(0)
 
 	self.loginData = {user, password, cpu, localIP, lobbyVersion}
@@ -258,50 +260,17 @@ function Interface:_SocketUpdate()
 		if (status == "timeout" or status == nil) and commandsStr ~= nil and commandsStr ~= "" then
 			Spring.Log(LOG_SECTION, LOG.DEBUG, commandsStr)
 			
-			local commands = explode("\n", commandsStr)
-			
-			if #commands > 0 then
-				local allFail = true
-				local newRagged = {}
-				for i = 1, #self.raggedJsonStore do
-					local internalSuccess
-					local success = pcall(function () internalSuccess = self:CommandReceived(self.raggedJsonStore[i].command .. commands[1]) end)
-					if (success and internalSuccess) then
-						allFail = false
-					elseif self.raggedJsonStore[i].tries < 10 then
-						self.raggedJsonStore[i].tries = self.raggedJsonStore[i].tries + 1
-						newRagged[#newRagged + 1] = self.raggedJsonStore[i]
-					end
-				end
-				self.raggedJsonStore = newRagged
-				if #self.raggedJsonStore > 0 and config and config.debugRawMessages then
-					Spring.Echo("allFail", allFail)
-					Spring.Utilities.TableEcho(self.raggedJsonStore, "raggedJsonStore")
-					Spring.Utilities.TableEcho(commands, "commands")
-				end
-				if allFail then
-					local internalSuccess
-					local success = pcall(function () internalSuccess = self:CommandReceived(commands[1]) end)
-					if not (success and internalSuccess) then
-						Spring.Echo("Processing failed for", commands[1])
-						if #commands == 1 then
-							self.raggedJsonStore[#self.raggedJsonStore + 1] = {tries = 0, command = commands[1]}
-						end
-					end
-				end
-				for i = 2, #commands-1 do
-					local command = commands[i]
-					if command ~= nil then
-						self:CommandReceived(command)
-					end
-				end
-				if #commands > 1 then
-					local internalSuccess
-					local success = pcall(function () internalSuccess = self:CommandReceived(commands[#commands]) end)
-					if not (success and internalSuccess) then
-						self.raggedJsonStore[#self.raggedJsonStore + 1] = {tries = 0, command = commands[#commands]}
-					end
-				end
+			if config and config.debugRawMessages then
+				Spring.Echo("receiveBuffer", self.receiveBuffer)
+				Spring.Echo("commandsStr", commandsStr)
+			end
+			-- A read can end inside a command. Keep the incomplete last line until the rest arrives.
+			local commands = explode("\n", self.receiveBuffer .. commandsStr)
+			self.receiveBuffer = commands[#commands]
+			for i = 1, #commands - 1 do
+				local command = commands[i]
+				xpcall(function() self:CommandReceived(command) end,
+					function(err) self:_PrintError(err) end )
 			end
 		elseif status == "closed" then
 			Spring.Log(LOG_SECTION, LOG.INFO, "Disconnected from server.")
