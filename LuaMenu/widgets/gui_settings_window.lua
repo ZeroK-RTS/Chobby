@@ -64,11 +64,17 @@ local function ToPercent(value)
 	return tostring(math.floor(0.5 + value)) .. "%"
 end
 
+local function GetUnscaledWindowGeometry()
+	-- Window settings use pixels. Chobby's override returns UI-scaled dimensions.
+	local getWindowGeometry = (Spring.Orig and Spring.Orig.GetWindowGeometry) or Spring.GetWindowGeometry
+	return getWindowGeometry()
+end
+
 local function SaveWindowPos(width, height, x, y)
 	local Configuration = WG.Chobby.Configuration
 
 	if not width then
-		width, height, x, y = Spring.GetWindowGeometry()
+		width, height, x, y = GetUnscaledWindowGeometry()
 	end
 	local screenX, screenY = Spring.GetScreenGeometry()
 	y = screenY - height - y
@@ -134,7 +140,7 @@ local function SetLobbyFullscreenMode_Sane(mode, borderOverride)
 		Spring.SetConfigInt("WindowPosX", 0, false)
 		Spring.SetConfigInt("WindowPosY", 0, false)
 	elseif mode == 2 then -- Windowed
-		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
+		local winSizeX, winSizeY, winPosX, winPosY = GetUnscaledWindowGeometry()
 		winPosX = Configuration.window_WindowPosX or winPosX
 		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
 		winSizeY = Configuration.window_YResolutionWindowed or winSizeY
@@ -241,7 +247,7 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 	elseif mode == 2 then -- Windowed
-		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
+		local winSizeX, winSizeY, winPosX, winPosY = GetUnscaledWindowGeometry()
 		winPosX = Configuration.window_WindowPosX or winPosX
 		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
 		winSizeY = Configuration.window_YResolutionWindowed or winSizeY
@@ -1948,7 +1954,7 @@ end
 --		return
 --	end
 --
---	local width, height, x, y = Spring.GetWindowGeometry()
+--	local width, height, x, y = GetUnscaledWindowGeometry()
 --	if width == oldWidth and height == oldHeight and x == oldX and y == oldY then
 --		return
 --	end
