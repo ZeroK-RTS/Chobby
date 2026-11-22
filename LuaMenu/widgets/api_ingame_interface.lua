@@ -474,7 +474,6 @@ function widget:Initialize()
 	WG.IngameInterface = externalFunctions
 	
 	local lobby = WG.LibLobby.lobby
-	lobby:AddListener("OnBattleAboutToStart", OnBattleStartMultiplayer)
 	lobby:AddListener("OnCommandBuffered", OnCommandBuffered)
 	lobby:AddListener("OnLeftBattle", PlayersUpdate)
 	lobby:AddListener("OnJoinedBattle", PlayersUpdate)
