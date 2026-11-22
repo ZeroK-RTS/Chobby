@@ -362,6 +362,9 @@ local function GetModuleList(parentControl, ClickFunc, left, right)
 		padding = {4, 4, 4, 4},
 		parent = parentControl,
 	}
+	-- Module buttons add name box resize functions to the list; Clear removes them with the buttons.
+	listScroll.OnResize = listScroll.OnResize or {}
+	local baseResizeCount = #listScroll.OnResize
 
 	local offset = 0
 	local hightlightEmpty = false
@@ -435,6 +438,9 @@ local function GetModuleList(parentControl, ClickFunc, left, right)
 		offset = 0
 		buttonList = {}
 		listScroll:ClearChildren()
+		for i = #listScroll.OnResize, baseResizeCount + 1, -1 do
+			listScroll.OnResize[i] = nil
+		end
 	end
 
 	function externalFunctions.SetHighlightEmpty(newHightlightEmpty)
