@@ -32,21 +32,21 @@ function ChatWindows:init()
 	)
 
 	self.onJoined = function(listener, chanName, userName)
-		if self.currentTab and self.userListPanels[self.currentTab] then
+		if chanName == self.currentTab and self.userListPanels[self.currentTab] then
 			self.userListPanels[self.currentTab]:OnJoined(userName)
 		end
 	end
 	lobby:AddListener("OnJoined", self.onJoined)
 
 	self.onLeft = function(listener, chanName, userName)
-		if self.currentTab and self.userListPanels[self.currentTab] then
+		if chanName == self.currentTab and self.userListPanels[self.currentTab] then
 			self.userListPanels[self.currentTab]:OnLeft(userName)
 		end
 	end
 	lobby:AddListener("OnLeft", self.onLeft)
 
 	self.onClients = function(listener, chanName, clients)
-		if self.currentTab and self.userListPanels[self.currentTab] then
+		if chanName == self.currentTab and self.userListPanels[self.currentTab] then
 			self.userListPanels[self.currentTab]:Update()
 		end
 	end
@@ -421,7 +421,7 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 	if not channelConsole then
 		return
 	end
-	local iAmMentioned = lobby:GetMyUserName() and (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+	local iAmMentioned = lobby:GetMyUserName() and (string.find(message, lobby:GetMyUserName(), 1, true) and userName ~= lobby:GetMyUserName())
 	local chatColour = (iAmMentioned and notifyColor) or chatColor
 	if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
 		self.activeUnreadMessages = self.activeUnreadMessages + 1
@@ -646,8 +646,8 @@ function ChatWindows:CreateDebugConsole()
 	)
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
-			command = self:RedactMessage(command)
 			if Configuration.activeDebugConsole then
+				command = self:RedactMessage(command)
 				Spring.Log("ServerMessage", LOG.NOTICE, command)
 				self.debugConsole:AddMessage("<--" .. command)
 			end
@@ -655,8 +655,8 @@ function ChatWindows:CreateDebugConsole()
 	)
 	lobby:AddListener("OnCommandSent",
 		function(listner, command)
-			command = self:RedactMessage(command)
 			if Configuration.activeDebugConsole then
+				command = self:RedactMessage(command)
 				Spring.Log("ClientMessage", LOG.NOTICE, command)
 				self.debugConsole:AddMessage("-->" .. command)
 			end

@@ -318,7 +318,7 @@ local function MakeQueueControl(parentControl, pos, queueName, queueDescription,
 	}
 
 	local function UpdateButton()
-		if maxPartySize and (currentPartySize > maxPartySize) then
+		if (not inQueue) and maxPartySize and (currentPartySize > maxPartySize) then
 			btnJoin:SetVisibility(false)
 			btnLeave:SetVisibility(false)
 			labelDisabled:SetVisibility(true)
@@ -396,6 +396,8 @@ local function MakeQueueControl(parentControl, pos, queueName, queueDescription,
 
 	function externalFunctions.UpdateQueueInformation(newName, newDescription, newPlayers, newWaiting, newMaxPartySize)
 		if newName then
+			maxPartySize = newMaxPartySize
+			UpdateButton()
 			lblTitle:SetText(newName)
 		end
 		if newDescription then
