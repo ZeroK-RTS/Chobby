@@ -215,7 +215,7 @@ local function StartBattleForReal(planetID, planetData)
 			shortName = shortName .. bitExtension
 		end
 
-		local availibleUnits = aiData.unlocks
+		local availibleUnits = aiData.unlocks and Spring.Utilities.CopyTable(aiData.unlocks)
 		local extraUnits = aiData.difficultyDependantUnlocks and aiData.difficultyDependantUnlocks[missionDifficulty]
 		if availibleUnits and extraUnits then
 			for j = 1, #extraUnits do

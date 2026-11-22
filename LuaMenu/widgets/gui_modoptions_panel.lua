@@ -531,11 +531,11 @@ local function CreateModoptionWindow()
 		for key, value in pairs(modoptionDefaults) do
 			UpdateControlValue(key, value)
 		end
-		localModoptions = {}
+		localModoptions = Spring.Utilities.CopyTable(modoptionDefaults)
 		
 		mapSelection = false
 		modSelection = false
-		tpyeSelection = false
+		typeSelection = false
 		
 		buttonCustom.caption = i18n("select_custom_mode")
 		if buttonMods then

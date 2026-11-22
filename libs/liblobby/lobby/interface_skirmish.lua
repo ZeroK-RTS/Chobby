@@ -315,10 +315,10 @@ function InterfaceSkirmish:StartReplay(replayFilename, myName, hostPort)
 		replayFilename = "demos/" .. replayFilename
 	end
 	
-	scriptTxt = scriptTxt:gsub("__FILE__", replayFilename)
-                         :gsub("__IP__", "127.0.0.1")
-                         :gsub("__MY_PLAYER_NAME__", myName or "(spec)")
-                         :gsub("__PORT__", hostPort or 0)
+	scriptTxt = scriptTxt:gsub("__FILE__", function() return replayFilename end)
+	                     :gsub("__IP__", "127.0.0.1")
+	                     :gsub("__MY_PLAYER_NAME__", function() return myName or "(spec)" end)
+	                     :gsub("__PORT__", hostPort or 0)
 	self:_CallListeners("OnBattleAboutToStart", "replay")
 
 	Spring.Echo(scriptTxt)

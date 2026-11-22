@@ -29,7 +29,7 @@ local IMAGE_OFFLINE      = IMAGE_DIR .. "offline.png"
 --------------------------------------------------------------------------------
 -- Lobby listeners
 
-local onAccepted, onDisconnected, onPong
+local onAccepted, onDisconnected, onPong, onAddUser
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -154,7 +154,7 @@ local function InitializeControls(window)
 		--UpdateLatency()
 	end
 
-	local function onAddUser(listener, userName, status)
+	onAddUser = function(listener, userName, status)
 		if userName == lobby:GetMyUserName() and status.accountID then
 			WG.Chobby.Configuration:SetConfigValue("myAccountID", status.accountID)
 		end
@@ -228,6 +228,8 @@ function widget:Shutdown()
 	if lobby then
 		lobby:RemoveListener("OnAccepted", onAccepted)
 		lobby:RemoveListener("OnPong", onPong)
+		lobby:RemoveListener("OnDisconnected", onDisconnected)
+		lobby:RemoveListener("OnAddUser", onAddUser)
 	end
 end
 

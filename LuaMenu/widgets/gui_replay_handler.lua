@@ -210,7 +210,7 @@ local function InitializeControls(parentControl)
 			loadingPanel:BringToFront()
 			local items = {}
 			for i = 1, PARTIAL_ADD_NUMBER do
-				if index >= #replays then
+				if index > #replays then
 					if moreButton then
 						moreButton:SetVisibility(false)
 					end
