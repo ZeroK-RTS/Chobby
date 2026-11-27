@@ -43,7 +43,7 @@ local function CheckCancelProposal(message)
 	end
 	if currentProposal then
 		Chotify:Post({
-			title = "Battle Proposal",
+			title = i18n("battle_proposal"),
 			body = "Ongoing proposal ended.",
 		})
 	end
@@ -87,7 +87,7 @@ local function CheckProposalSent(prop)
 	                   and prop.minsize == currentProposal.minsize
 	                   and prop.maxsize == currentProposal.maxsize then
 		Chotify:Post({
-			title = "Battle Proposal",
+			title = i18n("battle_proposal"),
 			body = "Invite for ongoing proposal sent",
 		})
 		return false
@@ -99,7 +99,7 @@ local function CheckProposalSent(prop)
 	currentProposal.acceptedPlayers = {}
 	
 	Chotify:Post({
-		title = "Battle Proposal",
+		title = i18n("battle_proposal"),
 		body = "New proposal sent.\nUse !endproposal to cancel.",
 	})
 	return true
@@ -136,13 +136,13 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 	if myProposal then
 		if skillTooLow then
 			Chotify:Post({
-				title = "Battle Proposal",
+				title = i18n("battle_proposal"),
 				body = "Your skill rating is too low for your proposal",
 			})
 			return onTextClick, textTooltip
 		elseif skillTooHigh then
 			Chotify:Post({
-				title = "Battle Proposal",
+				title = i18n("battle_proposal"),
 				body = "Your skill rating is too high for your proposal",
 			})
 			return onTextClick, textTooltip
@@ -164,7 +164,7 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 						acceptedProposal = userName
 						WG.LibLobby.lobby:BattleProposalRespond(userName, true)
 						Chotify:Post({
-							title = "Battle Proposal",
+							title = i18n("battle_proposal"),
 							body = "Signed up for " .. userName .. "'s battle",
 						})
 					end
@@ -228,7 +228,7 @@ function DelayedInitialize()
 		if currentProposal.battleHostComplete then
 			lobby:BattleProposalBattleInvite(userName, currentProposal.battleID, currentProposal.password)
 			Chotify:Post({
-				title = "Battle Proposal",
+				title = i18n("battle_proposal"),
 				body = userName .. " accepted and joined.",
 			})
 			return
@@ -237,7 +237,7 @@ function DelayedInitialize()
 		currentProposal.currentPlayers = currentProposal.currentPlayers + 1
 		currentProposal.acceptedPlayers[userName] = true
 		Chotify:Post({
-			title = "Battle Proposal",
+			title = i18n("battle_proposal"),
 			body = userName .. " accepted.\nPlayers: " .. currentProposal.currentPlayers .. "/" .. currentProposal.minsize,
 		})
 		
@@ -258,7 +258,7 @@ function DelayedInitialize()
 				currentProposal.openingBattleName = (lobby:GetMyUserName() or "Player") .. "'s Proposed Battle"
 				lobby:HostBattle(currentProposal.openingBattleName, currentProposal.password, "Team")
 				Chotify:Post({
-					title = "Battle Proposal",
+					title = i18n("battle_proposal"),
 					body = "Hosting game",
 				})
 			end
@@ -291,7 +291,7 @@ function DelayedInitialize()
 		lobby:JoinBattle(battleID, password)
 		acceptedProposal = false
 		Chotify:Post({
-			title = "Battle Proposal",
+			title = i18n("battle_proposal"),
 			body = "Joining " .. userName .. "'s battle",
 		})
 	end

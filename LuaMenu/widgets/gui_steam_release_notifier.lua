@@ -53,7 +53,7 @@ local function SteamCheckPopup()
 		y = 23,
 		height = 35,
 		objectOverrideFont = Configuration:GetFont(4),
-		text = "Zero-K is on Steam!",
+		text = i18n("zero_k_is_on_steam"),
 		parent = steamWindow,
 	}
 
@@ -77,7 +77,7 @@ local function SteamCheckPopup()
 		y = offset,
 		right = "26%",
 		height = 65,
-		caption = "Store Page",
+		caption = i18n("store_page"),
 		objectOverrideFont = Configuration:GetButtonFont(4),
 		classname = "action_button",
 		padding = {2,4,4,4},
@@ -95,7 +95,7 @@ local function SteamCheckPopup()
 		y = offset,
 		right = "27%",
 		height = 42,
-		caption = "Settings Guide",
+		caption = i18n("settings_guide"),
 		objectOverrideFont = Configuration:GetButtonFont(3),
 		classname = "option_button",
 		padding = {2,4,4,4},

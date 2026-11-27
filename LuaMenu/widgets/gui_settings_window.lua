@@ -449,7 +449,7 @@ local function ShowWindowGeoConfig(name, modeNum, modeName, retreatPadding)
 		SetLobbyFullscreenMode(modeNum, borders)
 
 		manualWindow:Dispose()
-		local confirmation = WG.Chobby.ConfirmationPopup(FinalApplyFunc, "Keep these settings?", nil, 315, 170, i18n("yes"), i18n("no"), FinalApplyFailureFunc, true, 5)
+		local confirmation = WG.Chobby.ConfirmationPopup(FinalApplyFunc, i18n("keep_settings"), nil, 315, 170, i18n("yes"), i18n("no"), FinalApplyFailureFunc, true, 5)
 	end
 
 	local function CancelFunc()
@@ -555,7 +555,7 @@ local function ShowManualFullscreenEntryWindow(name)
 		SetLobbyFullscreenMode(5, resolution)
 
 		manualWindow:Dispose()
-		local confirmation = WG.Chobby.ConfirmationPopup(FinalApplyFunc, "Keep these settings?", nil, 315, 170, i18n("yes"), i18n("no"), FinalApplyFailureFunc, true, 5)
+		local confirmation = WG.Chobby.ConfirmationPopup(FinalApplyFunc, i18n("keep_settings"), nil, 315, 170, i18n("yes"), i18n("no"), FinalApplyFailureFunc, true, 5)
 	end
 
 	local function CancelFunc()
@@ -750,7 +750,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Split Panel Mode",
+		caption = i18n("split_panel_mode"),
 	}
 	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
@@ -782,7 +782,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Chat Font Size",
+		caption = i18n("chat_font_size"),
 	}
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
@@ -812,7 +812,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Menu Music Volume",
+		caption = i18n("menu_music_volume"),
 	}
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
@@ -842,7 +842,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Notification Volume",
+		caption = i18n("notification_volume"),
 	}
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
@@ -872,7 +872,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Background Brightness",
+		caption = i18n("background_brightness"),
 	}
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
@@ -902,7 +902,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Game Overlay Opacity",
+		caption = i18n("game_overlay_opacity"),
 	}
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
@@ -932,8 +932,8 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Coop Connection Delay",
-		tooltip = "Hosts with poor internet may require their clients to add a delay in order to connect.",
+		caption = i18n("coop_connection_delay"),
+		tooltip = i18n("hosts_with_poor_internet_may_require_the"),
 	}
 	children[#children + 1] = Trackbar:New {
 		x = COMBO_X,
@@ -1007,7 +1007,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Clear Channel History",
+		caption = i18n("clear_channel_history"),
 	}
 	children[#children + 1] = Button:New {
 		x = COMBO_X,
@@ -1015,7 +1015,7 @@ local function GetLobbyTabControls()
 		width = COMBO_WIDTH,
 		height = 30,
 		caption = "Apply",
-		tooltip = "Clears chat history displayed in the lobby, does not affect the chat history files saved to your computer.",
+		tooltip = i18n("clears_chat_history_displayed_in_the_lob"),
 		objectOverrideFont = Configuration:GetFont(2),
 		OnClick = {
 			function (obj)
@@ -1034,7 +1034,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Delete Path Cache",
+		caption = i18n("delete_path_cache"),
 	}
 	children[#children + 1] = Button:New {
 		x = COMBO_X,
@@ -1042,7 +1042,7 @@ local function GetLobbyTabControls()
 		width = COMBO_WIDTH,
 		height = 30,
 		caption = "Apply",
-		tooltip = "Deletes path cache. May solve desync.",
+		tooltip = i18n("deletes_path_cache_may_solve_desync"),
 		objectOverrideFont = Configuration:GetFont(2),
 		OnClick = {
 			function (obj)
@@ -1085,7 +1085,7 @@ local function GetVoidTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(3),
-		text = "Warning: These settings are experimental and not officially supported, proceed at your own risk.",
+		text = i18n("warning_these_settings_are_experimental"),
 	}
 	offset = offset + 65
 
@@ -1121,7 +1121,7 @@ local function GetVoidTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Disable Lobby",
+		caption = i18n("disable_lobby"),
 	}
 	children[#children + 1] = Button:New {
 		x = COMBO_X,
@@ -1129,11 +1129,11 @@ local function GetVoidTabControls()
 		width = COMBO_WIDTH,
 		height = 30,
 		caption = "Disable",
-		tooltip = "Disables the entire lobby and menu.",
+		tooltip = i18n("disables_the_entire_lobby_and_menu"),
 		objectOverrideFont = Configuration:GetFont(2),
 		OnClick = {
 			function (obj)
-				WG.Chobby.ConfirmationPopup(DisableAllWidgets, "This will break everything. Are you sure?", nil, 315, 170, i18n("yes"), i18n("cancel"))
+				WG.Chobby.ConfirmationPopup(DisableAllWidgets, i18n("break_everything_confirm"), nil, 315, 170, i18n("yes"), i18n("cancel"))
 			end
 		}
 	}
@@ -1147,7 +1147,7 @@ local function GetVoidTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Server Address                                                                           (zero-k.info or test.zero-k.info for testing)",
+		caption = i18n("server_address_zero_k_info_or_test_zero"),
 	}
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,
@@ -1179,7 +1179,7 @@ local function GetVoidTabControls()
 		valign = "top",
 		align = "left",
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Server Port                                                                                  (8200 or 8202 for testing)",
+		caption = i18n("server_port_8200_or_8202_for_testing"),
 	}
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,
@@ -1319,7 +1319,7 @@ local function MakeRestartWarning(offset)
 		align = "left",
 		parent = window,
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Warning: Most changes do not affect battles in progress.",
+		caption = i18n("warning_most_changes_do_not_affect_battl"),
 	}
 	
 	return warningLabel, offset + ITEM_OFFSET
@@ -1338,7 +1338,7 @@ local function MakePresetsControl(settingPresets, offset)
 		align = "left",
 		parent = window,
 		objectOverrideFont = Configuration:GetFont(2),
-		caption = "Preset:",
+		caption = i18n("preset"),
 	}
 
 	local useCustomSettings = true
@@ -1351,7 +1351,7 @@ local function MakePresetsControl(settingPresets, offset)
 			y = ITEM_OFFSET*y,
 			width = 75,
 			height = 30,
-			caption = caption,
+			caption = i18n(caption),
 			objectOverrideFont = Configuration:GetFont(2),
 			customSettings = not settings,
 			OnClick = {
@@ -1443,9 +1443,9 @@ local function ProcessScreenSizeOption(data, offset)
 		height = 30,
 		valign = "top",
 		align = "left",
-		caption = data.humanName,
+		caption = i18n(data.humanName),
 		objectOverrideFont = Configuration:GetFont(2),
-		tooltip = data.desc,
+		tooltip = data.desc and i18n(data.desc) or nil,
 	}
 
 	local selectedOption
@@ -1518,9 +1518,9 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 		height = 30,
 		valign = "top",
 		align = "left",
-		caption = data.humanName,
+		caption = i18n(data.humanName),
 		objectOverrideFont = Configuration:GetFont(2),
-		tooltip = data.desc,
+		tooltip = data.desc and i18n(data.desc) or nil,
 	}
 
 	local defaultItem = 1
@@ -1529,7 +1529,7 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 	local items = {}
 	for i = 1, #data.options do
 		local itemName = data.options[i].name
-		items[i] = itemName
+		items[i] = i18n(itemName)
 		if itemName == defaultName then
 			defaultItem = i
 		end
@@ -1577,9 +1577,9 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		height = 30,
 		valign = "top",
 		align = "left",
-		caption = data.humanName,
+		caption = i18n(data.humanName),
 		objectOverrideFont = Configuration:GetFont(2),
-		tooltip = data.desc,
+		tooltip = data.desc and i18n(data.desc) or nil,
 	}
 
 	local function SetEditboxValue(obj, newValue)
@@ -1641,7 +1641,7 @@ local function ProcessSettingsLabel(data, offset)
 		height = 30,
 		valign = "top",
 		align = "left",
-		caption = data.humanName,
+		caption = i18n(data.humanName),
 		objectOverrideFont = Configuration:GetFont(data.size),
 	}
 
@@ -1652,7 +1652,7 @@ local function ProcessSettingsLabel(data, offset)
 		height = 30,
 		valign = "top",
 		align = "center",
-		caption = data.desc,
+		caption = data.desc and i18n(data.desc) or nil,
 		objectOverrideFont = Configuration:GetFont(data.size),
 	}
 	return label, descLabel, offset + ITEM_OFFSET
@@ -1709,7 +1709,7 @@ local function MakeTab(name, children)
 
 	return {
 		name = name,
-		caption = name,
+		caption = i18n(name),
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(3),
 		children = {contentsPanel}
 	}

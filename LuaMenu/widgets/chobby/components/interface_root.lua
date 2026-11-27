@@ -337,7 +337,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 
 	local function MakeExitPopup()
-		ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 315, 200)
+		ConfirmationPopup(ExitSpring, i18n("quit_confirm_lobby"), nil, 315, 200)
 		return true
 	end
 
@@ -907,7 +907,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		y = 3,
 		bottom = 11,
 		name = "switchToGameButton",
-		caption = "Return to Battle",
+		caption = i18n("return_to_battle"),
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(4),
 		parent = holder_topBar,
 		resizable = false,
@@ -926,7 +926,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		y = 3,
 		bottom = 11,
 		name = "leaveGameButton",
-		caption = "Leave Battle",
+		caption = i18n("leave_battle"),
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(4),
 		parent = holder_topBar,
 		resizable = false,
@@ -935,7 +935,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 		OnClick = {
 			function ()
-				ConfirmationPopup(LeaveGameFunction, "Are you sure you want to leave the game?", nil, 315, 200)
+				ConfirmationPopup(LeaveGameFunction, i18n("leave_game_confirm"), nil, 315, 200)
 			end
 		}
 	}

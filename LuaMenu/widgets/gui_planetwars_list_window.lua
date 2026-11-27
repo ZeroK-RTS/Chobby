@@ -81,18 +81,18 @@ local function TryToJoinPlanet(planetData)
 	if not VFS.HasArchive(mapName) then
 		queuePlanetJoin = planetData
 		WG.DownloadHandler.MaybeDownloadArchive(mapName, "map", -1)
-		WG.Chobby.InformationPopup("Map download required to attack planet. Please wait.")
+		WG.Chobby.InformationPopup(i18n("map_download_required_attack"))
 		return
 	end
 	queuePlanetJoin = nil
 
 	if not HaveRightEngineVersion() then
-		WG.Chobby.InformationPopup("Game engine update required, restart the menu to apply.")
+		WG.Chobby.InformationPopup(i18n("engine_update_required_menu"))
 		return
 	end
 
 	if not HaveRightGameVersion() then
-		WG.Chobby.InformationPopup("Game version update required, restart the menu to apply.")
+		WG.Chobby.InformationPopup(i18n("version_update_required_menu"))
 		return
 	end
 
@@ -767,12 +767,12 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attackPhase, def
 				end
 
 				if not HaveRightEngineVersion() then
-					WG.Chobby.InformationPopup("Engine update required, restart the game to apply.")
+					WG.Chobby.InformationPopup(i18n("engine_update_required_game"))
 					return
 				end
 
 				if not HaveRightGameVersion() then
-					WG.Chobby.InformationPopup("Version update required, restart the game to apply.")
+					WG.Chobby.InformationPopup(i18n("version_update_required_game"))
 					return
 				end
 
@@ -907,7 +907,7 @@ local function GetPlanetList(parentControl)
 			width = 160,
 		},
 		{
-			name = "Name",
+			name = i18n("name_column"),
 			x = 160,
 			width = 160,
 		
@@ -1066,7 +1066,7 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc, righ
 		y = offset,
 		width = 170,
 		height = 35,
-		caption = "Factions Page",
+		caption = i18n("factions_page"),
 		objectOverrideFont = Configuration:GetButtonFont(2),
 		classname = "option_button",
 		padding = {2,4,4,4},
@@ -1148,7 +1148,7 @@ local function MakeFactionSelectionPopup()
 		y = 15,
 		height = 35,
 		objectOverrideFont = Configuration:GetFont(3),
-		text = "Join a faction to play Planetwars",
+		text = i18n("join_a_faction_to_play_planetwars"),
 		parent = factionWindow,
 	}
 
@@ -1211,7 +1211,7 @@ local function InitializeControls(window)
 		bottom = 12,
 		width = 150,
 		height = 32,
-		caption = "Galaxy Map",
+		caption = i18n("galaxy_map"),
 		objectOverrideFont = Configuration:GetButtonFont(2),
 		classname = "option_button",
 		padding = {2,4,4,4},
@@ -1238,7 +1238,7 @@ local function InitializeControls(window)
 		bottom = 18,
 		height = 50,
 		objectOverrideFont = Configuration:GetFont(2),
-		text = "Select planets on the Galaxy Map for more options.",
+		text = i18n("select_planets_on_the_galaxy_map_for_mor"),
 		parent = window
 	}
 
@@ -1342,7 +1342,7 @@ local function InitializeControls(window)
 		if not (pwData.maxCharges and charges) then
 			return
 		end
-		local text = "Attack charges: " .. charges .. "/" .. pwData.maxCharges
+		local text = i18n("attack_charges") .. charges .. "/" .. pwData.maxCharges
 		if rechargeTime then
 			local difference, inTheFuture, isNow = Spring.Utilities.GetTimeDifference(rechargeTime, false, true)
 			if inTheFuture then
@@ -1443,15 +1443,15 @@ local function InitializeControls(window)
 
 		if currentMode == lobby.PW_ATTACK then
 			if attackerFactions and #attackerFactions and LIST_PHASE_FRACTIONS then
-				title = "Planetwars: " .. ListToString(attackerFactions) .. " attacking - "
+				title = i18n("planetwars_2") .. ListToString(attackerFactions) .. " attacking - "
 			else
-				title = "Planetwars: Launch Attacks - "
+				title = i18n("planetwars_launch_attacks")
 			end
 		else
 			if defenderFactions and #defenderFactions and LIST_PHASE_FRACTIONS then
-				title = "Planetwars: " .. ListToString(defenderFactions) .. " defending - "
+				title = i18n("planetwars_2") .. ListToString(defenderFactions) .. " defending - "
 			else
-				title = "Planetwars: Prepare Defense - "
+				title = i18n("planetwars_prepare_defense")
 			end
 		end
 

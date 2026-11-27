@@ -511,7 +511,7 @@ local function GetBattleTooltip(battleID, battle)
 			battleTooltip.mainControl:AddChild(battleTooltip.debugText)
 		end
 
-		local text = "battleID = " .. battleID
+		local text = i18n("battleid") .. battleID
 		for key, value in pairs(battle) do
 			text = text .. "\n" .. key .. " = " .. tostring(value)
 		end
@@ -707,9 +707,9 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		if userInfo.isBot then
 			text = "Autohost"
 		elseif userBattleInfo.aiLib then
-			text = "AI: " .. userBattleInfo.aiLib
+			text = i18n("ai") .. userBattleInfo.aiLib
 		else
-			text = "Level: " .. userInfo.level
+			text = i18n("level") .. userInfo.level
 		end
 
 		userTooltip.level.Update(

@@ -50,7 +50,7 @@ local function CreateReportWindow(parentHolder, userName, extraText, usePopupBac
 		right = 24,
 		y = offset,
 		height = 35,
-		text = "Reason:",
+		text = i18n("reason"),
 		objectOverrideFont = Configuration:GetFont(3),
 		parent = reportWindow,
 	}
@@ -61,7 +61,7 @@ local function CreateReportWindow(parentHolder, userName, extraText, usePopupBac
 		y = offset - 9,
 		height = 35,
 		text = "",
-		hint = "Enter report reason",
+		hint = i18n("enter_report_reason"),
 		objectOverrideFont = Configuration:GetFont(3),
 		objectOverrideHintFont = Configuration:GetHintFont(3),
 		parent = reportWindow,
@@ -89,7 +89,7 @@ local function CreateReportWindow(parentHolder, userName, extraText, usePopupBac
 		caption = "Kick",
 		checked = false,
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(3),
-		tooltip = "Start a poll to kick the player or spectator. Do not kick players without a good reason, such as to halt intentional teamkilling.",
+		tooltip = i18n("start_a_poll_to_kick_the_player_or_spect"),
 		parent = reportWindow,
 	}
 

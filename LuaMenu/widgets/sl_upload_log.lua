@@ -28,7 +28,7 @@ function widget:Initialize()
 		local txt = 'Log uploaded to: ' .. tostring(url) .. " (Copied to clipboard)"
 		WG.Chotify:Post({
 			body = txt,
-			title = "Log Uploaded",
+			title = i18n("log_uploaded"),
 			time = 15,
 		})
 		Spring.SetClipboard(url)
@@ -39,7 +39,7 @@ function widget:Initialize()
 		local txt = "\255\255\20\50Upload failed\b: " .. msg ..  "\n\255\255\255\255Please upload the log manually\b"
 		WG.Chotify:Post({
 			body = txt,
-			title = "Log upload failed",
+			title = i18n("log_upload_failed"),
 			time = 20,
 		})
 	end)

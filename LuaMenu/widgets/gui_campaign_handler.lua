@@ -138,7 +138,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		right = 15,
 		y = 15,
 		height = 35,
-		text = "Campaign Testing",
+		text = i18n("campaign_testing"),
 		objectOverrideFont = Configuration:GetFont(4),
 		parent = textWindow,
 	}
@@ -156,7 +156,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		y = 58,
 		height = 35,
 		lineSpacing = 1,
-		text = "New missions are released every Sunday. Currently there are " .. (missionCount or "??") .. " missions. Please post your thoughts, feedback and issues on the forum.",
+		text = i18n("new_missions_are_released_every_sunday_c") .. (missionCount or "??") .. " missions. Please post your thoughts, feedback and issues on the forum.",
 		objectOverrideFont = Configuration:GetFont(2),
 		parent = textWindow,
 	}
@@ -166,7 +166,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		right = 95,
 		bottom = 12,
 		height = WG.BUTTON_HEIGHT,
-		caption = "Post Feedback",
+		caption = i18n("post_feedback"),
 		classname = "action_button",
 		objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(3),
 		OnClick = {
@@ -190,7 +190,7 @@ local function MakeFeedbackButton(parentControl, link, x, y, right, bottom)
 		caption = "Feedback   ",
 		classname = "option_button",
 		objectOverrideFont = WG.Chobby.Configuration:GetButtonFont(2),
-		tooltip = "Post feedback on the forum",
+		tooltip = i18n("post_feedback_on_the_forum"),
 		OnClick = {
 			function ()
 				WG.BrowserHandler.OpenUrl(link)
@@ -610,7 +610,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty, extra
 		width = childWidth,
 		height = 30,
 		align = "center",
-		caption = "Victory on " .. planetData.name .. "!",
+		caption = i18n("victory_on") .. planetData.name .. "!",
 		objectOverrideFont = WG.Chobby.Configuration:GetFont(4),
 		parent = victoryWindow
 	}
@@ -745,7 +745,7 @@ local function ProcessPlanetDefeat(planetID, battleFrames)
 	--	selectedPlanet.Close()
 	--	selectedPlanet = nil
 	--end
-	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", {caption = i18n("continue")})
+	WG.Chobby.InformationPopup(i18n("battle_for_lost", {planet = planetConfig[planetID].name}), {caption = i18n("continue")})
 	WG.CampaignData.AddPlayTime(battleFrames, true)
 
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":lose", math.floor(battleFrames/30), ":defeat")
@@ -1082,14 +1082,14 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				classname = "option_button",
 				parent = buttonHolder,
 				caption = i18n("skip_tutorial"),
-				tooltip = "Skip quick tutorial. Only recommended for Zero-K veterans or players who have completed Tutorials 1 and 2.",
+				tooltip = i18n("skip_quick_tutorial_only_recommended_for"),
 				objectOverrideFont = Configuration:GetButtonFont(4),
 				OnClick = {
 					function(self)
 						local function SkipFunc()
 							ProcessPlanetVictory(planetID, 0, {}, nil, WG.CampaignData.GetDifficultySetting(), 0)
 						end
-						WG.Chobby.ConfirmationPopup(SkipFunc, "Are you sure you want to skip the quick tutorial? Remember to come back later if you need help.", nil, 315, 220)
+						WG.Chobby.ConfirmationPopup(SkipFunc, i18n("skip_quick_tutorial_confirm"), nil, 315, 220)
 					end
 				}
 			}
@@ -1103,7 +1103,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				height = 65,
 				classname = "action_button",
 				parent = buttonHolder,
-				caption = "Full Auto",
+				caption = i18n("full_auto"),
 				objectOverrideFont = Configuration:GetButtonFont(4),
 				OnClick = {
 					function(self)
@@ -1142,7 +1142,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				height = 65,
 				classname = "action_button",
 				parent = buttonHolder,
-				caption = "Auto Win",
+				caption = i18n("auto_win"),
 				objectOverrideFont = Configuration:GetButtonFont(4),
 				OnClick = {
 					function(self)
@@ -1157,7 +1157,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				height = 65,
 				classname = "action_button",
 				parent = buttonHolder,
-				caption = "Auto Lose",
+				caption = i18n("auto_lose"),
 				objectOverrideFont = Configuration:GetButtonFont(4),
 				OnClick = {
 					function(self)

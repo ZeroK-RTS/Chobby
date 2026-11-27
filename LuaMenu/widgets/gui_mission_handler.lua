@@ -108,14 +108,14 @@ local function CreateMissionEntry(missionData)
 				local gameName = WG.Chobby.Configuration:GetDefaultGameName()
 				local haveGame = VFS.HasArchive(gameName)
 				if not haveGame then
-					WG.Chobby.InformationPopup("You do not have the game file required. It will now be downloaded.")
+					WG.Chobby.InformationPopup(i18n("missing_game_downloading"))
 					WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
 					return
 				end
 
 				local haveMap = VFS.HasArchive(missionData.Map)
 				if not haveMap then
-					WG.Chobby.InformationPopup("You do not have the map file required. It will now be downloaded.")
+					WG.Chobby.InformationPopup(i18n("missing_map_downloading"))
 					WG.DownloadHandler.MaybeDownloadArchive(missionData.Map, "map", -1)
 					return
 				end
@@ -205,7 +205,7 @@ local function InitializeControls(parentControl)
 		height = 30,
 		parent = parentControl,
 		objectOverrideFont = Configuration:GetFont(3),
-		caption = "Learn advanced techniques in these tutorials",
+		caption = i18n("learn_advanced_techniques_in_these_tutor"),
 	}
 
 	local btnLeaveScreen = Button:New {
@@ -245,7 +245,7 @@ local function InitializeControls(parentControl)
 			valign = "center",
 			parent = missingPanel,
 			objectOverrideFont = Configuration:GetFont(3),
-			caption = "Error Loading Missions",
+			caption = i18n("error_loading_missions"),
 		}
 		local missingLabel = Label:New {
 			x = "5%",
@@ -256,7 +256,7 @@ local function InitializeControls(parentControl)
 			valign = "center",
 			parent = missingPanel,
 			objectOverrideFont = Configuration:GetFont(3),
-			caption = "check that your install directory is writable.",
+			caption = i18n("check_that_your_install_directory_is_wri"),
 		}
 		return
 	end

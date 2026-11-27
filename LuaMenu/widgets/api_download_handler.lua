@@ -419,7 +419,7 @@ local function TestDownload()
 	WG.WrapperLoopback.DownloadFile("Sands of Time v1.0", "MAP")
 	Spring.Echo("TestDownload")
 	Chotify:Post({
-		title = "Download Failed",
+		title = i18n("download_failed"),
 		body = "Starting backup download for " .. ("Sands of Time v1.0" or "???"),
 	})
 end

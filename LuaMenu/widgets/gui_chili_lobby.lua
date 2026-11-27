@@ -82,6 +82,21 @@ function widget:Initialize()
 
 	Chobby = VFS.Include(CHOBBY_DIR .. "core.lua", nil)
 
+	-- Apply the saved language before any UI is created.
+	-- (SetConfigData only arrives after Initialize, which is too late.)
+	-- Apply the saved language before any UI is created.
+	-- (SetConfigData only arrives after Initialize, which is too late.)
+	local i18nLib = WG and WG.i18n
+	local cfgPath = (type(CONFIG_FILENAME) == "string" and CONFIG_FILENAME) or (LUA_DIRNAME .. "Config/IGL_data.lua")
+	if i18nLib and VFS.FileExists(cfgPath) then
+		local ok, data = pcall(VFS.Include, cfgPath)
+		local savedConfig = ok and data and data[widget:GetInfo().name]
+		if savedConfig and savedConfig.language then
+			i18nLib.setLocale(savedConfig.language)
+			Spring.Echo("[zhfix] locale=" .. tostring(savedConfig.language) .. " test=" .. tostring(i18nLib("settings")))
+		end
+	end
+
 	WG.Chobby = Chobby
 	WG.Chobby:_Initialize()
 

@@ -24,7 +24,7 @@ local function DelayedInitialize()
 			lobby:RejoinBattle(battleID)
 		end
 
-		WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "You are still in a game. Rejoin or abandon the other players?", nil, 315, 200, "rejoin", "abandon")
+		WG.Chobby.ConfirmationPopup(RejoinBattleFunc, i18n("still_in_game_rejoin"), nil, 315, 200, i18n("rejoin"), i18n("abandon"))
 	end
 
 	lobby:AddListener("OnRejoinOption", OnRejoinOption)

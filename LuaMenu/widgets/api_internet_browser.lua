@@ -109,9 +109,9 @@ function BrowserHandler.OpenUrl(rawUrlString, requireLogin, applyUserIDandName)
 				WG.SteamHandler.OpenUrlIfActive(urlString)
 			end
 			if requireLogin then
-				WG.Chobby.ConfirmationPopup(LoginFunc, "You must log in to view this page.", nil, 315, 200, "Log In", "Cancel")
+				WG.Chobby.ConfirmationPopup(LoginFunc, i18n("you_must_log_in_to_view_this_page"), nil, 315, 200, i18n("login_verb"), "Cancel")
 			else
-				WG.Chobby.ConfirmationPopup(LoginFunc, "Log in first to access more site features.", nil, 315, 200, "Log In", "Not Now", GoAnywayFunc)
+				WG.Chobby.ConfirmationPopup(LoginFunc, i18n("log_in_first_to_access_more_site_features"), nil, 315, 200, i18n("login_verb"), i18n("not_now"), GoAnywayFunc)
 			end
 		else
 			local processedUrl = ApplySessionToken(rawUrlString, requireLogin, applyUserIDandName)

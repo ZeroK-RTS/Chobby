@@ -83,7 +83,7 @@ local function RunBenchmark(config)
 	local perm = (config.fixedOrder and GetIdentityPermutation(totalRuns)) or GetRandomPermutation(totalRuns)
 
 	local function DownloadsComplete()
-		WG.Chobby.InformationPopup("Running the benchmark. It may take a few minutes to launch each test case. Zero-K will close when the benchmark is complete. Submit the result by allowing the upload of an automated crash report.", {caption = "Abort", closeFunc = CancelFunc, buttonClass = "negative_button", width = 524, height = 260})
+		WG.Chobby.InformationPopup(i18n("benchmark_running"), {caption = i18n("abort"), closeFunc = CancelFunc, buttonClass = "negative_button", width = 524, height = 260})
 
 		local runData = config.runs
 		local dataFile = io.open(dataFilePath, "w")
@@ -222,8 +222,8 @@ local function InitializeControls(parentControl)
 			right = "35%",
 			y = offset,
 			height = 80,
-			caption = "Generate Script",
-			tooltip = "Generates a startscript from luamenu/startscripts/config.lua.",
+			caption = i18n("generate_script"),
+			tooltip = i18n("generates_a_startscript_from_luamenu_sta"),
 			objectOverrideFont = Configuration:GetButtonFont(4),
 			classname = "action_button",
 			OnClick = {
@@ -232,7 +232,7 @@ local function InitializeControls(parentControl)
 					if scriptFile then
 						WG.ScriptGenerator.GenerateScript(scriptFile)
 					else
-						WG.Chobby.InformationPopup("Missing file luamenu/startscripts/config.lua.", {width = 380, height = 220})
+						WG.Chobby.InformationPopup(i18n("missing_startscript"), {width = 380, height = 220})
 					end
 				end
 			},
