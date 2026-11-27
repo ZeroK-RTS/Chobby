@@ -33,7 +33,7 @@ EditBox = Control:Inherit{
 	padding = {3, 3, 3, 3},
 
 	cursorColor = {0, 0, 1, 0.7},
-	selectionColor = {0, 1, 1, 0.3},
+	selectionColor = {59/255, 109/255, 179/255, 0.35}, -- to match buttonSelectedColor from configuration.lua
 
 	align    = "left",
 	valign   = "linecenter",

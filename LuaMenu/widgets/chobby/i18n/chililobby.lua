@@ -90,7 +90,7 @@ return {
 		help = "Help",
 		about = "About",
 		links = "Links",
-		load_saved_game = "Load saved game",
+		load_saved_game = "Load Saved Games",
 		time_ingame = "Time ingame",
 		missions = "Missions",
 		tutorials = "Tutorials",

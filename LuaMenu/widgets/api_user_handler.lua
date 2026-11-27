@@ -531,7 +531,7 @@ local function GetUserControls(userName, opts)
 			x = 0,
 			y = 0,
 			right = 0,
-			height = height,
+			height = height + 3, -- + 3 or else the font shadow is cut off for tall strings
 			backgroundColor = backgroundColor,
 			borderColor     = borderColor,
 			padding = {0, 0, 0, 0},
@@ -687,7 +687,7 @@ local function GetUserControls(userName, opts)
 		userControls.imCountry = Image:New {
 			name = "imCountry",
 			x = offset + 2,
-			y = offsetY + 4,
+			y = offsetY + 6,
 			width = 16,
 			height = 11,
 			parent = userControls.mainControl,
@@ -749,10 +749,12 @@ local function GetUserControls(userName, opts)
 	if nameColor then
 		userControls.tbName.font = Configuration:GetFont(2, colorIndex, {color = nameColor})
 		userControls.tbName:Invalidate()
+		userControls.tbName.font.shadow = true
 	end
 	if truncatedName then
 		userControls.tbName:SetText(truncatedName)
 		userControls.nameTruncated = true
+		userControls.tbName.font.shadow = true
 	end
 	userControls.nameActualLength = userControls.tbName.font:GetTextWidth(userControls.tbName.text)
 	offset = offset + userControls.nameActualLength

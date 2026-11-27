@@ -247,7 +247,7 @@ local settingsConfig = {
 				humanName = "Graphics Driver Selected: ",
 				isLabelSetting = true,
 				desc = Platform.gpuVendor,
-				size = 2,
+				size = 6,
 			},
 			{
 				name = "AntiAliasing",

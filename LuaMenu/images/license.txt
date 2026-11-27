@@ -1,0 +1,20 @@
+The following icons along with their respective Krita (.kra) and SVG (.svg) sources were authored by cabinboy (CC-BY-SA):
+
+away.png
+battle.png
+bullet.png
+clock.png
+connecting.png
+download.png
+ingame.png
+link.png
+nicecircle.png
+offline.png
+online.png
+partyInvite.png
+playing.png
+ready.png
+runningBattle.png
+spectating.png
+top-background.png
+unready.png
